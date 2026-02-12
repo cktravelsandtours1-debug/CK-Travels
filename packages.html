@@ -7,6 +7,38 @@
     <title>Trip Packages | CK Travels</title>
 
     <link rel="stylesheet" href="css/main.css">
+    <style>
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .pkg-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            border: 1px solid #eee;
+        }
+
+        .pkg-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .pkg-img {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .pkg-content {
+            padding: 20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -32,7 +64,7 @@
                 <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Curated Experiences</h1>
                 <p style="color: #666;">Handpicked luxury packages for next-level travel.</p>
             </div>
-            <!-- Simple Filter Tabs -->
+            <!-- Simple Filter Tabs (Visual Only for now) -->
             <div style="background: #f0f0f0; padding: 4px; border-radius: 4px;">
                 <button class="btn btn-sm btn-primary" style="height: 36px;">All</button>
                 <button class="btn btn-sm btn-link" style="color: #666; padding: 0 16px;">Beach</button>
@@ -41,49 +73,96 @@
             </div>
         </div>
 
-        <div class="grid-3" id="packages-container">
+        <div class="package-grid" id="packages-container">
             <!-- Loading -->
-            <div style="grid-column: 1/-1; text-align: center; color: #666;">Loading experiences...</div>
+            <div style="grid-column: 1/-1; text-align: center; color: #666; padding: 40px;">
+                Loading exclusive packages from cloud...
+            </div>
         </div>
     </main>
 
-    <script type="module">
-        import { packages } from './js/data.js';
-        import { updateNavigation } from './js/auth.js';
+    <!-- Firebase SDK v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
-        // Update navigation based on auth state
+    <script type="module">
+        import { updateNavigation } from './js/auth.js';
         updateNavigation();
+    </script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsrtZh0PBOjNA8c8-9sifdtVqKMk7q-fs",
+            authDomain: "ck-travels-8926e.firebaseapp.com",
+            projectId: "ck-travels-8926e",
+            storageBucket: "ck-travels-8926e.firebasestorage.app",
+            messagingSenderId: "310809428136",
+            appId: "1:310809428136:web:74e2b0216f58088cf3829d",
+            measurementId: "G-HNT07JXC3C"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+        db.settings({ experimentalForceLongPolling: true });
 
         const container = document.getElementById('packages-container');
 
-        // Render
-        container.innerHTML = '';
-        packages.forEach(pkg => {
-            const card = document.createElement('div');
-            card.className = 'package-card'; // New bordered style
-            card.onclick = () => window.location.href = `package-details.html?id=${pkg.id}`;
+        // Fetch Real Data
+        db.collection("packages").get()
+            .then((querySnapshot) => {
+                const packages = [];
+                querySnapshot.forEach((doc) => {
+                    packages.push({ id: doc.id, ...doc.data() });
+                });
+                renderPackages(packages);
+            })
+            .catch((error) => {
+                console.error(error);
+                container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: red;">Error loading packages: ${error.message}</div>`;
+            });
 
-            card.innerHTML = `
-                <div class="package-bg" style="background-image: url('${pkg.image}');"></div>
-                <div class="package-overlay" style="border-top: 1px solid #e0e0e0;">
-                    <div style="display:flex; justify-content:space-between; align-items:start;">
-                        <div>
-                            <h3 style="font-size: 1.25rem; margin-bottom: 4px; color: var(--sh-black);">${pkg.location}</h3>
-                            <div style="font-size: 0.9rem; color: #666; margin-bottom: 16px;">${pkg.title}</div>
-                        </div>
-                        <div style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight:700;">${pkg.rating} ★</div>
+        function renderPackages(packages) {
+            container.innerHTML = '';
+
+            if (packages.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px; background: #f9f9f9; border-radius: 12px;">
+                        <h3 style="color: #444; margin-bottom: 8px;">No packages available yet</h3>
+                        <p style="color: #666;">Check back later for new travel experiences.</p>
                     </div>
-                    
-                    <div class="flex-between">
-                        <div>
-                            <span style="font-size: 0.8rem; background: #f8f8f8; padding: 4px 8px; border-radius: 4px; color: #333; border:1px solid #eee;">${pkg.duration}</span>
+                `;
+                return;
+            }
+
+            packages.forEach(pkg => {
+                const card = document.createElement('div');
+                card.className = 'pkg-card';
+                card.onclick = () => window.location.href = `package-details.html?id=${pkg.id}`;
+
+                card.innerHTML = `
+                    <img src="${pkg.image}" class="pkg-img" alt="${pkg.title}" onerror="this.src='https://via.placeholder.com/400x300?text=CK+Travels'">
+                    <div class="pkg-content">
+                        <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+                            <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--color-primary); letter-spacing: 1px;">
+                                ${pkg.location}
+                            </span>
+                            <span style="font-size: 0.8rem; background: #f0f0f0; padding: 2px 8px; border-radius: 4px;">${pkg.duration}</span>
                         </div>
-                        <span style="font-weight: 700; font-size: 1.25rem; color: var(--sh-black);">$${pkg.price}</span>
+                        <h3 style="font-size: 1.25rem; margin-bottom: 8px; color: #111;">${pkg.title}</h3>
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                            ${(pkg.features || []).join(', ')}
+                        </p>
+                        <div style="display:flex; justify-content:space-between; align-items: center; border-top: 1px solid #eee; padding-top: 16px;">
+                            <span style="font-size: 0.9rem; color: #888;">Starting from</span>
+                            <span style="font-size: 1.25rem; font-weight: 700;">$${pkg.price}</span>
+                        </div>
                     </div>
-                </div>
-            `;
-            container.appendChild(card);
-        });
+                `;
+                container.appendChild(card);
+            });
+        }
     </script>
 </body>
 

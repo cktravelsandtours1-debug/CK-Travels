@@ -321,35 +321,14 @@ function initPageTransitions() {
         document.body.appendChild(curtain);
     }
 
-    // Handle internal links
-    // We select all links that look like pages
-    document.querySelectorAll('a').forEach(link => {
-        const href = link.getAttribute('href');
-        // Filter out non-navigation links
-        if (!href || href === '#' || href.startsWith('javascript') || href.startsWith('mailto') || href.startsWith('tel') || link.target === '_blank') return;
-
-        // Add listener
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            navigateWithCurtain(href);
-        });
-    });
+    // Handle internal links — standard navigation for instant response
+    // The "Passing Bar" animation is handled by initGlobalAnimations on page load.
+    // Manual calls to navigateWithCurtain() remain for specific logic (like search).
 }
 
 function navigateWithCurtain(href) {
-    const curtain = document.getElementById('page-curtain');
-    if (curtain) {
-        // Ensure it's a small bar for navigation (Length 2)
-        gsap.set(curtain, { left: "-25%", width: "25%" });
-        gsap.to(curtain, {
-            left: "100%",
-            duration: 0.8,
-            ease: "power2.in",
-            onComplete: () => { window.location.href = href; }
-        });
-    } else {
-        window.location.href = href;
-    }
+    // Instant navigation — the "Passing Bar" animation now only happens as an entrance effect on the next page.
+    window.location.href = href;
 }
 
 // === DATA RENDERING (Legacy Support) ===

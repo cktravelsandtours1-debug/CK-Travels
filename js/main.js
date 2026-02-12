@@ -37,30 +37,60 @@ function initLenis() {
 function initGlobalAnimations() {
     console.log("Initializing CK Travels Motion System...");
 
-    // 1. Setup Page Curtain if missing (Guaranteed for Transitions)
-    if (!document.getElementById('page-curtain')) {
-        const curtain = document.createElement('div');
+    // 1. Detect if this is the first load of the session for the "Length 8" intro
+    const isFirstLoad = !sessionStorage.getItem('ck_intro_done');
+    const introWidth = isFirstLoad ? '100%' : '25%'; // 8 vs 2 logic
+
+    // 2. Setup Page Curtain (The "Passing" Bar)
+    let curtain = document.getElementById('page-curtain');
+    if (!curtain) {
+        curtain = document.createElement('div');
         curtain.id = 'page-curtain';
-        curtain.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #FF8C00; z-index: 9999; pointer-events: none;`;
         document.body.appendChild(curtain);
     }
 
-    const curtain = document.getElementById('page-curtain');
+    // Style as a passing bar
+    curtain.style.cssText = `
+        position: fixed; 
+        top: 0; 
+        left: -${introWidth}; 
+        width: ${introWidth}; 
+        height: 100%; 
+        background-color: #FF8C00; 
+        z-index: 9990; 
+        pointer-events: none;
+        box-shadow: 0 0 100px rgba(255, 140, 0, 0.4);
+    `;
+
     const introTl = gsap.timeline();
 
-    // A) ONLY Intro Animation: Orange Curtain Wipe OUT
-    if (curtain) {
-        // Reset curtain position for the entrance
-        gsap.set(curtain, { left: 0 });
+    // A) ONLY Intro Animation: Orange Bar PASSING Through
+    if (isFirstLoad) {
+        // First time: Full screen wipe out
+        gsap.set(curtain, { left: 0, width: '100%' });
+        introTl.to(curtain, {
+            left: "100%",
+            duration: 1.5,
+            ease: "expo.inOut",
+            onComplete: () => {
+                sessionStorage.setItem('ck_intro_done', 'true');
+                gsap.set(curtain, { width: '25%', left: '-25%' }); // Reset to small bar for navigation
+            }
+        });
+    } else {
+        // Subsequent loads: Just a passing bar sweep
+        gsap.set(curtain, { left: "-25%", width: '25%' });
         introTl.to(curtain, {
             left: "100%",
             duration: 1.2,
-            ease: "expo.inOut"
+            ease: "power2.inOut"
         });
     }
 
     // B) Global Navigation Static Scroll Behavior
     const nav = document.getElementById('main-nav');
+    if (nav) nav.style.zIndex = "10001"; // Keep nav above the bar
+
     if (nav && typeof ScrollTrigger !== 'undefined') {
         const navContainer = document.getElementById('nav-container');
         ScrollTrigger.create({
@@ -309,11 +339,12 @@ function initPageTransitions() {
 function navigateWithCurtain(href) {
     const curtain = document.getElementById('page-curtain');
     if (curtain) {
-        gsap.set(curtain, { left: "-100%" });
+        // Ensure it's a small bar for navigation (Length 2)
+        gsap.set(curtain, { left: "-25%", width: "25%" });
         gsap.to(curtain, {
-            left: 0,
+            left: "100%",
             duration: 0.8,
-            ease: "expo.inOut",
+            ease: "power2.in",
             onComplete: () => { window.location.href = href; }
         });
     } else {

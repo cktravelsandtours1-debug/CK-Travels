@@ -25,19 +25,23 @@
         }
 
         .stat-card {
-            background: white;
-            border: 1px solid #f1f5f9;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(3xl);
+            border: 1px solid rgba(0, 191, 255, 0.1);
             transition: all 0.5s var(--ease-expo);
         }
 
         .stat-card:hover {
             transform: translateY(-8px);
-            border-color: #FF6B00;
+            border-color: #FF8C00;
+            background: white;
+            box-shadow: 0 40px 80px -20px rgba(0, 191, 255, 0.1);
         }
 
         .itinerary-card {
             background: #00143D;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 191, 255, 0.1);
+            box-shadow: 0 50px 100px -20px rgba(0, 20, 61, 0.4);
         }
 
         #page-curtain {
@@ -46,7 +50,7 @@
             left: 100%;
             width: 100%;
             height: 100%;
-            background-color: #FF6B00;
+            background-color: #FF8C00;
             z-index: 9999;
             pointer-events: none;
         }
@@ -59,34 +63,38 @@
     </style>
 </head>
 
-<body class="bg-slate-50 font-body text-[#00143D] antialiased">
+<body class="bg-[#FFFAF0] font-body text-[#00143D] antialiased">
 
     <!-- Page Transition Curtain -->
     <div id="page-curtain"></div>
 
     <!-- Navigation -->
-    <nav id="main-nav" class="fixed top-0 w-full z-50 px-6 py-4 flex items-center justify-between">
+    <nav id="main-nav" class="fixed top-0 w-full z-50">
         <div id="nav-container"
-            class="max-w-7xl mx-auto w-full flex items-center justify-between px-10 py-5 rounded-[40px] transition-all duration-500">
-            <a href="index.html" class="flex items-center gap-1 group">
-                <span
-                    class="text-3xl font-black tracking-tighter italic text-midnight group-hover:text-orange-600 transition-colors">CK<span
-                        class="text-orange-600 not-italic">.</span></span>
+            class="max-w-7xl mx-auto w-full flex items-center justify-between px-10 py-5 rounded-[40px]">
+            <a href="index.html" class="flex items-center gap-1 group page-link">
+                <span id="logo-span"
+                    class="text-3xl font-black tracking-tighter italic text-[#00BFFF] group-hover:text-[#FF8C00] transition-colors">CK<span
+                        class="text-[#FF8C00] not-italic">.</span></span>
             </a>
 
-            <div class="hidden lg:flex items-center gap-12 font-bold text-[11px] tracking-[0.3em] uppercase opacity-60">
-                <a href="index.html" class="hover:text-orange-600 transition-colors">Home</a>
-                <a href="flights.html" class="hover:text-orange-600 transition-colors">Flights</a>
-                <a href="packages.html" class="hover:text-orange-600 transition-colors">Packages</a>
-                <a href="booking.html" class="text-orange-600">My Trips</a>
+            <div class="hidden lg:flex items-center gap-12 font-bold text-[11px] tracking-[0.3em] uppercase">
+                <a href="index.html"
+                    class="nav-link-text text-[#00BFFF]/60 hover:text-[#FF8C00] transition-colors page-link text-[#FF8C00]">Home</a>
+                <a href="flights.html"
+                    class="nav-link-text text-[#00BFFF]/60 hover:text-[#FF8C00] transition-colors page-link">Flights</a>
+                <a href="packages.html"
+                    class="nav-link-text text-[#00BFFF]/60 hover:text-[#FF8C00] transition-colors page-link">Packages</a>
+                <a href="booking.html"
+                    class="nav-link-text text-[#00BFFF]/60 hover:text-[#FF8C00] transition-colors page-link">My
+                    Trips</a>
             </div>
 
             <div class="flex items-center gap-6">
-                <a href="login.html" class="text-[11px] font-black tracking-[0.3em] uppercase text-midnight">Member
-                    Link</a>
-                <a href="flights.html"
-                    class="bg-orange-600 text-white px-8 py-4 rounded-full text-[11px] font-black tracking-[0.3em] uppercase transition-all hover:scale-105 active:scale-95 shadow-xl">Book
-                    Now</a>
+                <div class="magnetic-wrap">
+                    <a href="login.html"
+                        class="magnetic-btn btn-orange px-10 py-4 rounded-full text-[11px] font-black tracking-[0.3em] uppercase shadow-xl page-link">Login</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -97,14 +105,14 @@
         <aside class="w-full lg:w-80 space-y-10 reveal-left">
             <div class="bg-white p-10 rounded-[48px] border border-slate-100 space-y-8 shadow-sm">
                 <div class="flex flex-col items-center text-center py-6">
-                    <div class="w-24 h-24 rounded-[32px] border-2 border-orange-600/20 p-2 mb-8 relative">
+                    <div class="w-24 h-24 rounded-[32px] border-2 border-[#FF8C00]/20 p-2 mb-8 relative">
                         <img src="https://i.pravatar.cc/100?u=premium" class="w-full h-full rounded-[24px] object-cover"
                             alt="Profile">
                         <div
-                            class="absolute -bottom-2 -right-2 w-6 h-6 bg-orange-600 rounded-full border-4 border-white">
+                            class="absolute -bottom-2 -right-2 w-6 h-6 bg-[#FF8C00] rounded-full border-4 border-white">
                         </div>
                     </div>
-                    <p class="text-[9px] font-black tracking-[0.4em] text-orange-600 uppercase mb-3">Principal Delegate
+                    <p class="text-[9px] font-black tracking-[0.4em] text-[#FF8C00] uppercase mb-3">Principal Delegate
                     </p>
                     <h2 class="text-3xl font-heading font-black italic">Johnathan Doe</h2>
                 </div>
@@ -155,14 +163,14 @@
                 <div class="stat-card p-10 rounded-[48px] shadow-sm">
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em] mb-8">Route Matrix</p>
                     <div class="text-5xl font-heading font-black italic text-[#00143D]">14</div>
-                    <div class="mt-8 text-[10px] font-bold text-orange-600 uppercase tracking-widest">Elite Tier Rank
+                    <div class="mt-8 text-[10px] font-bold text-[#FF8C00] uppercase tracking-widest">Elite Tier Rank
                     </div>
                 </div>
                 <div class="stat-card p-10 rounded-[48px] shadow-sm">
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em] mb-8">Active Stays</p>
                     <div class="text-5xl font-heading font-black italic text-[#00143D]">02</div>
                     <button
-                        class="mt-8 text-[10px] font-bold text-slate-400 hover:text-[#FF6B00] uppercase tracking-widest underline underline-offset-8 transition-colors">Audit
+                        class="mt-8 text-[10px] font-bold text-slate-400 hover:text-[#FF8C00] uppercase tracking-widest underline underline-offset-8 transition-colors">Audit
                         Reservations</button>
                 </div>
             </div>
@@ -176,7 +184,7 @@
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-16">
                             <div class="space-y-6">
                                 <div
-                                    class="inline-flex items-center gap-3 bg-orange-600/10 text-[#FF6B00] px-5 py-2 rounded-full text-[10px] font-black tracking-[0.3em] uppercase border border-orange-600/20">
+                                    class="inline-flex items-center gap-3 bg-orange-600/10 text-[#FF8C00] px-5 py-2 rounded-full text-[10px] font-black tracking-[0.3em] uppercase border border-orange-600/20">
                                     Verified • First Class</div>
                                 <h2 class="text-5xl font-heading font-black italic text-white leading-tight">Dubai <span
                                         class="not-italic text-sm text-slate-700 px-6">→</span> London</h2>
@@ -184,7 +192,7 @@
                                     CK007 • Maritime Dreamliner Interface</p>
                             </div>
                             <button
-                                class="px-12 py-7 bg-white text-[#00143D] rounded-[24px] font-black text-[11px] tracking-[0.4em] uppercase shadow-2xl transition-all hover:bg-[#FF6B00] hover:text-white active:scale-95">Access
+                                class="px-12 py-7 bg-white text-[#00143D] rounded-[24px] font-black text-[11px] tracking-[0.4em] uppercase shadow-2xl transition-all hover:bg-[#FF8C00] hover:text-white active:scale-95">Access
                                 Pass_</button>
                         </div>
 
@@ -227,94 +235,13 @@
         </main>
     </div>
 
-    <!-- Mobile Nav -->
-    <div class="lg:hidden fixed bottom-0 w-full z-50 px-6 pb-8 pt-4 mobile-tab-bar text-white">
-        <div class="flex justify-between items-center opacity-40">
-            <a href="index.html" class="flex flex-col items-center gap-1">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-                </svg>
-                <span class="text-[8px] font-black uppercase tracking-widest">Home</span>
-            </a>
-            <a href="flights.html" class="flex flex-col items-center gap-1">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                        d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
-                </svg>
-                <span class="text-[8px] font-black uppercase tracking-widest">Flights</span>
-            </a>
-            <a href="booking.html" class="flex flex-col items-center gap-1 text-[#FF6B00] opacity-100">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                        d="M19 3h-1V1h-2v2H8V1H6v3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" />
-                </svg>
-                <span class="text-[8px] font-black uppercase tracking-widest">Trips</span>
-            </a>
-        </div>
-    </div>
-
+    <script src="js/main.js"></script>
     <script>
-        const lenis = new Lenis()
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-        requestAnimationFrame(raf);
-
         window.addEventListener('load', () => {
+            // Dashboard specific entrance
             gsap.from(".reveal-up", { y: 30, opacity: 0, duration: 1.2, ease: "power4.out" });
             gsap.from(".reveal-left", { x: -30, opacity: 0, duration: 1.2, ease: "power4.out", delay: 0.2 });
             gsap.from(".stat-card", { opacity: 0, scale: 0.9, stagger: 0.1, duration: 1, ease: "back.out(1.7)", delay: 0.5 });
-
-            // Navbar Entrance
-            gsap.to("#main-nav", {
-                y: 0,
-                opacity: 1,
-                duration: 1.2,
-                ease: "expo.out"
-            });
-
-            // Curtain Entry
-            gsap.to("#page-curtain", { left: "-100%", duration: 1.2, ease: "expo.inOut" });
-
-            // Navbar Scroll Transformation
-            ScrollTrigger.create({
-                start: "top -50",
-                onEnter: () => {
-                    gsap.to("#nav-container", {
-                        backgroundColor: "rgba(255, 255, 255, 0.1)",
-                        backdropFilter: "blur(25px)",
-                        border: "1px solid rgba(255, 255, 255, 0.1)",
-                        boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
-                        padding: "16px 40px",
-                        marginTop: "16px",
-                        duration: 0.5,
-                        ease: "power2.out"
-                    });
-                },
-                onLeaveBack: () => {
-                    gsap.to("#nav-container", {
-                        backgroundColor: "transparent",
-                        backdropFilter: "blur(0px)",
-                        border: "1px solid transparent",
-                        boxShadow: "none",
-                        padding: "20px 0px",
-                        marginTop: "0px",
-                        duration: 0.5,
-                        ease: "power2.out"
-                    });
-                }
-            });
-
-            // Exit Hijack bank to Home
-            document.querySelectorAll('a[href="index.html"]').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    gsap.to("#page-curtain", {
-                        left: 0,
-                        duration: 1,
-                        ease: "expo.inOut",
-                        onComplete: () => window.location.href = link.getAttribute('href')
-                    });
-                });
-            });
         });
     </script>
 </body>

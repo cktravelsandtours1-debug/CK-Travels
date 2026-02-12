@@ -28,7 +28,7 @@
         }
 
         .btn-orange {
-            background-color: #FF6B00;
+            background-color: #FF8C00;
             color: white;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -58,7 +58,7 @@
             right: -50%;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(255, 107, 0, 0.08) 0%, transparent 60%);
+            background: radial-gradient(circle, rgba(255, 140, 0, 0.08) 0%, transparent 60%);
             pointer-events: none;
         }
 
@@ -81,19 +81,19 @@
 
         .input-boarding:focus {
             outline: none;
-            border-color: #FF6B00;
-            background: rgba(255, 107, 0, 0.05);
-            box-shadow: 0 0 30px rgba(255, 107, 0, 0.15), inset 0 0 20px rgba(255, 107, 0, 0.03);
+            border-color: #FF8C00;
+            background: rgba(255, 140, 0, 0.05);
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.15), inset 0 0 20px rgba(255, 140, 0, 0.03);
         }
 
         /* Active field glow transition for GSAP */
         .field-glow {
-            box-shadow: 0 0 30px rgba(255, 107, 0, 0.2), 0 0 60px rgba(255, 107, 0, 0.1);
-            border-color: #FF6B00 !important;
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.2), 0 0 60px rgba(255, 140, 0, 0.1);
+            border-color: #FF8C00 !important;
         }
 
         .label-active {
-            color: #FF6B00 !important;
+            color: #FF8C00 !important;
         }
 
         /* Step toggle */
@@ -119,7 +119,7 @@
         .airplane-loader {
             width: 120px;
             height: 120px;
-            fill: #FF6B00;
+            fill: #FF8C00;
         }
 
         /* SVG Flight Path */
@@ -156,7 +156,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background-color: #FF6B00;
+            background-color: #FF8C00;
             z-index: 9999;
             pointer-events: none;
         }
@@ -164,7 +164,7 @@
         /* Progress Line */
         .progress-line {
             height: 2px;
-            background: linear-gradient(90deg, #FF6B00 var(--progress, 0%), rgba(255, 255, 255, 0.1) var(--progress, 0%));
+            background: linear-gradient(90deg, #FF8C00 var(--progress, 0%), rgba(255, 255, 255, 0.1) var(--progress, 0%));
             transition: all 0.6s ease;
         }
 
@@ -178,7 +178,7 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #FF6B00;
+            background: #FF8C00;
             border-radius: 10px;
         }
     </style>
@@ -208,7 +208,7 @@
         <g id="animated-plane">
             <path
                 d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"
-                fill="#FF6B00" transform="scale(3)" />
+                fill="#FF8C00" transform="scale(3)" />
         </g>
     </svg>
 
@@ -216,12 +216,12 @@
     <div id="boarding-pass">
         <div class="flex justify-between items-start mb-16">
             <div>
-                <span class="text-[10px] font-black text-[#FF6B00] tracking-[0.4em] uppercase mb-4 block">Boarding Pass
+                <span class="text-[10px] font-black text-[#FF8C00] tracking-[0.4em] uppercase mb-4 block">Boarding Pass
                     Generated</span>
                 <h2 class="text-5xl font-heading font-black italic text-[#00143D]">Bon Voyage.</h2>
             </div>
             <div class="text-right">
-                <div class="text-4xl font-black italic text-[#00143D]">CK<span class="text-[#FF6B00]">.</span>007</div>
+                <div class="text-4xl font-black italic text-[#00143D]">CK<span class="text-[#FF8C00]">.</span>007</div>
             </div>
         </div>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-12 border-t border-slate-100 pt-12 mb-16">
@@ -303,7 +303,7 @@
                 <!-- Progress Bar -->
                 <div class="flex items-center gap-4 mb-8">
                     <div id="step-node-1"
-                        class="w-12 h-12 rounded-full bg-[#FF6B00] text-white flex items-center justify-center font-black italic text-sm shadow-lg shadow-[#FF6B00]/30 transition-all duration-500">
+                        class="w-12 h-12 rounded-full bg-[#FF8C00] text-white flex items-center justify-center font-black italic text-sm shadow-lg shadow-[#FF8C00]/30 transition-all duration-500">
                         01</div>
                     <div class="flex-1 progress-line" id="progress-1" style="--progress: 0%"></div>
                     <div id="step-node-2"
@@ -323,7 +323,7 @@
                         <!-- ========= STEP 1: Passenger Identity ========= -->
                         <div id="step-1" class="space-y-10">
                             <div class="flex items-center gap-4 mb-6">
-                                <div class="w-16 h-1 bg-[#FF6B00] rounded-full"></div>
+                                <div class="w-16 h-1 bg-[#FF8C00] rounded-full"></div>
                                 <h2 class="text-3xl md:text-4xl font-heading font-black italic">Passenger <span
                                         class="not-italic text-white/20">Identity.</span></h2>
                             </div>
@@ -364,7 +364,7 @@
                             </div>
 
                             <button type="button" onclick="nextStep(2)"
-                                class="w-full btn-orange py-6 rounded-2xl font-black tracking-[0.4em] text-[10px] uppercase shadow-2xl shadow-[#FF6B00]/20 transition-all active:scale-[0.98]">
+                                class="w-full btn-orange py-6 rounded-2xl font-black tracking-[0.4em] text-[10px] uppercase shadow-2xl shadow-[#FF8C00]/20 transition-all active:scale-[0.98]">
                                 Proceed To Preferences →
                             </button>
                         </div>
@@ -372,7 +372,7 @@
                         <!-- ========= STEP 2: Travel Preferences ========= -->
                         <div id="step-2" class="step-inactive space-y-10">
                             <div class="flex items-center gap-4 mb-6">
-                                <div class="w-16 h-1 bg-[#FF6B00] rounded-full"></div>
+                                <div class="w-16 h-1 bg-[#FF8C00] rounded-full"></div>
                                 <h2 class="text-3xl md:text-4xl font-heading font-black italic">Travel <span
                                         class="not-italic text-white/20">Preferences.</span></h2>
                             </div>
@@ -415,7 +415,7 @@
                                     class="px-10 py-6 rounded-2xl bg-white/5 text-white/40 font-black tracking-widest text-[9px] uppercase hover:bg-white/10 hover:text-white transition-all">←
                                     Back</button>
                                 <button type="button" onclick="nextStep(3)"
-                                    class="flex-1 btn-orange py-6 rounded-2xl font-black tracking-[0.4em] text-[10px] uppercase shadow-2xl shadow-[#FF6B00]/20 transition-all active:scale-[0.98]">
+                                    class="flex-1 btn-orange py-6 rounded-2xl font-black tracking-[0.4em] text-[10px] uppercase shadow-2xl shadow-[#FF8C00]/20 transition-all active:scale-[0.98]">
                                     Proceed To Payment →
                                 </button>
                             </div>
@@ -424,7 +424,7 @@
                         <!-- ========= STEP 3: Secure Payment ========= -->
                         <div id="step-3" class="step-inactive space-y-10">
                             <div class="flex items-center gap-4 mb-6">
-                                <div class="w-16 h-1 bg-[#FF6B00] rounded-full"></div>
+                                <div class="w-16 h-1 bg-[#FF8C00] rounded-full"></div>
                                 <h2 class="text-3xl md:text-4xl font-heading font-black italic">Secure <span
                                         class="not-italic text-white/20">Settlement.</span></h2>
                             </div>
@@ -434,7 +434,7 @@
                                 class="bg-gradient-to-br from-white/5 to-white/[0.02] rounded-[32px] p-10 border border-white/5 space-y-10 relative overflow-hidden">
                                 <div class="flex justify-between items-start">
                                     <div
-                                        class="w-14 h-10 bg-gradient-to-br from-[#FFD700] to-[#FF6B00] rounded-lg opacity-80">
+                                        class="w-14 h-10 bg-gradient-to-br from-[#FFD700] to-[#FF8C00] rounded-lg opacity-80">
                                     </div>
                                     <svg class="w-10 h-10 text-white/10" fill="currentColor" viewBox="0 0 24 24">
                                         <path
@@ -446,25 +446,25 @@
                                         class="text-[9px] font-black text-white/20 uppercase tracking-[0.4em] field-label transition-colors duration-300">Card
                                         Link Protocol</label>
                                     <input type="text" placeholder="0000 0000 0000 0000"
-                                        class="w-full bg-transparent border-b border-white/10 py-4 text-2xl md:text-3xl font-mono tracking-widest outline-none focus:border-[#FF6B00] transition-colors text-white/80">
+                                        class="w-full bg-transparent border-b border-white/10 py-4 text-2xl md:text-3xl font-mono tracking-widest outline-none focus:border-[#FF8C00] transition-colors text-white/80">
                                 </div>
                                 <div class="grid grid-cols-2 gap-8">
                                     <div class="space-y-2 field-group">
                                         <label
                                             class="text-[9px] font-black text-white/20 uppercase tracking-widest field-label transition-colors duration-300">Expiry</label>
                                         <input type="text" placeholder="MM/YY"
-                                            class="w-full bg-transparent border-b border-white/10 py-3 text-xl outline-none focus:border-[#FF6B00] transition-colors text-white/80">
+                                            class="w-full bg-transparent border-b border-white/10 py-3 text-xl outline-none focus:border-[#FF8C00] transition-colors text-white/80">
                                     </div>
                                     <div class="space-y-2 field-group">
                                         <label
                                             class="text-[9px] font-black text-white/20 uppercase tracking-widest field-label transition-colors duration-300">Secret
                                             CVV</label>
                                         <input type="password" placeholder="•••"
-                                            class="w-full bg-transparent border-b border-white/10 py-3 text-xl outline-none focus:border-[#FF6B00] transition-colors text-white/80">
+                                            class="w-full bg-transparent border-b border-white/10 py-3 text-xl outline-none focus:border-[#FF8C00] transition-colors text-white/80">
                                     </div>
                                 </div>
                                 <div
-                                    class="absolute -right-16 -bottom-16 w-64 h-64 bg-[#FF6B00]/5 rounded-full blur-[80px]">
+                                    class="absolute -right-16 -bottom-16 w-64 h-64 bg-[#FF8C00]/5 rounded-full blur-[80px]">
                                 </div>
                             </div>
 
@@ -473,7 +473,7 @@
                                     class="px-10 py-6 rounded-2xl bg-white/5 text-white/40 font-black tracking-widest text-[9px] uppercase hover:bg-white/10 hover:text-white transition-all">←
                                     Back</button>
                                 <button type="button" onclick="executeTakeoff()" id="confirm-btn"
-                                    class="flex-1 btn-orange py-6 rounded-2xl font-black tracking-[0.4em] text-[10px] uppercase shadow-2xl shadow-[#FF6B00]/30 transition-all active:scale-[0.98]">
+                                    class="flex-1 btn-orange py-6 rounded-2xl font-black tracking-[0.4em] text-[10px] uppercase shadow-2xl shadow-[#FF8C00]/30 transition-all active:scale-[0.98]">
                                     Confirm Passage — $<span id="btn-price">0</span>
                                 </button>
                             </div>
@@ -486,7 +486,7 @@
             <!-- RIGHT: Order Summary Sidebar -->
             <aside class="w-full lg:w-96 space-y-8 reveal-up">
                 <div class="bg-white/[0.03] backdrop-blur-xl border border-white/5 p-10 rounded-[40px] sticky top-40">
-                    <h3 class="text-[11px] font-black tracking-[0.5em] text-[#FF6B00] uppercase mb-10">Target Selection
+                    <h3 class="text-[11px] font-black tracking-[0.5em] text-[#FF8C00] uppercase mb-10">Target Selection
                     </h3>
                     <div id="selection-view" class="space-y-8">
                         <div>
@@ -510,7 +510,7 @@
                                 <div>
                                     <p class="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">Grand
                                         Total</p>
-                                    <p id="summary-total" class="text-4xl font-black italic text-[#FF6B00]">$0</p>
+                                    <p id="summary-total" class="text-4xl font-black italic text-[#FF8C00]">$0</p>
                                 </div>
                             </div>
                         </div>
@@ -544,14 +544,6 @@
         // =========================================
         //  CK TRAVELS — BOOKING MOTION SYSTEM v10
         // =========================================
-
-        // 1. Smooth Scrolling (handled by main.js globally if present, but here for specific form control)
-        const lenis = new Lenis();
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-        requestAnimationFrame(raf);
-
-        // 2. Register GSAP Plugins
-        gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
         // 3. Firebase Config
         const firebaseConfig = {
@@ -636,7 +628,7 @@
                     node.className = 'w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center font-black italic text-sm shadow-lg shadow-green-500/30 transition-all duration-500';
                     node.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-width="3"/></svg>';
                 } else if (i === step) {
-                    node.className = 'w-12 h-12 rounded-full bg-[#FF6B00] text-white flex items-center justify-center font-black italic text-sm shadow-lg shadow-[#FF6B00]/30 transition-all duration-500';
+                    node.className = 'w-12 h-12 rounded-full bg-[#FF8C00] text-white flex items-center justify-center font-black italic text-sm shadow-lg shadow-[#FF8C00]/30 transition-all duration-500';
                     node.innerHTML = `0${i}`;
                 } else {
                     node.className = 'w-12 h-12 rounded-full bg-white/5 text-white/20 border border-white/10 flex items-center justify-center font-black italic text-sm transition-all duration-500';
@@ -659,12 +651,12 @@
                 const group = this.closest('.field-group');
                 if (!group) return;
                 const label = group.querySelector('.field-label');
-                if (label) gsap.to(label, { color: '#FF6B00', y: -2, duration: 0.3, ease: "power2.out" });
+                if (label) gsap.to(label, { color: '#FF8C00', y: -2, duration: 0.3, ease: "power2.out" });
 
                 // Enhanced Soft Orange Glow
                 gsap.to(this, {
-                    boxShadow: '0 0 30px rgba(255, 107, 0, 0.5), 0 0 10px rgba(255, 107, 0, 0.3)',
-                    borderColor: '#FF6B00',
+                    boxShadow: '0 0 30px rgba(255, 140, 0, 0.5), 0 0 10px rgba(255, 140, 0, 0.3)',
+                    borderColor: '#FF8C00',
                     duration: 0.4
                 });
             });

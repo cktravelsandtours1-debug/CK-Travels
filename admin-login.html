@@ -38,21 +38,21 @@
         }
 
         .input-dark:focus {
-            border-color: #FF6B00;
-            background: rgba(255, 107, 0, 0.03);
+            border-color: #FF8C00;
+            background: rgba(255, 140, 0, 0.03);
             outline: none;
-            box-shadow: 0 0 30px rgba(255, 107, 0, 0.15);
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.15);
         }
 
         .btn-orange {
-            background: #FF6B00;
+            background: #FF8C00;
             color: white;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .btn-orange:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 40px rgba(255, 107, 0, 0.5);
+            box-shadow: 0 0 40px rgba(255, 140, 0, 0.5);
         }
 
         .magnetic-wrap {
@@ -76,7 +76,7 @@
             left: 50%;
             width: 500px;
             height: 500px;
-            background: conic-gradient(from 0deg, rgba(255, 107, 0, 0) 0%, rgba(255, 107, 0, 0.08) 100%);
+            background: conic-gradient(from 0deg, rgba(255, 140, 0, 0) 0%, rgba(255, 140, 0, 0.08) 100%);
             border-radius: 50%;
             transform: translate(-50%, -50%);
             animation: radar 4s linear infinite;
@@ -98,7 +98,7 @@
             left: 50%;
             width: 200px;
             height: 200px;
-            border: 1px solid rgba(255, 107, 0, 0.06);
+            border: 1px solid rgba(255, 140, 0, 0.06);
             border-radius: 50%;
             margin-left: -100px;
             margin-top: -100px;
@@ -111,7 +111,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background-color: #FF6B00;
+            background-color: #FF8C00;
             z-index: 9999;
             pointer-events: none;
         }
@@ -134,7 +134,7 @@
         <div class="glass-panel p-14 md:p-16 rounded-[48px] space-y-10" id="admin-login-card">
 
             <div class="text-center space-y-4">
-                <span class="text-[10px] font-black tracking-[0.6em] text-[#FF6B00] uppercase">Secure Command
+                <span class="text-[10px] font-black tracking-[0.6em] text-[#FF8C00] uppercase">Secure Command
                     Interface</span>
                 <h1 class="text-4xl font-heading font-black italic">Officer <span
                         class="not-italic text-white/20">Access_</span></h1>
@@ -160,7 +160,7 @@
 
                 <div class="pt-4 magnetic-wrap w-full">
                     <button type="submit" id="login-btn"
-                        class="magnetic-btn w-full btn-orange py-6 rounded-2xl font-black tracking-[0.4em] text-xs uppercase shadow-2xl shadow-[#FF6B00]/20">
+                        class="magnetic-btn w-full btn-orange py-6 rounded-2xl font-black tracking-[0.4em] text-xs uppercase shadow-2xl shadow-[#FF8C00]/20">
                         Initiate Handshake
                     </button>
                 </div>
@@ -207,7 +207,7 @@
                 const group = this.closest('.field-group');
                 if (!group) return;
                 const label = group.querySelector('.float-label');
-                if (label) gsap.to(label, { color: '#FF6B00', y: -4, scale: 1.05, duration: 0.3 });
+                if (label) gsap.to(label, { color: '#FF8C00', y: -4, scale: 1.05, duration: 0.3 });
             });
             input.addEventListener('blur', function () {
                 const group = this.closest('.field-group');

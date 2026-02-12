@@ -46,26 +46,37 @@
     </style>
 </head>
 
-<body class="bg-surface font-sans text-gray-900 antialiased overflow-x-hidden">
+<body class="bg-[#FFFAF0] font-body text-[#00143D] antialiased">
 
-    <div class="bg-matrix"></div>
+    <!-- Page Transition Curtain -->
+    <div id="page-curtain"></div>
 
-    <!-- Navbar -->
-    <nav class="glass-header border-b border-white/20 fixed top-0 w-full z-50 h-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-            <div class="flex justify-between items-center h-full">
-                <a href="index.html" class="flex-shrink-0 flex items-center gap-1 group">
-                    <span
-                        class="text-3xl font-extrabold tracking-tighter text-gray-900 group-hover:text-primary transition-colors">CK<span
-                            class="text-primary group-hover:text-amber-500 transition-colors">.</span></span>
-                </a>
+    <!-- Navigation -->
+    <nav id="main-nav" class="fixed top-0 w-full z-50">
+        <div id="nav-container"
+            class="max-w-7xl mx-auto w-full flex items-center justify-between px-10 py-5 rounded-[40px]">
+            <a href="index.html" class="flex items-center gap-1 group page-link">
+                <span id="logo-span"
+                    class="text-3xl font-black tracking-tighter italic text-[#00BFFF] group-hover:text-[#FF8C00] transition-colors">CK<span
+                        class="text-[#FF8C00] not-italic">.</span></span>
+            </a>
 
-                <div class="hidden md:flex gap-8">
-                    <a href="index.html"
-                        class="text-gray-500 hover:text-black font-semibold text-sm tracking-wide transition-colors">HOME</a>
-                    <a href="flights.html"
-                        class="text-gray-500 hover:text-black font-semibold text-sm tracking-wide transition-colors">FLIGHTS</a>
-                    <a href="packages.html" class="text-primary font-bold text-sm tracking-wide">PACKAGES</a>
+            <div class="hidden lg:flex items-center gap-12 font-bold text-[11px] tracking-[0.3em] uppercase">
+                <a href="index.html"
+                    class="nav-link-text text-[#00BFFF]/60 hover:text-[#FF8C00] transition-colors page-link">Home</a>
+                <a href="flights.html"
+                    class="nav-link-text text-[#00BFFF]/60 hover:text-[#FF8C00] transition-colors page-link">Flights</a>
+                <a href="packages.html"
+                    class="nav-link-text text-[#00BFFF]/60 hover:text-[#FF8C00] transition-colors page-link">Packages</a>
+                <a href="booking.html"
+                    class="nav-link-text text-[#00BFFF]/60 hover:text-[#FF8C00] transition-colors page-link">My
+                    Trips</a>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div class="magnetic-wrap">
+                    <a href="login.html"
+                        class="magnetic-btn btn-orange px-10 py-4 rounded-full text-[11px] font-black tracking-[0.3em] uppercase shadow-xl page-link">Login</a>
                 </div>
             </div>
         </div>
@@ -75,9 +86,10 @@
         <!-- Loading State -->
         <div class="max-w-7xl mx-auto px-4 py-40 text-center">
             <div
-                class="inline-flex items-center gap-4 bg-white/50 backdrop-blur-xl px-8 py-4 rounded-full border border-white/20 shadow-xl">
-                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-                <span class="text-xs font-bold tracking-widest text-primary uppercase">Syncing Experience Data...</span>
+                class="inline-flex items-center gap-4 bg-white/40 backdrop-blur-xl px-8 py-4 rounded-full border border-[#00BFFF]/10 shadow-xl">
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-[#FF8C00]"></div>
+                <span class="text-xs font-bold tracking-widest text-[#00143D]/60 uppercase">Syncing Experience
+                    Data...</span>
             </div>
         </div>
     </main>
@@ -125,22 +137,22 @@
         function renderDetails(pkg, id) {
             document.getElementById('package-content').innerHTML = `
                 <!-- Hero Section -->
-                <div class="relative h-[70vh] min-h-[600px] overflow-hidden">
+                <div class="relative h-[80vh] min-h-[700px] overflow-hidden">
                     <img src="${pkg.image}" class="w-full h-full object-cover" id="hero-img" alt="${pkg.title}">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#FFFAF0] via-[#FFFAF0]/20 to-transparent"></div>
                     
                     <div class="absolute inset-0 flex items-end">
                         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 w-full">
                             <div class="max-w-4xl" id="hero-text">
-                                <div class="bg-amber-500/20 backdrop-blur-md text-amber-500 border border-amber-500/30 px-5 py-2 rounded-full text-xs font-bold inline-block mb-10 tracking-[0.2em] uppercase">EXCLUSIVE LOGISTICS SYNCHRONIZED</div>
-                                <h1 class="text-6xl md:text-9xl font-serif font-bold text-white mb-8 leading-none tracking-tighter">${pkg.title}</h1>
-                                <div class="flex items-center gap-10 text-white/70 text-sm font-bold tracking-widest uppercase">
+                                <div class="bg-[#FF8C00]/10 backdrop-blur-md text-[#FF8C00] border border-[#FF8C00]/20 px-5 py-2 rounded-full text-[9px] font-black inline-block mb-10 tracking-[0.4em] uppercase">EXCLUSIVE LOGISTICS SYNCHRONIZED</div>
+                                <h1 class="text-7xl md:text-[120px] font-heading font-black text-[#00143D] italic mb-8 leading-none tracking-tighter">${pkg.title}</h1>
+                                <div class="flex items-center gap-10 text-[#00143D]/40 text-[10px] font-black tracking-[0.3em] uppercase">
                                     <span class="flex items-center gap-3">
-                                        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
+                                        <svg class="w-5 h-5 text-[#FF8C00]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
                                         ${pkg.location}
                                     </span>
-                                    <span>•</span>
-                                    <span>${pkg.duration} ALL-INCLUSIVE</span>
+                                    <span class="w-1 h-1 bg-[#00143D]/10 rounded-full"></span>
+                                    <span>${pkg.duration} ALL-INCLUSIVE DEPLOYMENT</span>
                                 </div>
                             </div>
                         </div>
@@ -153,34 +165,34 @@
                         
                         <!-- Main Story -->
                         <div class="lg:col-span-2 space-y-12" id="main-content">
-                            <div class="bg-white/70 backdrop-blur-2xl rounded-[64px] p-12 md:p-20 shadow-2xl border border-white/40">
-                                <h2 class="text-4xl md:text-5xl font-serif font-bold mb-10 text-gray-900 leading-tight">The <span class="italic text-primary">Private Itinerary.</span></h2>
-                                <p class="text-2xl text-gray-500 leading-relaxed mb-12 font-medium">
+                            <div class="bg-white/60 backdrop-blur-3xl rounded-[64px] p-12 md:p-20 shadow-[0_40px_100px_-20px_rgba(0,191,255,0.1)] border border-[#00BFFF]/10">
+                                <h2 class="text-4xl md:text-5xl font-heading font-black italic mb-10 text-[#00143D] leading-tight">The <span class="not-italic text-[#00BFFF]">Private Itinerary.</span></h2>
+                                <p class="text-2xl text-[#00143D]/60 leading-relaxed mb-12 font-medium">
                                     Experience the absolute pinnacle of luxury travel. Our bespoke itinerary for ${pkg.title} is designed to provide seamless logistics and unparalleled comfort.
                                 </p>
                                 
                                 <div class="space-y-12">
                                     <div class="flex gap-8 items-start group">
-                                        <div class="w-16 h-16 bg-blue-50 text-primary rounded-3xl flex items-center justify-center font-bold flex-shrink-0 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all text-xl">01</div>
+                                        <div class="w-16 h-16 bg-[#00BFFF]/5 text-[#00BFFF] rounded-3xl flex items-center justify-center font-black flex-shrink-0 group-hover:scale-110 group-hover:bg-[#00BFFF] group-hover:text-white transition-all text-xl">01</div>
                                         <div>
-                                            <h3 class="text-2xl font-bold mb-3 text-gray-900">Private Arrival</h3>
-                                            <p class="text-gray-500 text-lg leading-relaxed">Chauffeur-driven transfer in a premium luxury sedan directly from the tarmac to your five-star villa.</p>
+                                            <h3 class="text-2xl font-black italic mb-3 text-[#00143D]">Private Arrival</h3>
+                                            <p class="text-[#00143D]/50 text-lg leading-relaxed font-medium">Chauffeur-driven transfer in a premium luxury sedan directly from the tarmac to your five-star villa.</p>
                                         </div>
                                     </div>
                                     <div class="flex gap-8 items-start group">
-                                        <div class="w-16 h-16 bg-blue-50 text-primary rounded-3xl flex items-center justify-center font-bold flex-shrink-0 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all text-xl">02</div>
+                                        <div class="w-16 h-16 bg-[#00BFFF]/5 text-[#00BFFF] rounded-3xl flex items-center justify-center font-black flex-shrink-0 group-hover:scale-110 group-hover:bg-[#00BFFF] group-hover:text-white transition-all text-xl">02</div>
                                         <div>
-                                            <h3 class="text-2xl font-bold mb-3 text-gray-900">Curated Exploration</h3>
-                                            <p class="text-gray-500 text-lg leading-relaxed">Expert-led private tours exploring hidden locations that standard tourists never see.</p>
+                                            <h3 class="text-2xl font-black italic mb-3 text-[#00143D]">Curated Exploration</h3>
+                                            <p class-[#00143D]/50 text-lg leading-relaxed font-medium">Expert-led private tours exploring hidden locations that standard tourists never see.</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="mt-20 grid grid-cols-2 gap-8">
-                                     <div class="h-80 rounded-[40px] overflow-hidden shadow-2xl skew-y-1">
+                                     <div class="h-80 rounded-[40px] overflow-hidden shadow-2xl skew-y-1 border border-[#00BFFF]/10">
                                         <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Luxury Interior">
                                      </div>
-                                      <div class="h-80 rounded-[40px] overflow-hidden shadow-2xl -skew-y-1 mt-12">
+                                      <div class="h-80 rounded-[40px] overflow-hidden shadow-2xl -skew-y-1 mt-12 border border-[#00BFFF]/10">
                                         <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Luxury Hotel">
                                      </div>
                                 </div>
@@ -189,28 +201,30 @@
 
                         <!-- Side Booking Card -->
                         <div class="lg:col-span-1" id="sidebar-content">
-                            <div class="bg-white/80 backdrop-blur-2xl rounded-[48px] p-12 shadow-2xl border border-white/50 sticky sticky-sidebar">
+                            <div class="bg-white/80 backdrop-blur-3xl rounded-[48px] p-12 shadow-[0_40px_100px_-20px_rgba(0,191,255,0.15)] border border-[#00BFFF]/10 sticky sticky-sidebar">
                                 <div class="mb-12">
-                                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">ALL-INCLUSIVE TOTAL</div>
-                                    <div class="text-6xl font-black text-primary tracking-tighter">$${pkg.price}</div>
-                                    <div class="text-xs text-gray-400 mt-4 font-bold italic uppercase tracking-widest">Experience Guaranteed</div>
+                                    <div class="text-[10px] font-black text-[#00143D]/20 uppercase tracking-[0.4em] mb-3">ALL-INCLUSIVE TOTAL</div>
+                                    <div class="text-6xl font-black text-[#FF8C00] tracking-tighter italic">$${pkg.price}</div>
+                                    <div class="text-[9px] text-[#00143D]/40 mt-4 font-black italic uppercase tracking-[0.3em]">Experience Guaranteed</div>
                                 </div>
 
                                 <div class="space-y-6 mb-12">
-                                    <h4 class="text-[10px] font-bold text-gray-900 uppercase tracking-[0.2em]">PLATINUM INCLUSIONS</h4>
+                                    <h4 class="text-[10px] font-black text-[#00143D] uppercase tracking-[0.4em]">PLATINUM INCLUSIONS</h4>
                                     <ul class="space-y-4">
                                         ${(pkg.features || []).map(f => `
-                                            <li class="flex items-center gap-4 text-sm font-bold text-gray-600 uppercase tracking-wide">
-                                                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
+                                            <li class="flex items-center gap-4 text-xs font-bold text-[#00143D]/60 uppercase tracking-widest">
+                                                <svg class="w-5 h-5 text-[#00BFFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="4"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
                                                 ${f}
                                             </li>
                                         `).join('')}
                                     </ul>
                                 </div>
 
-                                <a href="booking.html?id=${id}&type=package" class="block w-full bg-primary hover:bg-black text-white text-center py-7 rounded-[32px] font-bold tracking-widest shadow-2xl shadow-primary/30 transition-all hover:scale-[1.05] active:scale-95 text-xs uppercase">RESERVE JOURNEY</a>
+                                <div class="magnetic-wrap w-full">
+                                    <a href="booking.html?id=${id}&type=package" class="magnetic-btn block w-full bg-[#FF8C00] hover:bg-[#00143D] text-white text-center py-7 rounded-[32px] font-black tracking-[0.4em] shadow-2xl shadow-[#FF8C00]/20 transition-all text-[10px] uppercase">RESERVE JOURNEY</a>
+                                </div>
                                 
-                                <p class="mt-8 text-center text-[10px] text-gray-400 font-bold uppercase tracking-[0.3em] inline-block w-full">Inventory Critical</p>
+                                <p class="mt-8 text-center text-[9px] text-[#00143D]/20 font-black uppercase tracking-[0.3em] inline-block w-full">Inventory Critical</p>
                             </div>
                         </div>
 
@@ -218,12 +232,19 @@
                 </div>
             `;
 
+            // Re-init global FX
+            if (typeof initMagneticButtons === 'function') initMagneticButtons();
+
             // GSAP Entrance
             gsap.from("#hero-img", { scale: 1.2, duration: 4, ease: "power2.out" });
             gsap.from("#hero-text", { opacity: 0, y: 50, duration: 1.5, ease: "power4.out", delay: 0.5 });
             gsap.from("#main-content", { opacity: 0, x: -50, duration: 1.2, ease: "power3.out", delay: 1 });
             gsap.from("#sidebar-content", { opacity: 0, x: 50, duration: 1.2, ease: "power3.out", delay: 1.2 });
         }
+    </script>
+
+    <!-- Unified Logic -->
+    <script src="js/main.js"></script>
     </script>
 </body>
 

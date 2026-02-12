@@ -26,8 +26,8 @@
         }
 
         .command-card:hover {
-            border-color: #FF6B00;
-            background: rgba(255, 255, 255, 0.04);
+            border-color: #FF8C00;
+            background: rgba(255, 140, 0, 0.04);
             transform: translateY(-4px);
         }
 
@@ -38,8 +38,8 @@
 
         .nav-link:hover,
         .nav-link.active {
-            color: #FF6B00;
-            background: rgba(255, 107, 0, 0.1);
+            color: #FF8C00;
+            background: rgba(255, 140, 0, 0.1);
         }
 
         /* Scanline Effect */
@@ -47,7 +47,7 @@
             width: 100%;
             height: 100px;
             z-index: 10;
-            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 107, 0, 0.02) 50%, rgba(0, 0, 0, 0) 100%);
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 140, 0, 0.02) 50%, rgba(0, 0, 0, 0) 100%);
             opacity: 0.1;
             position: absolute;
             bottom: 100%;
@@ -71,7 +71,7 @@
 
     <!-- Page Transition Curtain -->
     <div id="page-curtain"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #FF6B00; z-index: 9999;">
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #FF8C00; z-index: 9999;">
     </div>
 
     <!-- Sidebar Control -->
@@ -140,13 +140,13 @@
 
         <header class="flex justify-between items-end reveal-up opacity-0">
             <div class="space-y-4">
-                <p class="text-[10px] font-black tracking-[0.6em] text-orange-500 uppercase">Station Alpha 1</p>
+                <p class="text-[10px] font-black tracking-[0.6em] text-[#FF8C00] uppercase">Station Alpha 1</p>
                 <h1 class="text-6xl font-black italic tracking-tighter">Command <span
-                        class="not-italic text-slate-800">Interface_</span></h1>
+                        class="not-italic text-white/5 whitespace-nowrap">Interface_</span></h1>
             </div>
             <div class="flex gap-4">
                 <div
-                    class="px-8 py-4 bg-orange-600 rounded-2xl font-black text-[9px] tracking-widest uppercase shadow-2xl">
+                    class="px-8 py-4 bg-[#FF8C00] rounded-2xl font-black text-[9px] tracking-widest uppercase shadow-2xl">
                     Broadcast System Msg</div>
             </div>
         </header>
@@ -164,7 +164,7 @@
             <div class="command-card p-10 rounded-[40px]">
                 <p class="text-[9px] font-black text-slate-600 uppercase tracking-[0.4em] mb-6">Gross Valuation</p>
                 <div class="text-5xl font-black italic">$2.4M</div>
-                <div class="mt-6 text-[9px] font-bold text-orange-500 uppercase tracking-widest">Mission Critical Growth
+                <div class="mt-6 text-[9px] font-bold text-[#FF8C00] uppercase tracking-widest">Mission Critical Growth
                 </div>
             </div>
             <div class="command-card p-10 rounded-[40px]">
@@ -174,8 +174,8 @@
             </div>
             <div class="command-card p-10 rounded-[40px]">
                 <p class="text-[9px] font-black text-slate-600 uppercase tracking-[0.4em] mb-6">System Health</p>
-                <div class="text-5xl font-black italic text-[#FF6B00]">99.8%</div>
-                <div class="mt-6 text-[9px] font-bold text-slate-700 uppercase tracking-widest">Nautical Grid Online
+                <div class="text-5xl font-black italic text-[#FF8C00]">99.8%</div>
+                <div class="mt-6 text-[9px] font-bold text-[#00BFFF]/40 uppercase tracking-widest">Nautical Grid Online
                 </div>
             </div>
         </div>
@@ -184,7 +184,7 @@
         <div class="command-card rounded-[48px] overflow-hidden reveal-up opacity-0">
             <div class="px-10 py-8 border-b border-white/5 flex justify-between items-center">
                 <h3 class="text-xs font-black tracking-[0.4em] uppercase text-slate-400">Communication Logs</h3>
-                <span class="text-[9px] font-bold text-orange-500 uppercase tracking-widest">Live Stream</span>
+                <span class="text-[9px] font-bold text-[#FF8C00] uppercase tracking-widest">Live Stream</span>
             </div>
             <div class="p-10">
                 <table class="w-full text-left">
@@ -201,19 +201,19 @@
                             <td class="py-6 font-mono opacity-60">12:45:01</td>
                             <td class="py-6 text-white uppercase italic">Johnathan Doe</td>
                             <td class="py-6">Nautical First-Class (DXB)</td>
-                            <td class="py-6 text-right text-orange-500">$2,400</td>
+                            <td class="py-6 text-right text-[#FF8C00]">$2,400</td>
                         </tr>
                         <tr class="border-t border-white/5">
                             <td class="py-6 font-mono opacity-60">12:44:12</td>
                             <td class="py-6 text-white uppercase italic">Sarah Connors</td>
                             <td class="py-6">Maldives Interface Node</td>
-                            <td class="py-6 text-right text-orange-500">$4,850</td>
+                            <td class="py-6 text-right text-[#FF8C00]">$4,850</td>
                         </tr>
                         <tr class="border-t border-white/5">
                             <td class="py-6 font-mono opacity-60">12:42:55</td>
                             <td class="py-6 text-white uppercase italic">Viktor Drago</td>
                             <td class="py-6">European Sector Link</td>
-                            <td class="py-6 text-right text-orange-500">$1,200</td>
+                            <td class="py-6 text-right text-[#FF8C00]">$1,200</td>
                         </tr>
                     </tbody>
                 </table>

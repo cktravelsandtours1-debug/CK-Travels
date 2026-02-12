@@ -32,25 +32,25 @@
 
         .nav-link:hover,
         .nav-link.active {
-            color: #FF6B00;
-            background: rgba(255, 107, 0, 0.1);
+            color: #FF8C00;
+            background: rgba(255, 140, 0, 0.1);
         }
 
         .btn-orange {
-            background: #FF6B00;
+            background: #FF8C00;
             color: white;
             transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         .btn-orange:hover {
             transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(255, 107, 0, 0.4);
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.4);
         }
 
         .modal-glass {
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(35px);
-            border: 1px solid rgba(255, 107, 0, 0.2);
+            border: 1px solid rgba(255, 140, 0, 0.2);
         }
 
         .input-dark {
@@ -61,9 +61,9 @@
         }
 
         .input-dark:focus {
-            border-color: #FF6B00;
+            border-color: #FF8C00;
             outline: none;
-            box-shadow: 0 0 15px rgba(255, 107, 0, 0.2);
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.2);
         }
 
         .pkg-card {
@@ -75,7 +75,7 @@
         }
 
         .pkg-card:hover {
-            border-color: #FF6B00;
+            border-color: #FF8C00;
             transform: translateY(-8px);
         }
     </style>
@@ -138,9 +138,9 @@
     <main class="flex-1 overflow-y-auto p-16 space-y-16">
         <header class="flex justify-between items-end reveal-up opacity-0">
             <div class="space-y-4">
-                <p class="text-[10px] font-black tracking-[0.6em] text-orange-500 uppercase">Experience Portfolio</p>
+                <p class="text-[10px] font-black tracking-[0.6em] text-[#FF8C00] uppercase">Experience Portfolio</p>
                 <h1 class="text-6xl font-black italic tracking-tighter">Event <span
-                        class="not-italic text-slate-800">Inventory_</span></h1>
+                        class="not-italic text-white/5 whitespace-nowrap">Inventory_</span></h1>
             </div>
             <button onclick="showPackageModal()"
                 class="btn-orange px-10 py-5 rounded-2xl font-black text-[10px] tracking-widest uppercase shadow-2xl">Create
@@ -159,9 +159,9 @@
         <div id="modal-container" class="relative z-10 w-full max-w-4xl modal-glass p-16 rounded-[48px]">
             <header class="mb-12 flex justify-between items-start">
                 <div class="space-y-4">
-                    <p class="text-[10px] font-black tracking-[0.5em] text-orange-500 uppercase">Experience Manifest</p>
+                    <p class="text-[10px] font-black tracking-[0.5em] text-[#FF8C00] uppercase">Experience Manifest</p>
                     <h2 id="modal-title" class="text-4xl font-black italic">Deploy <span
-                            class="not-italic text-slate-500">Node_</span></h2>
+                            class="not-italic text-white/10">Node_</span></h2>
                 </div>
                 <button onclick="hidePackageModal()" class="text-slate-500 hover:text-white group">
                     <svg class="w-8 h-8 group-hover:rotate-90 transition-transform" fill="none" stroke="currentColor"
@@ -253,7 +253,7 @@
                                     <p class="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase">${p.duration} Deployment</p>
                                 </div>
                                 <div class="flex justify-between items-center pt-6 border-t border-white/5">
-                                    <span class="text-2xl font-black text-orange-500">$${p.price}</span>
+                                    <span class="text-2xl font-black text-[#FF8C00]">$${p.price}</span>
                                     <div class="flex gap-2">
                                         <button onclick="editPackage('${doc.id}')" class="p-3 bg-white/5 rounded-xl hover:bg-orange-600 transition-all">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-width="2"/></svg>

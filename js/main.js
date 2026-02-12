@@ -37,18 +37,21 @@ function initLenis() {
 function initGlobalAnimations() {
     console.log("Initializing CK Travels Motion System...");
 
+    const introTl = gsap.timeline();
+
     // A) Global Navigation Logic
     const nav = document.getElementById('main-nav');
     if (nav) {
+        // Ensure nav is above curtain for the intro
+        nav.style.zIndex = "10001";
+
         // 1. Initial State: Slide down
-        // 1. Initial State: Slide down (Force opacity 1 at end)
-        gsap.fromTo(nav,
+        introTl.fromTo(nav,
             { y: -100, opacity: 0 },
             { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }
         );
 
         // 2. Scroll Transformation (The "Floating Glassmorphic Dock")
-        // Only if ScrollTrigger is loaded
         if (typeof ScrollTrigger !== 'undefined') {
             const navContainer = document.getElementById('nav-container');
             ScrollTrigger.create({
@@ -83,16 +86,24 @@ function initGlobalAnimations() {
         }
     }
 
-    // B) Magnetic Buttons (Global)
+    // C) Magnetic Buttons (Global)
     initMagneticButtons();
 
-    // C) Page Transitions (Curtain Wipe)
+    // D) Page Transitions (Setup links & create curtain)
     initPageTransitions();
 
-    // D) Common Reveal Animations
-    // Only target elements that are NOT manually animated by specific page scripts (like login cards)
-    // We use a specific class 'reveal-up-global' or check if it's not handled elsewhere
-    // For now, we apply to all .reveal-up unless they are in specific contexts if needed
+    // E) Page Intro Curtain Wipe (OUT)
+    // We add this to the intro timeline now that curtain is guaranteed to exist
+    const curtain = document.getElementById('page-curtain');
+    if (curtain) {
+        introTl.to(curtain, {
+            left: "100%",
+            duration: 1.5,
+            ease: "expo.inOut"
+        }, "-=0.2"); // Start slightly before nav finishes
+    }
+
+    // E) Common Reveal Animations
     const reveals = document.querySelectorAll('.reveal-up');
     if (reveals.length > 0 && typeof ScrollTrigger !== 'undefined') {
         gsap.from(reveals, {
@@ -103,20 +114,21 @@ function initGlobalAnimations() {
             ease: "power4.out",
             scrollTrigger: {
                 trigger: document.body,
-                start: "top 80%", // Immediate if top of page
+                start: "top 80%",
             }
         });
     }
-    // E) Hero 3D Scene
+
+    // F) Hero 3D Scene
     createHeroScene();
 
-    // F) AI-Glass Shimmer
+    // G) AI-Glass Shimmer
     initAIShimmer();
 
-    // G) Raindrop Headings
+    // H) Raindrop Headings
     initRaindropText();
 
-    // H) Login Interactions
+    // I) Login Interactions
     initLoginInteractions();
 }
 
@@ -302,7 +314,7 @@ function initPageTransitions() {
     if (!document.getElementById('page-curtain')) {
         const curtain = document.createElement('div');
         curtain.id = 'page-curtain';
-        curtain.style.cssText = `position: fixed; top: 0; left: -100%; width: 100%; height: 100%; background-color: #FF8C00; z-index: 9999; pointer-events: none;`;
+        curtain.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #FF8C00; z-index: 9999; pointer-events: none;`;
         document.body.appendChild(curtain);
     }
 

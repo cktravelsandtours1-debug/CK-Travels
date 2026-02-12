@@ -32,25 +32,25 @@
 
         .nav-link:hover,
         .nav-link.active {
-            color: #FF6B00;
-            background: rgba(255, 107, 0, 0.1);
+            color: #FF8C00;
+            background: rgba(255, 140, 0, 0.1);
         }
 
         .btn-orange {
-            background: #FF6B00;
+            background: #FF8C00;
             color: white;
             transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         .btn-orange:hover {
             transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(255, 107, 0, 0.4);
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.4);
         }
 
         .modal-glass {
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(35px);
-            border: 1px solid rgba(255, 107, 0, 0.2);
+            border: 1px solid rgba(255, 140, 0, 0.2);
         }
 
         .input-dark {
@@ -61,9 +61,9 @@
         }
 
         .input-dark:focus {
-            border-color: #FF6B00;
+            border-color: #FF8C00;
             outline: none;
-            box-shadow: 0 0 15px rgba(255, 107, 0, 0.2);
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.2);
         }
 
         /* Flight Row Hover */
@@ -72,7 +72,7 @@
         }
 
         .flight-row:hover {
-            background: rgba(255, 107, 0, 0.03);
+            background: rgba(255, 140, 0, 0.03);
         }
     </style>
 </head>
@@ -81,7 +81,7 @@
 
     <!-- Page Transition Curtain -->
     <div id="page-curtain"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #FF6B00; z-index: 9999;">
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #FF8C00; z-index: 9999;">
     </div>
 
     <!-- Sidebar Control -->
@@ -139,9 +139,9 @@
     <main class="flex-1 overflow-y-auto p-16 space-y-16">
         <header class="flex justify-between items-end reveal-up opacity-0">
             <div class="space-y-4">
-                <p class="text-[10px] font-black tracking-[0.6em] text-orange-500 uppercase">Aviation Logistics</p>
+                <p class="text-[10px] font-black tracking-[0.6em] text-[#FF8C00] uppercase">Aviation Logistics</p>
                 <h1 class="text-6xl font-black italic tracking-tighter">Asset <span
-                        class="not-italic text-slate-800">Inventory_</span></h1>
+                        class="not-italic text-white/5 whitespace-nowrap">Inventory_</span></h1>
             </div>
             <button onclick="showFlightModal()"
                 class="btn-orange px-10 py-5 rounded-2xl font-black text-[10px] tracking-widest uppercase shadow-2xl">Deploy
@@ -152,7 +152,7 @@
         <div class="command-card rounded-[48px] overflow-hidden reveal-up opacity-0">
             <div class="px-10 py-8 border-b border-white/5 flex justify-between items-center bg-white/5">
                 <h3 class="text-xs font-black tracking-[0.4em] uppercase text-slate-400">Synchronized Node Data</h3>
-                <span id="results-count" class="text-[9px] font-bold text-orange-500 uppercase tracking-widest">Awaiting
+                <span id="results-count" class="text-[9px] font-bold text-[#FF8C00] uppercase tracking-widest">Awaiting
                     Link...</span>
             </div>
             <div id="flights-list" class="divide-y divide-white/5">
@@ -167,16 +167,18 @@
         <div id="modal-container" class="relative z-10 w-full max-w-4xl modal-glass p-16 rounded-[48px]">
             <header class="mb-12 flex justify-between items-start">
                 <div class="space-y-4">
-                    <p class="text-[10px] font-black tracking-[0.5em] text-orange-500 uppercase">Asset Configuration</p>
-                    <h2 id="modal-title" class="text-4xl font-black italic">Entity <span
-                            class="not-italic text-slate-500">Manifest_</span></h2>
-                </div>
-                <button onclick="hideFlightModal()" class="text-slate-500 hover:text-white group">
-                    <svg class="w-8 h-8 group-hover:rotate-90 transition-transform" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path d="M6 18L18 6M6 6l12 12" stroke-width="3" />
-                    </svg>
-                </button>
+                    <div class="space-y-4">
+                        <p class="text-[10px] font-black tracking-[0.5em] text-[#FF8C00] uppercase">Asset Configuration
+                        </p>
+                        <h2 id="modal-title" class="text-4xl font-black italic">Entity <span
+                                class="not-italic text-white/10">Manifest_</span></h2>
+                    </div>
+                    <button onclick="hideFlightModal()" class="text-slate-500 hover:text-white group">
+                        <svg class="w-8 h-8 group-hover:rotate-90 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 18L18 6M6 6l12 12" stroke-width="3" />
+                        </svg>
+                    </button>
             </header>
 
             <form id="flight-form" onsubmit="handleFlightSubmit(event)"
@@ -257,7 +259,7 @@
                     listContainer.innerHTML += `
                         <div class="flight-row px-12 py-8 flex items-center justify-between group">
                             <div class="flex items-center gap-10">
-                                <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center font-black text-orange-500 text-sm border border-white/5 uppercase">
+                                <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center font-black text-[#FF8C00] text-sm border border-white/5 uppercase">
                                     ${f.airline.substring(0, 2)}
                                 </div>
                                 <div class="space-y-1">
@@ -268,7 +270,7 @@
                             <div class="flex items-center gap-16">
                                 <div class="text-right">
                                     <p class="text-[9px] font-black text-slate-800 uppercase tracking-widest mb-1">Valuation</p>
-                                    <p class="font-black text-orange-500">$${f.price}</p>
+                                    <p class="font-black text-[#FF8C00]">$${f.price}</p>
                                 </div>
                                 <div class="flex gap-4">
                                     <button onclick="editFlight('${doc.id}')" class="p-4 bg-white/5 rounded-xl hover:bg-orange-600 hover:text-white transition-all">

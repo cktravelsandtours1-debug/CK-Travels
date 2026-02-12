@@ -84,6 +84,23 @@
             </button>
         </form>
 
+        <div class="mt-10 mb-8">
+            <div class="relative">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-50"></div>
+                </div>
+                <div class="relative flex justify-center text-[10px]"><span
+                        class="px-3 bg-white text-gray-400 font-bold uppercase tracking-[0.2em]">Social
+                        Integration</span></div>
+            </div>
+        </div>
+
+        <button onclick="handleGoogleLogin()"
+            class="w-full border border-gray-100 py-5 rounded-3xl font-bold text-[10px] text-gray-700 hover:bg-gray-50 transition-all flex items-center justify-center gap-4 tracking-[0.2em] shadow-sm">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-4 h-4" alt="Google">
+            SIGN IN WITH GOOGLE
+        </button>
+
         <div class="mt-12 text-center">
             <p class="text-sm text-gray-400">
                 New to the platform? <a href="#" class="text-primary font-bold hover:text-black transition-colors">Apply
@@ -103,7 +120,6 @@
     <script>
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            // Mock login for UX
             const btn = e.target.querySelector('button');
             btn.textContent = "VERIFYING...";
             btn.disabled = true;
@@ -111,6 +127,11 @@
                 window.location.href = 'index.html';
             }, 1000);
         });
+
+        function handleGoogleLogin() {
+            // Mock redirect for premium flow
+            window.location.href = 'index.html';
+        }
     </script>
 </body>
 

@@ -18,95 +18,93 @@
                         sans: ['Inter', 'sans-serif'],
                     },
                     colors: {
-                        primary: '#1e40af',  // Deep Blue
-                        secondary: '#3b82f6', // Bright Blue
-                        accent: '#f59e0b',    // Amber
+                        primary: '#1e40af',
                         surface: '#f3f4f6',
                     }
                 }
             }
         }
     </script>
-
     <style>
-        .pkg-card-hover:hover {
-            transform: translateY(-4px);
+        .tap-target {
+            min-height: 44px;
         }
     </style>
 </head>
 
-<body class="bg-surface font-sans text-gray-800 antialiased">
+<body class="bg-surface font-sans text-gray-800 antialiased overflow-x-hidden">
 
     <!-- Navbar -->
-    <nav class="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center">
-                    <a href="index.html" class="flex-shrink-0 flex items-center gap-2 group">
-                        <span
-                            class="text-3xl font-bold tracking-tighter text-gray-900 group-hover:text-primary transition-colors">CK<span
-                                class="text-primary group-hover:text-amber-500 transition-colors">.</span></span>
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50 h-16 sm:h-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+            <div class="flex justify-between items-center h-full">
+                <div class="flex items-center gap-4">
+                    <button class="sm:hidden p-2 -ml-2 text-gray-500 tap-target" onclick="toggleMobileMenu()">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <a href="index.html" class="flex-shrink-0 flex items-center gap-1">
+                        <span class="text-2xl sm:text-3xl font-bold tracking-tighter text-gray-900">CK<span
+                                class="text-primary">.</span></span>
                     </a>
-                    <div class="hidden sm:ml-10 sm:flex sm:space-x-8">
-                        <a href="index.html"
-                            class="border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">Home</a>
-                        <a href="flights.html"
-                            class="border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">Flights</a>
-                        <a href="packages.html"
-                            class="border-primary text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Packages</a>
-                        <a href="booking.html"
-                            class="border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">My
-                            Trips</a>
-                    </div>
                 </div>
-                <div class="flex items-center space-x-4">
+                <div class="hidden sm:flex space-x-8">
+                    <a href="index.html" class="text-gray-500 hover:text-gray-900 text-sm font-medium">Home</a>
+                    <a href="flights.html" class="text-gray-500 hover:text-gray-900 text-sm font-medium">Flights</a>
+                    <a href="packages.html"
+                        class="text-gray-900 border-primary border-b-2 text-sm font-medium">Packages</a>
+                </div>
+                <div class="flex items-center">
                     <a href="login.html"
-                        class="bg-primary hover:bg-blue-800 text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">Sign
+                        class="bg-primary hover:bg-blue-800 text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-lg transition-all tap-target flex items-center">Sign
                         In</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Overlay -->
+        <div id="mobile-nav" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity"
+            onclick="toggleMobileMenu()">
+            <div class="bg-white w-3/4 h-full shadow-2xl p-6 transform -translate-x-full transition-transform duration-300"
+                id="mobile-nav-panel">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-2xl font-bold tracking-tighter text-gray-900">CK<span
+                            class="text-primary">.</span></span>
+                    <button class="text-gray-400 p-2" onclick="toggleMobileMenu()">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="space-y-6">
+                    <a href="index.html" class="block text-xl font-bold text-gray-800">Home</a>
+                    <a href="flights.html" class="block text-xl font-bold text-gray-800">Flights</a>
+                    <a href="packages.html" class="block text-xl font-bold text-primary">Packages</a>
+                    <a href="booking.html" class="block text-xl font-bold text-gray-800">My Trips</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Header -->
-    <div class="bg-white border-b border-gray-200 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="lg:text-center">
-                <h2 class="text-base text-primary font-semibold tracking-wide uppercase">Curated Collections</h2>
-                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                    Discover your next adventure
-                </p>
-                <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-                    Handpicked luxury experiences tailored for the discerning traveler. From city breaks to tropical
-                    escapes.
-                </p>
-            </div>
-
-            <!-- Filters -->
-            <div class="mt-8 flex justify-center gap-2">
-                <button class="px-4 py-2 bg-gray-900 text-white rounded-full text-sm font-medium shadow-md">All</button>
-                <button
-                    class="px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-full text-sm font-medium hover:bg-gray-50 hover:border-gray-300 transition-all">Beach</button>
-                <button
-                    class="px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-full text-sm font-medium hover:bg-gray-50 hover:border-gray-300 transition-all">Mountain</button>
-                <button
-                    class="px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-full text-sm font-medium hover:bg-gray-50 hover:border-gray-300 transition-all">City</button>
-            </div>
+    <header class="bg-white border-b border-gray-100 py-10 sm:py-20 text-center">
+        <div class="max-w-4xl mx-auto px-4">
+            <h1 class="text-4xl sm:text-6xl font-extrabold text-gray-900 tracking-tighter mb-4">Curated Experiences</h1>
+            <p class="text-lg text-gray-500 max-w-2xl mx-auto">Discover handpicked luxury packages designed for the
+                discerning traveler.</p>
         </div>
-    </div>
+    </header>
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div id="packages-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Loading State -->
-            <div class="col-span-full text-center py-20">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
-                <p class="text-gray-500">Curating best experiences from the cloud...</p>
-            </div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div id="packages-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <!-- Dynamic Content -->
         </div>
     </main>
 
-    <!-- Firebase SDK v8 -->
+    <!-- JS and Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
@@ -121,79 +119,45 @@
             measurementId: "G-HNT07JXC3C"
         };
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         db.settings({ experimentalForceLongPolling: true });
 
-        const container = document.getElementById('packages-container');
-
-        // Fetch Real Data
-        db.collection("packages").get()
-            .then((querySnapshot) => {
-                const packages = [];
-                querySnapshot.forEach((doc) => {
-                    packages.push({ id: doc.id, ...doc.data() });
-                });
-                renderPackages(packages);
-            })
-            .catch((error) => {
-                console.error(error);
-                container.innerHTML = `<div class="col-span-full text-center text-red-500 py-10 bg-red-50 rounded-lg">Error loading packages: ${error.message}</div>`;
-            });
-
-        function renderPackages(packages) {
-            container.innerHTML = '';
-
-            if (packages.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                        <h3 class="mt-2 text-sm font-medium text-gray-900">No packages ready</h3>
-                        <p class="mt-1 text-sm text-gray-500">Check back later for new travel experiences.</p>
-                    </div>
-                `;
-                return;
+        window.toggleMobileMenu = function () {
+            const nav = document.getElementById('mobile-nav');
+            const panel = document.getElementById('mobile-nav-panel');
+            if (nav.classList.contains('hidden')) {
+                nav.classList.remove('hidden');
+                setTimeout(() => panel.classList.remove('-translate-x-full'), 10);
+            } else {
+                panel.classList.add('-translate-x-full');
+                setTimeout(() => nav.classList.add('hidden'), 300);
             }
+        };
 
-            packages.forEach(pkg => {
-                const card = document.createElement('div');
-                card.className = 'group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 cursor-pointer pkg-card-hover';
-                card.onclick = () => window.location.href = `booking.html?id=${pkg.id}&type=package`;
-
-                card.innerHTML = `
-                    <div class="relative h-64 overflow-hidden">
-                        <img src="${pkg.image}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" alt="${pkg.title}" onerror="this.src='https://via.placeholder.com/400x300?text=CK+Luxury'">
-                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-gray-900 shadow-sm">
-                            ${pkg.location}
+        db.collection("packages").get().then(qs => {
+            const container = document.getElementById('packages-container');
+            container.innerHTML = '';
+            qs.forEach(doc => {
+                const pkg = doc.data();
+                container.innerHTML += `
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 group cursor-pointer" onclick="window.location.href='booking.html?id=${doc.id}&type=package'">
+                        <div class="h-64 relative overflow-hidden">
+                            <img src="${pkg.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="${pkg.title}" loading="lazy">
+                            <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-900 shadow-sm">${pkg.location}</div>
                         </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">${pkg.title}</h3>
-                                <div class="flex flex-wrap gap-2">
-                                     ${(pkg.features || []).slice(0, 3).map(f => `<span class="bg-gray-50 text-gray-600 text-xs px-2 py-1 rounded-md border border-gray-100">${f}</span>`).join('')}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="border-t border-gray-100 pt-4 flex justify-between items-center">
-                            <div class="flex items-center text-gray-500 text-sm">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                ${pkg.duration}
-                            </div>
-                            <div class="text-right">
-                                <span class="block text-xs text-gray-400 font-medium uppercase">Starting at</span>
-                                <span class="text-2xl font-bold text-primary">$${pkg.price}</span>
+                        <div class="p-6 sm:p-8">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">${pkg.title}</h3>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">${pkg.duration}</p>
+                            <div class="flex justify-between items-center border-t border-gray-50 pt-6">
+                                <div class="text-2xl font-black text-primary">$${pkg.price}</div>
+                                <div class="bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-lg shadow-primary/20 group-hover:translate-x-1 transition-transform">→</div>
                             </div>
                         </div>
                     </div>
                 `;
-                container.appendChild(card);
             });
-        }
+        });
     </script>
 </body>
 

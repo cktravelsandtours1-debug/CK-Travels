@@ -6,202 +6,216 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Checkout | CK Travels</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Modular CSS System -->
-    <link rel="stylesheet" href="css/main.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#1e40af',  // Deep Blue
+                        secondary: '#3b82f6', // Bright Blue
+                        accent: '#f59e0b',    // Amber
+                        surface: '#f3f4f6',
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        .checkout-progress {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            position: relative;
-            max-width: 600px;
-            margin: 0 auto 3rem auto;
+        .tap-target {
+            min-height: 44px;
         }
 
-        .progress-line {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: #e0e0e0;
-            z-index: -1;
-            transform: translateY(-50%);
-        }
-
-        .step-node {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #fff;
-            border: 2px solid #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            position: relative;
-            color: var(--sh-black);
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        .step-node.active {
-            border-color: var(--sh-black);
-            background: var(--sh-black);
-            color: #fff;
-        }
-
-        .step-node.completed {
-            background: #f0f0f0;
-            border-color: #ccc;
-            color: #000;
-        }
-
-        .step-label {
-            position: absolute;
-            top: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.8rem;
-            white-space: nowrap;
-            color: #666;
-            text-transform: uppercase;
-            font-weight: 600;
+        /* Smooth transition for form panels */
+        .panel-fade {
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
     </style>
 </head>
 
-<body>
+<body class="bg-surface font-sans text-gray-800 antialiased overflow-x-hidden">
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <a href="index.html" class="logo">CK Travels</a>
-        <div class="nav-links">
-            <a href="index.html" class="nav-item">Home</a>
-            <a href="flights.html" class="nav-item">Flights</a>
-            <a href="packages.html" class="nav-item">Packages</a>
-            <a href="booking.html" class="nav-item active">My Trips</a>
-        </div>
-        <div style="display: flex; gap: 12px;">
-            <a href="login.html" class="btn btn-signup btn-sm">Sign Up</a>
-            <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50 h-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+            <div class="flex justify-between items-center h-full">
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-1 group">
+                    <span
+                        class="text-2xl font-bold tracking-tighter text-gray-900 group-hover:text-primary transition-colors">CK<span
+                            class="text-primary">.</span></span>
+                </a>
+                <div class="hidden sm:flex space-x-6">
+                    <a href="index.html" class="text-gray-500 hover:text-gray-900 text-sm font-medium">Home</a>
+                    <a href="flights.html" class="text-gray-500 hover:text-gray-900 text-sm font-medium">Flights</a>
+                    <a href="packages.html" class="text-gray-500 hover:text-gray-900 text-sm font-medium">Packages</a>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <div class="container os-layout" style="grid-template-columns: 1fr 350px;">
+    <!-- Main Content Grid -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div class="flex flex-col lg:flex-row gap-8">
 
-        <!-- Main Form Area -->
-        <main>
-            <!-- Progress -->
-            <div class="checkout-progress">
-                <div class="progress-line"></div>
-                <div class="step-node active" id="step1-node">1 <span class="step-label">Travelers</span></div>
-                <div class="step-node" id="step2-node">2 <span class="step-label">Payment</span></div>
-                <div class="step-node" id="step3-node">3 <span class="step-label">Confirm</span></div>
-            </div>
+            <!-- Main Checkout Form (Left) -->
+            <main class="flex-1 w-full order-2 lg:order-1">
 
-            <!-- Form Panels -->
-            <form id="checkout-form">
-
-                <!-- STEP 1: Travelers -->
-                <div id="step1" class="glass-panel panel-content" style="display: block;">
-                    <h2 style="margin-bottom: 24px;">Who is traveling?</h2>
-
-                    <div class="grid-2">
-                        <div class="form-group">
-                            <label for="fname" class="input-label">First Name</label>
-                            <input type="text" id="fname" class="input-field" required>
+                <!-- Progress Header -->
+                <div class="mb-8 overflow-hidden">
+                    <div class="flex items-center justify-between px-2">
+                        <div class="flex flex-col items-center gap-2 group">
+                            <div id="step1-node"
+                                class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-lg shadow-primary/20 transition-all">
+                                1</div>
+                            <span class="text-[10px] font-bold text-gray-900 uppercase tracking-widest">Travelers</span>
                         </div>
-                        <div class="form-group">
-                            <label for="lname" class="input-label">Last Name</label>
-                            <input type="text" id="lname" class="input-field" required>
+                        <div class="flex-1 h-0.5 bg-gray-200 mx-4 -mt-6"></div>
+                        <div class="flex flex-col items-center gap-2 group">
+                            <div id="step2-node"
+                                class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold transition-all">
+                                2</div>
+                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Payment</span>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email" class="input-label">Email Address</label>
-                        <input type="email" id="email" class="input-field" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phone" class="input-label">Phone Number</label>
-                        <input type="tel" id="phone" class="input-field" required>
-                    </div>
-
-                    <div style="text-align: right; margin-top: 32px;">
-                        <button type="button" class="btn btn-primary" onclick="nextStep(2)">Continue to Payment
-                            &rarr;</button>
+                        <div class="flex-1 h-0.5 bg-gray-200 mx-4 -mt-6"></div>
+                        <div class="flex flex-col items-center gap-2 group">
+                            <div id="step3-node"
+                                class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold transition-all">
+                                3</div>
+                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Done</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- STEP 2: Payment -->
-                <div id="step2" class="glass-panel panel-content" style="display: none;">
-                    <h2 style="margin-bottom: 24px;">Secure Payment</h2>
+                <form id="checkout-form" class="space-y-6">
 
-                    <div class="form-group">
-                        <label for="card" class="input-label">Card Number</label>
-                        <input type="text" id="card" class="input-field" placeholder="0000 0000 0000 0000" required>
-                    </div>
-
-                    <div class="grid-2">
-                        <div class="form-group">
-                            <label for="expiry" class="input-label">MM / YY</label>
-                            <input type="text" id="expiry" class="input-field" placeholder="MM/YY" required>
+                    <!-- STEP 1: TRAVELERS -->
+                    <div id="step1" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-100 panel-fade">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-8 tracking-tight">Traveler Details</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">First
+                                    Name</label>
+                                <input type="text" id="fname" required
+                                    class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Last
+                                    Name</label>
+                                <input type="text" id="lname" required
+                                    class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="cvc" class="input-label">CVC</label>
-                            <input type="text" id="cvc" class="input-field" placeholder="123" required>
+                        <div class="mt-6 space-y-2">
+                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Email
+                                Address</label>
+                            <input type="email" id="email" required
+                                class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                        </div>
+                        <div class="mt-6 space-y-2">
+                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Phone
+                                Number</label>
+                            <input type="tel" id="phone" required
+                                class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                        </div>
+                        <button type="button" onclick="nextStep(2)"
+                            class="w-full bg-primary hover:bg-black text-white font-bold py-4 rounded-xl mt-10 shadow-lg shadow-primary/10 transition-all flex items-center justify-center gap-2 group">
+                            CONTINUE TO PAYMENT
+                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- STEP 2: PAYMENT (Hidden) -->
+                    <div id="step2"
+                        class="hidden bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-100 panel-fade">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-8 tracking-tight">Secure Payment</h2>
+                        <div class="space-y-6">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Card
+                                    Number</label>
+                                <input type="text" id="card" placeholder="0000 0000 0000 0000"
+                                    class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Expiry
+                                        Date</label>
+                                    <input type="text" id="expiry" placeholder="MM/YY"
+                                        class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">CVV</label>
+                                    <input type="text" id="cvc" placeholder="***"
+                                        class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-10 flex gap-3">
+                            <button type="button" onclick="nextStep(1)"
+                                class="px-6 py-4 rounded-xl font-bold text-gray-400 hover:bg-gray-50 transition-all">BACK</button>
+                            <button type="button" onclick="processPayment()"
+                                class="flex-1 bg-primary hover:bg-black text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/10 transition-all">
+                                COMPLETE BOOKING $<span id="pay-amt">0</span>
+                            </button>
                         </div>
                     </div>
 
-                    <div class="flex-between" style="margin-top: 32px;">
-                        <button type="button" class="btn btn-secondary" onclick="nextStep(1)">&larr; Back</button>
-                        <button type="button" class="btn btn-primary" onclick="processPayment()">Complete Booking
-                            ($<span id="pay-amt">0</span>)</button>
+                    <!-- STEP 3: SUCCESS (Hidden) -->
+                    <div id="step3"
+                        class="hidden bg-white rounded-3xl p-12 text-center shadow-2xl border border-gray-50 panel-fade">
+                        <div
+                            class="w-24 h-24 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
+                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">Booking Confirmed!</h2>
+                        <p class="text-gray-500 mb-10 max-w-xs mx-auto">Your digital tickets and itinerary have been
+                            sent to your email.</p>
+                        <a href="index.html"
+                            class="inline-block bg-primary hover:bg-black text-white px-10 py-4 rounded-2xl font-bold transition-all shadow-xl shadow-primary/20">BACK
+                            TO HOME</a>
+                    </div>
+
+                </form>
+            </main>
+
+            <!-- Order Summary Sidebar (Right on Desktop, Top on Mobile) -->
+            <aside class="w-full lg:w-80 order-1 lg:order-2">
+                <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-gray-50 sticky top-40">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Booking Summary</h3>
+
+                    <div class="space-y-4 mb-8">
+                        <div>
+                            <h4 id="item-title" class="text-xl font-bold text-gray-900 tracking-tight">Loading...</h4>
+                            <p id="item-meta" class="text-sm text-gray-400 font-medium"></p>
+                        </div>
+                        <div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl">
+                            <span class="text-sm font-bold text-gray-900 uppercase tracking-widest">Total</span>
+                            <span id="item-price" class="text-2xl font-black text-primary">$0</span>
+                        </div>
                     </div>
                 </div>
+            </aside>
 
-                <!-- STEP 3: Success -->
-                <div id="step3" class="glass-panel panel-content"
-                    style="display: none; text-align: center; padding: 60px 20px;">
-                    <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
-                    <h2 style="margin-bottom: 16px;">Booking Confirmed!</h2>
-                    <p style="color: #666; margin-bottom: 32px;">Your itinerary has been sent to your email.</p>
-                    <a href="index.html" class="btn btn-primary">Back to Home</a>
-                </div>
-
-            </form>
-        </main>
-
-        <!-- Sidebar Summary -->
-        <aside>
-            <div class="glass-panel" style="position: sticky; top: 120px; border: var(--sh-border); padding: 24px;">
-                <h3 style="font-size: 1rem; margin-bottom: 16px; color: #666; text-transform: uppercase;">Order Summary
-                </h3>
-
-                <h4 id="item-title" style="font-size: 1.25rem; margin-bottom: 4px; font-weight: 700;">Loading...</h4>
-                <p id="item-meta"
-                    style="font-size: 0.9rem; color: #666; padding-bottom: 16px; border-bottom: 1px solid #e0e0e0;">
-                    Please wait</p>
-
-                <div class="flex-between" style="padding-top: 16px;">
-                    <span style="font-weight: 600;">Total Due</span>
-                    <span id="item-price" style="font-size: 1.5rem; font-weight: 700; color: var(--sh-black);">-</span>
-                </div>
-            </div>
-        </aside>
-
+        </div>
     </div>
 
-    <!-- Firebase Compat Libraries -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <script>
         const firebaseConfig = {
@@ -214,11 +228,11 @@
             measurementId: "G-HNT07JXC3C"
         };
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const db = firebase.firestore();
 
-        // 1. Data Loader Logic
         const params = new URLSearchParams(window.location.search);
         const type = params.get('type') || 'flight';
         const id = params.get('id');
@@ -226,132 +240,62 @@
         let item = null;
         let itemPrice = 0;
 
-        window.loadItemDetails = function () {
-            // Wait for auth (or guest access)
-            // For booking, we allow guest access, but ideally database rules should allow read access to 'flights' and 'packages'
-
-            if (!id) {
-                // No ID provided, just dummy load or redirect
-                // If it's a test, we can leave it
-                document.getElementById('item-title').textContent = "Select a Trip";
-                document.getElementById('item-meta').textContent = "Go back to flights or packages";
-                return;
-            }
-
-            const collectionName = type === 'flight' ? 'flights' : 'packages';
-
-            db.collection(collectionName).doc(id).get().then((doc) => {
+        // Load Data
+        if (id) {
+            const collection = type === 'flight' ? 'flights' : 'packages';
+            db.collection(collection).doc(id).get().then(doc => {
                 if (doc.exists) {
                     item = doc.data();
                     itemPrice = item.price;
-
-                    if (type === 'flight') {
-                        document.getElementById('item-title').textContent = `${item.airline} • ${item.flightNumber}`;
-                        document.getElementById('item-meta').textContent = `${item.from} → ${item.to}`;
-                    } else {
-                        document.getElementById('item-title').textContent = item.title;
-                        document.getElementById('item-meta').textContent = `${item.location} • ${item.duration}`;
-                    }
-
+                    document.getElementById('item-title').textContent = type === 'flight' ? `${item.airline} • ${item.flightNumber}` : item.title;
+                    document.getElementById('item-meta').textContent = type === 'flight' ? `${item.from} → ${item.to}` : item.location;
                     document.getElementById('item-price').textContent = `$${item.price}`;
                     document.getElementById('pay-amt').textContent = item.price;
-                } else {
-                    document.getElementById('item-title').textContent = "Item Not Found";
                 }
-            }).catch((error) => {
-                console.log("Error getting document:", error);
-                document.getElementById('item-title').textContent = "Error Loading Item";
             });
         }
 
-        // 2. Wizard Logic
         window.nextStep = function (step) {
-            // Hide all
-            ['step1', 'step2', 'step3'].forEach(id => document.getElementById(id).style.display = 'none');
-            // Show target
-            document.getElementById(`step${step}`).style.display = 'block';
+            ['step1', 'step2', 'step3'].forEach(s => document.getElementById(s).classList.add('hidden'));
+            const target = document.getElementById(`step${step}`);
+            target.classList.remove('hidden');
 
-            // Minimalist Fade Animation
-            const panel = document.getElementById(`step${step}`);
-            panel.style.opacity = '0';
-            panel.style.transform = 'translateY(10px)';
+            // Animation
+            target.style.opacity = '0';
+            target.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                target.style.opacity = '1';
+                target.style.transform = 'translateY(0)';
+            }, 10);
 
-            // Trigger reflow
-            void panel.offsetWidth;
-
-            panel.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-            panel.style.opacity = '1';
-            panel.style.transform = 'translateY(0)';
-
-            // Update Progress
-            updateProgress(step);
-        }
-
-        function updateProgress(step) {
-            const nodes = document.querySelectorAll('.step-node');
-            nodes.forEach((node, idx) => {
-                // Clear previous text
-                node.innerHTML = '';
-                // Add label
-                const label = document.createElement('span');
-                label.className = 'step-label';
-                if (idx === 0) label.textContent = 'Travelers';
-                if (idx === 1) label.textContent = 'Payment';
-                if (idx === 2) label.textContent = 'Confirm';
-
-                if (idx + 1 < step) {
-                    node.classList.add('completed');
-                    node.classList.remove('active');
-                    node.textContent = '✓';
-                } else if (idx + 1 === step) {
-                    node.classList.add('active');
-                    node.classList.remove('completed');
-                    node.textContent = step;
-                } else {
-                    node.classList.remove('active', 'completed');
-                    node.textContent = idx + 1;
+            // Update Header
+            for (let i = 1; i <= 3; i++) {
+                const node = document.getElementById(`step${i}-node`);
+                if (i < step) {
+                    node.classList.replace('bg-primary', 'bg-green-500');
+                    node.classList.replace('bg-gray-200', 'bg-green-500');
+                    node.innerHTML = '✓';
+                } else if (i === step) {
+                    node.classList.replace('bg-gray-200', 'bg-primary');
+                    node.classList.replace('text-gray-500', 'text-white');
+                    node.innerHTML = i;
                 }
-                node.appendChild(label);
-            });
-        }
+            }
+        };
 
         window.processPayment = function () {
-            // Validate inputs briefly
-            const fname = document.getElementById('fname').value;
-            const lname = document.getElementById('lname').value;
-            const email = document.getElementById('email').value;
-
-            if (!fname || !lname || !email) {
-                alert("Please fill in traveller details");
-                nextStep(1);
-                return;
-            }
-
-            // Create Booking Object in Firestore
             const booking = {
-                customer: `${fname} ${lname}`,
-                email: email,
+                customer: `${document.getElementById('fname').value} ${document.getElementById('lname').value}`,
+                email: document.getElementById('email').value,
                 item: item ? (type === 'flight' ? `${item.airline} (${item.from}-${item.to})` : item.title) : "Unknown",
                 type: type === 'flight' ? 'Flight' : 'Package',
-                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-                status: 'Pending', // Default status
-                itemPrice: itemPrice, // Store price at time of booking
-                price: itemPrice,     // Alias for consistency
+                price: itemPrice,
+                status: 'Confirmed',
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
-            db.collection("bookings").add(booking).then(() => {
-                nextStep(3);
-            }).catch(e => {
-                console.error("Error saving booking: ", e);
-                alert("Error saving booking. Please try again.");
-            });
-        }
-
-        // This ensures auth is ready before we try to read, although public read usually ok
-        document.addEventListener('DOMContentLoaded', () => {
-            loadItemDetails();
-        });
+            db.collection("bookings").add(booking).then(() => nextStep(3));
+        };
     </script>
 </body>
 

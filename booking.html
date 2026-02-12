@@ -249,10 +249,9 @@
     <!-- ============================================ -->
     <!--           GLOBAL NAVIGATION                  -->
     <!-- ============================================ -->
-    <nav id="main-nav" class="fixed top-0 w-full z-50 transition-all duration-700"
-        style="opacity:0; transform: translateY(-100px);">
+    <nav id="main-nav" class="fixed top-0 w-full z-50">
         <div id="nav-container"
-            class="max-w-7xl mx-auto w-full flex items-center justify-between px-10 py-5 rounded-[40px] transition-all duration-500">
+            class="max-w-7xl mx-auto w-full flex items-center justify-between px-10 py-5 rounded-[40px]">
             <a href="index.html" class="flex items-center gap-1 group page-link">
                 <span id="logo-span"
                     class="text-3xl font-black tracking-tighter italic text-white group-hover:text-[#FF6B00] transition-colors">CK<span
@@ -536,12 +535,15 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
+    <!-- Core Logic -->
+    <script src="js/main.js"></script>
+
     <script>
         // =========================================
         //  CK TRAVELS — BOOKING MOTION SYSTEM v10
         // =========================================
 
-        // 1. Smooth Scrolling
+        // 1. Smooth Scrolling (handled by main.js globally if present, but here for specific form control)
         const lenis = new Lenis();
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
@@ -648,7 +650,7 @@
         }
 
         // =========================================
-        //  GSAP FIELD FOCUS GLOW
+        //  GSAP FIELD FOCUS GLOW (Enhanced)
         // =========================================
         document.querySelectorAll('.input-boarding, .boarding-container input, .boarding-container select').forEach(input => {
             input.addEventListener('focus', function () {
@@ -656,14 +658,20 @@
                 if (!group) return;
                 const label = group.querySelector('.field-label');
                 if (label) gsap.to(label, { color: '#FF6B00', y: -2, duration: 0.3, ease: "power2.out" });
-                gsap.to(this, { boxShadow: '0 0 30px rgba(255, 107, 0, 0.2)', duration: 0.4 });
+
+                // Enhanced Soft Orange Glow
+                gsap.to(this, {
+                    boxShadow: '0 0 30px rgba(255, 107, 0, 0.5), 0 0 10px rgba(255, 107, 0, 0.3)',
+                    borderColor: '#FF6B00',
+                    duration: 0.4
+                });
             });
             input.addEventListener('blur', function () {
                 const group = this.closest('.field-group');
                 if (!group) return;
                 const label = group.querySelector('.field-label');
                 if (label) gsap.to(label, { color: 'rgba(255,255,255,0.3)', y: 0, duration: 0.3 });
-                gsap.to(this, { boxShadow: 'none', duration: 0.3 });
+                gsap.to(this, { boxShadow: 'none', borderColor: 'rgba(255,255,255,0.08)', duration: 0.3 });
             });
         });
 
@@ -707,7 +715,7 @@
                             }
                         });
 
-                        // Phase 4: Reveal boarding pass with 3D flip
+                        // Phase 4: Reveal boarding pass with 3D flip (Revised)
                         setTimeout(() => { revealBoardingPass(); }, 3000);
                     }
                 });
@@ -720,10 +728,22 @@
             const overlay = document.getElementById('takeoff-overlay');
             gsap.to(overlay, { opacity: 0, duration: 0.5 });
 
+            // 3D Flip Reveal logic as requested
             gsap.fromTo("#boarding-pass",
-                { bottom: '-100%', rotationX: -90 },
                 {
-                    bottom: 0, rotationX: 0, duration: 1.5, ease: "expo.out",
+                    bottom: '50%',
+                    y: '50%',
+                    opacity: 0,
+                    rotationY: 90,
+                    transformPerspective: 1000
+                },
+                {
+                    bottom: '0%',
+                    y: '0%',
+                    opacity: 1,
+                    rotationY: 0,
+                    duration: 1.5,
+                    ease: "back.out(1.2)",
                     boxShadow: "0 -20px 100px rgba(0,0,0,0.8)"
                 }
             );
@@ -739,91 +759,6 @@
             cloud.style.left = '-100px';
             document.body.appendChild(cloud);
             gsap.to(cloud, { x: window.innerWidth + 200, duration: 5 + Math.random() * 10, onComplete: () => cloud.remove() });
-        }
-
-        // =========================================
-        //  PAGE LOAD ANIMATIONS
-        // =========================================
-        window.addEventListener('load', () => {
-            // Navbar slide in
-            gsap.from("#main-nav", {
-                y: -100, opacity: 0, duration: 1.2, ease: "expo.out",
-                onStart: () => {
-                    document.getElementById('main-nav').style.opacity = '1';
-                    document.getElementById('main-nav').style.transform = 'translateY(0)';
-                }
-            });
-
-            // Content reveal
-            gsap.from(".reveal-up", { y: 40, opacity: 0, duration: 1.2, stagger: 0.2, ease: "power4.out", delay: 0.3 });
-
-            // Navbar Scroll Transformation
-            ScrollTrigger.create({
-                start: "top -50",
-                onEnter: () => {
-                    gsap.to("#nav-container", {
-                        backgroundColor: "rgba(0, 20, 61, 0.85)",
-                        backdropFilter: "blur(25px)",
-                        borderBottom: "2px solid #FF6B00",
-                        boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
-                        padding: "12px 40px",
-                        marginTop: "12px",
-                        duration: 0.5, ease: "power2.out"
-                    });
-                },
-                onLeaveBack: () => {
-                    gsap.to("#nav-container", {
-                        backgroundColor: "transparent",
-                        backdropFilter: "blur(0px)",
-                        borderBottom: "2px solid transparent",
-                        boxShadow: "none",
-                        padding: "20px 40px",
-                        marginTop: "0px",
-                        duration: 0.5, ease: "power2.out"
-                    });
-                }
-            });
-
-            // Magnetic Buttons
-            initMagneticButtons();
-
-            // Page Transitions
-            initPageTransitions();
-        });
-
-        // === REUSABLE FUNCTIONS ===
-        function navigateWithCurtain(href) {
-            gsap.to("#page-curtain", {
-                left: 0, duration: 0.8, ease: "expo.inOut",
-                onComplete: () => { window.location.href = href; }
-            });
-        }
-
-        function initPageTransitions() {
-            document.querySelectorAll('a.page-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const href = link.getAttribute('href');
-                    if (!href || href === '#' || href.startsWith('javascript')) return;
-                    e.preventDefault();
-                    navigateWithCurtain(href);
-                });
-            });
-        }
-
-        function initMagneticButtons() {
-            document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
-                const btn = wrap.querySelector('.magnetic-btn');
-                if (!btn) return;
-                wrap.addEventListener('mousemove', (e) => {
-                    const rect = wrap.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    gsap.to(btn, { x: x * 0.4, y: y * 0.4, duration: 0.4, ease: "power2.out" });
-                });
-                wrap.addEventListener('mouseleave', () => {
-                    gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
-                });
-            });
         }
     </script>
 </body>

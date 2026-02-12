@@ -16,6 +16,9 @@
     <!-- Design System -->
     <link rel="stylesheet" href="css/main.css">
 
+    <!-- Core Logic -->
+    <script src="js/main.js"></script>
+
     <style>
         /* === Nautical Design Tokens === */
         .bg-midnight {
@@ -272,11 +275,7 @@
             // Spawn floating particles
             spawnParticles();
 
-            // Init magnetic buttons
-            initMagneticButtons();
-
-            // Init page transitions
-            initPageTransitions();
+            // Note: Magnetic buttons and page transitions are now handled by main.js
         });
 
         // B) Interactive Field Labels — Pop Up & Turn Orange on Focus
@@ -367,41 +366,6 @@
                     ease: "none"
                 });
             }
-        }
-
-        // === REUSABLE FUNCTIONS (Consistent with all pages) ===
-        function navigateWithCurtain(href) {
-            gsap.to("#page-curtain", {
-                left: 0, duration: 0.8, ease: "expo.inOut",
-                onComplete: () => { window.location.href = href; }
-            });
-        }
-
-        function initPageTransitions() {
-            document.querySelectorAll('a.page-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const href = link.getAttribute('href');
-                    if (!href || href === '#' || href.startsWith('javascript')) return;
-                    e.preventDefault();
-                    navigateWithCurtain(href);
-                });
-            });
-        }
-
-        function initMagneticButtons() {
-            document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
-                const btn = wrap.querySelector('.magnetic-btn');
-                if (!btn) return;
-                wrap.addEventListener('mousemove', (e) => {
-                    const rect = wrap.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    gsap.to(btn, { x: x * 0.4, y: y * 0.4, duration: 0.4, ease: "power2.out" });
-                });
-                wrap.addEventListener('mouseleave', () => {
-                    gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
-                });
-            });
         }
     </script>
 </body>

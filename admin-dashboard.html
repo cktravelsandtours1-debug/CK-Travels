@@ -69,6 +69,11 @@
 
 <body class="bg-[#000000] text-white font-sans antialiased overflow-hidden h-screen flex">
 
+    <!-- Page Transition Curtain -->
+    <div id="page-curtain"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #FF6B00; z-index: 9999;">
+    </div>
+
     <!-- Sidebar Control -->
     <aside id="sidebar" class="w-80 glass-sidebar flex flex-col p-10 z-20">
         <div class="mb-20">
@@ -217,10 +222,16 @@
 
     </main>
 
+    <!-- Core Logic -->
+    <script src="js/main.js"></script>
+
     <script>
         window.addEventListener('load', () => {
             gsap.from("#sidebar", { x: -100, opacity: 0, duration: 1.5, ease: "expo.out" });
             gsap.to(".reveal-up", { opacity: 1, y: 0, stagger: 0.15, duration: 1.5, ease: "expo.out", delay: 0.2 });
+
+            // Curtain Entry
+            gsap.to("#page-curtain", { left: "-100%", duration: 1.2, ease: "expo.inOut" });
         });
     </script>
 </body>

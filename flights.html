@@ -98,10 +98,9 @@
     <div id="page-curtain"></div>
 
     <!-- Navigation -->
-    <nav id="main-nav" class="fixed top-0 w-full z-50 transition-all duration-700"
-        style="opacity:0; transform: translateY(-100px);">
+    <nav id="main-nav" class="fixed top-0 w-full z-50">
         <div id="nav-container"
-            class="max-w-7xl mx-auto w-full flex items-center justify-between px-10 py-5 rounded-[40px] transition-all duration-500">
+            class="max-w-7xl mx-auto w-full flex items-center justify-between px-10 py-5 rounded-[40px]">
             <a href="index.html" class="flex items-center gap-1 group page-link">
                 <span id="logo-span"
                     class="text-3xl font-black tracking-tighter italic text-white group-hover:text-[#FF6B00] transition-colors">CK<span
@@ -254,6 +253,9 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
+    <!-- Core Logic -->
+    <script src="js/main.js"></script>
+
     <script>
         gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
@@ -374,78 +376,12 @@
             });
         });
 
+        // Page Specific Entrance
         window.addEventListener('load', () => {
-            gsap.from(".reveal-up", { y: 40, opacity: 0, duration: 1.2, ease: "power4.out" });
+            // Unique sidebar reveal
             gsap.from(".reveal-left", { x: -30, opacity: 0, duration: 1.2, ease: "power4.out", delay: 0.2 });
 
-            // Navbar Entrance — slide from top
-            gsap.from("#main-nav", {
-                y: -100, opacity: 0, duration: 1.2, ease: "expo.out",
-                onStart: () => {
-                    document.getElementById('main-nav').style.opacity = '1';
-                    document.getElementById('main-nav').style.transform = 'translateY(0)';
-                }
-            });
-
-            // Handle Entrance Curtain
-            gsap.to("#page-curtain", { left: "-100%", duration: 1.2, ease: "expo.inOut" });
-
-            // Navbar Scroll Transformation (Deep Blue Glassmorphic Dock)
-            ScrollTrigger.create({
-                start: "top -50",
-                onEnter: () => {
-                    gsap.to("#nav-container", {
-                        backgroundColor: "rgba(0, 20, 61, 0.85)",
-                        backdropFilter: "blur(25px)",
-                        borderBottom: "2px solid #FF6B00",
-                        boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
-                        padding: "12px 40px",
-                        marginTop: "12px",
-                        duration: 0.5,
-                        ease: "power2.out"
-                    });
-                },
-                onLeaveBack: () => {
-                    gsap.to("#nav-container", {
-                        backgroundColor: "transparent",
-                        backdropFilter: "blur(0px)",
-                        borderBottom: "2px solid transparent",
-                        boxShadow: "none",
-                        padding: "20px 40px",
-                        marginTop: "0px",
-                        duration: 0.5,
-                        ease: "power2.out"
-                    });
-                }
-            });
-
-            // Page Curtain on ALL internal links
-            document.querySelectorAll('a.page-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const href = link.getAttribute('href');
-                    if (!href || href === '#' || href.startsWith('javascript')) return;
-                    e.preventDefault();
-                    gsap.to("#page-curtain", {
-                        left: 0, duration: 0.8, ease: "expo.inOut",
-                        onComplete: () => { window.location.href = href; }
-                    });
-                });
-            });
-
-            // Magnetic Mouse Effect
-            document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
-                const btn = wrap.querySelector('.magnetic-btn');
-                if (!btn) return;
-                wrap.addEventListener('mousemove', (e) => {
-                    const rect = wrap.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    gsap.to(btn, { x: x * 0.4, y: y * 0.4, duration: 0.4, ease: "power2.out" });
-                });
-                wrap.addEventListener('mouseleave', () => {
-                    gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
-                });
-            });
+            // Note: Navbar, Curtain, Magnetic, and generic Reveal Up are handled by main.js
         });
     </script>
 </body>

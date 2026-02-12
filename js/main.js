@@ -1,21 +1,151 @@
-// CK Travels Main Logic
-// Uses global data from window.ckTravelsData
+// CK Travels Premium OS — Main Logic & Motion System
+// Unified Global Animation Controller
 
 document.addEventListener('DOMContentLoaded', () => {
-    const data = window.ckTravelsData || { flights: [], packages: [] };
-    const auth = window.ckTravelsAuth;
-    const flights = data.flights;
-    const packages = data.packages;
+    console.log("CK Travels Premium OS loaded.");
 
-    console.log('CK Travels Premium OS loaded.');
-
-    if (auth && typeof auth.updateNavigation === 'function') {
-        auth.updateNavigation();
+    // 1. Initialize Data Rendering (if on Home Page)
+    if (document.getElementById('home-experiences-grid')) {
+        const data = window.ckTravelsData || { flights: [], packages: [] };
+        renderHomeExperiences(data.flights, data.packages);
     }
 
-    renderHomeExperiences(flights, packages);
+    // 2. Initialize Global Animations
+    // We wait for window load to ensure all assets/layout are stable for GSAP
+    window.addEventListener('load', () => {
+        initGlobalAnimations();
+    });
 });
 
+function initGlobalAnimations() {
+    console.log("Initializing CK Travels Motion System...");
+
+    // A) Global Navigation Logic
+    const nav = document.getElementById('main-nav');
+    if (nav) {
+        // 1. Initial State: Slide down
+        // 1. Initial State: Slide down (Force opacity 1 at end)
+        gsap.fromTo(nav,
+            { y: -100, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }
+        );
+
+        // 2. Scroll Transformation (The "Floating Glassmorphic Dock")
+        // Only if ScrollTrigger is loaded
+        if (typeof ScrollTrigger !== 'undefined') {
+            const navContainer = document.getElementById('nav-container');
+            ScrollTrigger.create({
+                start: "top -50",
+                onEnter: () => {
+                    gsap.to(navContainer, {
+                        backgroundColor: "rgba(0, 20, 61, 0.85)",
+                        backdropFilter: "blur(25px)",
+                        webkitBackdropFilter: "blur(25px)",
+                        borderBottom: "2px solid #FF6B00",
+                        boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+                        padding: "12px 40px",
+                        marginTop: "12px",
+                        duration: 0.5,
+                        ease: "power2.out"
+                    });
+                },
+                onLeaveBack: () => {
+                    gsap.to(navContainer, {
+                        backgroundColor: "transparent",
+                        backdropFilter: "blur(0px)",
+                        webkitBackdropFilter: "blur(0px)",
+                        borderBottom: "2px solid transparent",
+                        boxShadow: "none",
+                        padding: "20px 40px",
+                        marginTop: "0px",
+                        duration: 0.5,
+                        ease: "power2.out"
+                    });
+                }
+            });
+        }
+    }
+
+    // B) Magnetic Buttons (Global)
+    initMagneticButtons();
+
+    // C) Page Transitions (Curtain Wipe)
+    initPageTransitions();
+
+    // D) Common Reveal Animations
+    // Only target elements that are NOT manually animated by specific page scripts (like login cards)
+    // We use a specific class 'reveal-up-global' or check if it's not handled elsewhere
+    // For now, we apply to all .reveal-up unless they are in specific contexts if needed
+    const reveals = document.querySelectorAll('.reveal-up');
+    if (reveals.length > 0 && typeof ScrollTrigger !== 'undefined') {
+        gsap.from(reveals, {
+            y: 40,
+            opacity: 0,
+            duration: 1.2,
+            stagger: 0.1,
+            ease: "power4.out",
+            scrollTrigger: {
+                trigger: document.body,
+                start: "top 80%", // Immediate if top of page
+            }
+        });
+    }
+}
+
+// === COMPONENT: Magnetic Buttons ===
+function initMagneticButtons() {
+    document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
+        const btn = wrap.querySelector('.magnetic-btn');
+        if (!btn) return;
+
+        wrap.addEventListener('mousemove', (e) => {
+            const rect = wrap.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            gsap.to(btn, { x: x * 0.4, y: y * 0.4, duration: 0.4, ease: "power2.out" });
+        });
+
+        wrap.addEventListener('mouseleave', () => {
+            gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
+        });
+    });
+}
+
+// === COMPONENT: Page Transitions ===
+function initPageTransitions() {
+    // Ensure curtain exists
+    if (!document.getElementById('page-curtain')) {
+        const curtain = document.createElement('div');
+        curtain.id = 'page-curtain';
+        curtain.style.cssText = "position: fixed; top: 0; left: -100%; width: 100%; height: 100%; background-color: #FF6B00; z-index: 9999; pointer-events: none;";
+        document.body.appendChild(curtain);
+    }
+
+    // Handle internal links
+    // We select all links that look like pages
+    document.querySelectorAll('a').forEach(link => {
+        const href = link.getAttribute('href');
+        // Filter out non-navigation links
+        if (!href || href === '#' || href.startsWith('javascript') || href.startsWith('mailto') || href.startsWith('tel') || link.target === '_blank') return;
+
+        // Add listener
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateWithCurtain(href);
+        });
+    });
+}
+
+function navigateWithCurtain(href) {
+    gsap.to("#page-curtain", {
+        left: 0,
+        duration: 0.8,
+        ease: "expo.inOut",
+        onComplete: () => { window.location.href = href; }
+    });
+}
+
+// === DATA RENDERING (Legacy Support) ===
 function renderHomeExperiences(flights, packages) {
     const container = document.getElementById('home-experiences-grid');
     if (!container) return;
@@ -27,7 +157,7 @@ function renderHomeExperiences(flights, packages) {
     container.innerHTML = '';
 
     // Render Packages first
-    featuredPackages.forEach((pkg, index) => {
+    featuredPackages.forEach((pkg) => {
         const card = document.createElement('div');
         card.className = 'card-perspective reveal-up opacity-0';
         card.innerHTML = `
@@ -50,7 +180,7 @@ function renderHomeExperiences(flights, packages) {
     });
 
     // Render Flights
-    featuredFlights.forEach((flight, index) => {
+    featuredFlights.forEach((flight) => {
         const card = document.createElement('div');
         card.className = 'card-perspective reveal-up opacity-0';
         card.innerHTML = `
@@ -83,18 +213,4 @@ function renderHomeExperiences(flights, packages) {
         `;
         container.appendChild(card);
     });
-
-    // Re-trigger GSAP for new items
-    if (window.gsap) {
-        gsap.to(".reveal-up", {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            stagger: 0.1,
-            scrollTrigger: {
-                trigger: "#home-experiences-grid",
-                start: "top 80%"
-            }
-        });
-    }
 }

@@ -145,10 +145,9 @@
     <!-- ============================================ -->
     <!--           GLOBAL NAVIGATION (PC & Mobile)     -->
     <!-- ============================================ -->
-    <nav id="main-nav" class="fixed top-0 w-full z-50 transition-all duration-700"
-        style="opacity:0; transform: translateY(-100px);">
+    <nav id="main-nav" class="fixed top-0 w-full z-50">
         <div id="nav-container"
-            class="max-w-7xl mx-auto w-full flex items-center justify-between px-10 py-5 rounded-[40px] transition-all duration-500">
+            class="max-w-7xl mx-auto w-full flex items-center justify-between px-10 py-5 rounded-[40px]">
             <a href="index.html" class="flex items-center gap-1 group page-link">
                 <span id="logo-span"
                     class="text-3xl font-black tracking-tighter italic text-white group-hover:text-[#FF6B00] transition-colors">CK<span
@@ -413,9 +412,10 @@
     <script src="js/data.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/main.js"></script>
+
     <script>
         // =========================================
-        //  CK TRAVELS — UNIFIED MOTION SYSTEM v10
+        //  CK TRAVELS — HOME MOTION SYSTEM v10
         // =========================================
 
         // 1. Smooth Scrolling
@@ -426,122 +426,42 @@
         // 2. Register GSAP Plugins
         gsap.registerPlugin(ScrollTrigger);
 
-        // 3. Window Load — Master Timeline
+        // 3. Page Specific Animations
         window.addEventListener('load', () => {
             const tl = gsap.timeline();
 
-            // A) NAVBAR — Slide from top immediately
-            gsap.from("#main-nav", {
-                y: -100,
-                opacity: 0,
-                duration: 1.2,
-                ease: "expo.out",
-                onStart: () => {
-                    document.getElementById('main-nav').style.opacity = '1';
-                    document.getElementById('main-nav').style.transform = 'translateY(0)';
-                }
-            });
-
-            // B) Hero text split & stagger
+            // A) Hero text split & stagger
             const h1 = document.getElementById('hero-title');
             if (h1) {
                 const text = h1.innerText;
                 h1.innerHTML = text.split('').map(c => `<span class="char">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+                // Note: Navbar entry is handled by main.js
+                // We add a slight delay to hero text to sync with nav
                 tl.from("#hero-title .char", { duration: 1.2, opacity: 0, y: 50, stagger: 0.04, ease: "expo.out", delay: 0.3 });
             }
 
-            // C) Cascade reveal
-            tl.from(".reveal-up", { opacity: 0, y: 30, stagger: 0.15, duration: 1.5, ease: "expo.out" }, "-=1");
-
-            // D) Infinite Logo Marquee
+            // B) Infinite Logo Marquee
             const marquee = document.getElementById('marquee-track');
             if (marquee) {
                 const loop = gsap.to(marquee, { xPercent: -50, repeat: -1, duration: 40, ease: "none" });
                 marquee.addEventListener('mouseenter', () => gsap.to(loop, { timeScale: 0.2, duration: 1 }));
                 marquee.addEventListener('mouseleave', () => gsap.to(loop, { timeScale: 1, duration: 1 }));
             }
-
-            // E) Magnetic Mouse Effect (Global)
-            initMagneticButtons();
-
-            // F) Page Transition Curtain — ALL internal links
-            initPageTransitions();
-
-            // G) Navbar Scroll Transformation (transparent → glassmorphic dock)
-            ScrollTrigger.create({
-                start: "top -50",
-                onEnter: () => {
-                    gsap.to("#nav-container", {
-                        backgroundColor: "rgba(0, 20, 61, 0.85)",
-                        backdropFilter: "blur(25px)",
-                        borderBottom: "2px solid #FF6B00",
-                        boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
-                        padding: "12px 40px",
-                        marginTop: "12px",
-                        duration: 0.5,
-                        ease: "power2.out"
-                    });
-                },
-                onLeaveBack: () => {
-                    gsap.to("#nav-container", {
-                        backgroundColor: "transparent",
-                        backdropFilter: "blur(0px)",
-                        borderBottom: "2px solid transparent",
-                        boxShadow: "none",
-                        padding: "20px 40px",
-                        marginTop: "0px",
-                        duration: 0.5,
-                        ease: "power2.out"
-                    });
-                }
-            });
         });
 
-        // === REUSABLE FUNCTIONS ===
-
+        // 4. Search Functionality
         function executeAISearch() {
             const input = document.getElementById('ai-search');
             if (!input) return;
             const query = input.value.trim();
             if (query) {
-                navigateWithCurtain(`flights.html?query=${encodeURIComponent(query)}`);
+                // navigateWithCurtain is now global in main.js
+                if (typeof navigateWithCurtain === 'function') {
+                    navigateWithCurtain(`flights.html?query=${encodeURIComponent(query)}`);
+                } else {
+                    window.location.href = `flights.html?query=${encodeURIComponent(query)}`;
+                }
             }
-        }
-
-        function navigateWithCurtain(href) {
-            gsap.to("#page-curtain", {
-                left: 0,
-                duration: 0.8,
-                ease: "expo.inOut",
-                onComplete: () => { window.location.href = href; }
-            });
-        }
-
-        function initPageTransitions() {
-            document.querySelectorAll('a.page-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const href = link.getAttribute('href');
-                    if (!href || href === '#' || href.startsWith('javascript')) return;
-                    e.preventDefault();
-                    navigateWithCurtain(href);
-                });
-            });
-        }
-
-        function initMagneticButtons() {
-            document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
-                const btn = wrap.querySelector('.magnetic-btn');
-                if (!btn) return;
-                wrap.addEventListener('mousemove', (e) => {
-                    const rect = wrap.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    gsap.to(btn, { x: x * 0.4, y: y * 0.4, duration: 0.4, ease: "power2.out" });
-                });
-                wrap.addEventListener('mouseleave', () => {
-                    gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
-                });
-            });
         }
     </script>
 </body>

@@ -74,6 +74,11 @@
 
 <body class="bg-dark font-sans text-slate-300 antialiased overflow-hidden flex h-screen relative">
 
+    <!-- Page Transition Curtain -->
+    <div id="page-curtain"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #FF6B00; z-index: 9999;">
+    </div>
+
     <div class="bg-matrix"></div>
 
     <!-- Sidebar Navigation -->
@@ -281,10 +286,13 @@
                 container.innerHTML += card;
             });
 
-            // GSAP Animations
+            gsap.to(".booking-card", { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out", delay: 0.2 });
+        }
+
+        window.initAdminAnimations = function () {
             gsap.from("#sidebar", { x: -50, opacity: 0, duration: 1, ease: "power4.out" });
             gsap.from("header", { y: -20, opacity: 0, duration: 1, ease: "power4.out", delay: 0.2 });
-            gsap.to(".booking-card", { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out", delay: 0.4 });
+            gsap.to("#page-curtain", { left: "-100%", duration: 1.2, ease: "expo.inOut" });
         }
 
         window.updateStatus = async function (id, status) {
@@ -303,7 +311,9 @@
 
         document.getElementById('status-filter').addEventListener('change', renderBookings);
         document.addEventListener('DOMContentLoaded', fetchBookings);
+        window.addEventListener('load', initAdminAnimations);
     </script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>

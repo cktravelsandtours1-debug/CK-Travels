@@ -8,230 +8,238 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- GSAP for Micro-interactions -->
+    <!-- GSAP & Lenis -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="css/main.css">
 
     <style>
-        .glass-header {
-            background: rgba(255, 255, 255, 0.7);
+        .glass-dock {
+            background: rgba(10, 18, 41, 0.4);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-        }
-
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6);
         }
 
         .flight-card {
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         .flight-card:hover {
-            transform: translateY(-8px);
-            background: rgba(255, 255, 255, 1);
-            box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-10px) rotateX(2deg);
+            border-color: rgba(59, 130, 246, 0.3);
+            background: rgba(10, 18, 41, 0.6);
         }
 
         .accordion-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease-out, opacity 0.3s ease;
+            transition: max-height 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.5s ease;
             opacity: 0;
         }
 
         .accordion-content.open {
-            max-height: 500px;
+            max-height: 1000px;
             opacity: 1;
         }
 
-        .price-tab-active {
-            background: #1e40af;
-            color: white;
-            box-shadow: 0 10px 20px -5px rgba(30, 64, 175, 0.3);
-        }
-
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Thematic Gradients */
-        .bg-matrix {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            background: radial-gradient(circle at 0% 0%, #eff6ff 0%, transparent 40%),
-                radial-gradient(circle at 100% 100%, #fff7ed 0%, transparent 40%),
-                #fafafa;
+        .mobile-tab-bar {
+            background: rgba(10, 18, 41, 0.8);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
 
-<body class="bg-surface font-sans text-gray-900 antialiased overflow-x-hidden">
+<body class="bg-[#050A18] font-body text-[#F8FAFC] antialiased">
 
-    <div class="bg-matrix"></div>
+    <!-- Desktop Nav Dock -->
+    <nav id="main-nav"
+        class="fixed top-8 left-1/2 -translate-x-1/2 w-[90%] max-w-7xl z-50 px-10 py-5 rounded-[32px] transition-all duration-700 glass-dock hidden lg:flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-1 group">
+            <span class="text-3xl font-black tracking-tighter italic text-white">CK<span
+                    class="text-primary not-italic">.</span></span>
+        </a>
 
-    <!-- Navbar -->
-    <nav class="glass-header border-b border-white/20 fixed top-0 w-full z-50 h-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-            <div class="flex justify-between items-center h-full">
-                <div class="flex items-center gap-12">
-                    <a href="index.html" class="flex-shrink-0 flex items-center gap-1 group">
-                        <span
-                            class="text-3xl font-extrabold tracking-tighter text-gray-900 group-hover:text-primary transition-colors">CK<span
-                                class="text-primary group-hover:text-amber-500 transition-colors">.</span></span>
-                    </a>
+        <div class="flex items-center gap-12 font-bold text-[11px] tracking-[0.3em] uppercase opacity-60">
+            <a href="index.html" class="hover:opacity-100 transition-opacity">Home</a>
+            <a href="flights.html" class="hover:opacity-100 transition-opacity text-primary">Flights</a>
+            <a href="packages.html" class="hover:opacity-100 transition-opacity">Packages</a>
+            <a href="booking.html" class="hover:opacity-100 transition-opacity">My Trips</a>
+        </div>
 
-                    <div class="hidden lg:flex items-center space-x-10">
-                        <a href="index.html"
-                            class="text-gray-500 hover:text-black font-semibold text-sm tracking-wide transition-colors">HOME</a>
-                        <a href="flights.html"
-                            class="text-primary font-bold text-sm tracking-wide border-b-2 border-primary pb-1">FLIGHTS</a>
-                        <a href="packages.html"
-                            class="text-gray-500 hover:text-black font-semibold text-sm tracking-wide transition-colors">PACKAGES</a>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-4">
-                    <a href="login.html"
-                        class="bg-primary hover:bg-black text-white px-8 py-3 rounded-full text-sm font-bold shadow-xl shadow-primary/20 transition-all hover:scale-105 active:scale-95">PORTAL</a>
-                </div>
-            </div>
+        <div class="flex items-center gap-6">
+            <a href="login.html"
+                class="text-[11px] font-bold tracking-[0.3em] hover:text-primary transition-colors uppercase">Account</a>
+            <a href="flights.html"
+                class="bg-primary hover:bg-blue-600 text-white px-8 py-4 rounded-full text-[11px] font-black tracking-[0.3em] transition-all active:scale-95 shadow-2xl shadow-primary/20 uppercase">Book
+                Now</a>
         </div>
     </nav>
 
-    <!-- Search Summary / Date Matrix (Smart Header) -->
-    <header class="pt-32 pb-8 sticky top-0 z-40 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="glass-panel p-8 rounded-[48px] flex flex-col lg:flex-row items-center justify-between gap-8"
-                id="header-matrix">
-                <!-- Search Info -->
-                <div class="flex items-center gap-12">
-                    <div class="flex flex-col">
-                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-1">REGION</span>
-                        <div class="text-3xl font-black tracking-tighter flex items-center gap-4 italic text-gray-900">
-                            DXB <svg class="w-6 h-6 text-primary animate-pulse" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="3" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg> LHR
+    <!-- Smart Matrix Header -->
+    <header class="pt-48 pb-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div
+                class="glass-dock p-10 rounded-[64px] flex flex-col lg:flex-row items-center justify-between gap-12 reveal-up">
+                <div class="flex items-center gap-16">
+                    <div class="space-y-2">
+                        <p class="text-[9px] font-black tracking-[0.4em] text-primary uppercase">Region Logic</p>
+                        <div class="text-5xl font-heading font-black italic flex items-center gap-6">
+                            DXB <span class="not-italic text-sm text-slate-700">→</span> LHR
                         </div>
                     </div>
-                    <div class="w-px h-12 bg-gray-200/50 hidden sm:block"></div>
-                    <div class="flex flex-col">
-                        <span
-                            class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-1">DEPARTURE</span>
-                        <div class="text-xl font-bold text-gray-900">24 OCT, 2026</div>
+                    <div class="w-px h-16 bg-white/5 hidden md:block"></div>
+                    <div class="space-y-2">
+                        <p class="text-[9px] font-black tracking-[0.4em] text-slate-500 uppercase">Synchronized Date</p>
+                        <div class="text-2xl font-black italic">24 OCT, 2026</div>
                     </div>
                 </div>
 
-                <!-- Sorting Tabs -->
-                <div class="bg-black/5 p-2 rounded-3xl flex w-full lg:w-auto overflow-x-auto no-scrollbar">
+                <!-- Live Sorting Controllers -->
+                <div class="bg-white/5 p-2 rounded-full flex gap-2">
                     <button
-                        class="flex-1 lg:flex-none px-10 py-4 rounded-2xl text-[10px] font-bold tracking-widest price-tab-active transition-all whitespace-nowrap uppercase">CHEAPEST</button>
+                        class="px-10 py-4 bg-primary text-white rounded-full text-[9px] font-black tracking-widest uppercase">Cheapest</button>
                     <button
-                        class="flex-1 lg:flex-none px-10 py-4 rounded-2xl text-[10px] font-bold tracking-widest text-gray-400 hover:text-black transition-all whitespace-nowrap uppercase">FASTEST</button>
-                    <button
-                        class="flex-1 lg:flex-none px-10 py-4 rounded-2xl text-[10px] font-bold tracking-widest text-gray-400 hover:text-black transition-all whitespace-nowrap uppercase">EXPERIENCE</button>
+                        class="px-10 py-4 hover:bg-white/5 text-slate-500 hover:text-white rounded-full text-[9px] font-black tracking-widest uppercase transition-all">Fastest</button>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="flex flex-col lg:flex-row gap-12">
+    <main class="max-w-7xl mx-auto px-6 py-20 flex flex-col lg:flex-row gap-20">
 
-            <!-- Sidebar Filters -->
-            <aside class="w-full lg:w-72 space-y-10">
-                <div class="bg-white rounded-[40px] p-8 border border-gray-50 shadow-sm sticky top-52">
-                    <h3 class="text-[10px] font-bold text-gray-900 uppercase tracking-[0.3em] mb-8">Refine Inventory
-                    </h3>
+        <!-- Interactive Sidebar -->
+        <aside class="w-full lg:w-80 space-y-12 reveal-left">
+            <div class="glass-dock p-10 rounded-[48px] sticky top-40 border border-white/5">
+                <h3 class="text-[10px] font-black tracking-[0.4em] text-white uppercase mb-10">Asset Filters</h3>
 
-                    <div class="space-y-8">
-                        <div>
-                            <label
-                                class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">Price
-                                Ceiling</label>
-                            <input type="range"
-                                class="w-full h-1.5 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-primary">
-                        </div>
-
-                        <div class="space-y-4">
-                            <label
-                                class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Routing</label>
-                            <div class="space-y-3">
-                                <label class="flex items-center gap-3 group cursor-pointer">
-                                    <input type="checkbox" checked
-                                        class="w-5 h-5 rounded-lg border-gray-200 text-primary focus:ring-primary">
-                                    <span
-                                        class="text-sm font-semibold text-gray-600 group-hover:text-black transition-colors">Direct
-                                        Routes</span>
-                                </label>
-                                <label class="flex items-center gap-3 group cursor-pointer">
-                                    <input type="checkbox" checked
-                                        class="w-5 h-5 rounded-lg border-gray-200 text-primary focus:ring-primary">
-                                    <span
-                                        class="text-sm font-semibold text-gray-600 group-hover:text-black transition-colors">1
-                                        Stop Connection</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="pt-6 border-t border-gray-50 text-center">
-                            <button
-                                class="text-[10px] font-bold text-primary hover:text-black tracking-widest uppercase">Clear
-                                All Filters</button>
+                <div class="space-y-12">
+                    <div class="space-y-6">
+                        <label class="block text-[9px] font-black text-slate-500 uppercase tracking-widest">Valuation
+                            Ceiling</label>
+                        <input type="range" class="w-full accent-primary bg-white/5 h-1 rounded-full cursor-pointer">
+                        <div class="flex justify-between text-[9px] font-bold text-slate-700">
+                            <span>$0</span>
+                            <span>$10,000</span>
                         </div>
                     </div>
-                </div>
-            </aside>
 
-            <!-- Results -->
-            <div class="flex-1 space-y-6">
-                <!-- Status Bar -->
-                <div class="flex justify-between items-center px-4 mb-8">
-                    <h2 class="text-3xl font-serif font-bold italic">Available <span
-                            class="not-italic text-primary font-bold">Flights.</span></h2>
-                    <span id="results-count"
-                        class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Verifying cloud
-                        inventory...</span>
-                </div>
+                    <div class="space-y-4">
+                        <label class="block text-[9px] font-black text-slate-500 uppercase tracking-widest">Route
+                            Matrix</label>
+                        <div class="space-y-4">
+                            <label class="flex items-center gap-4 cursor-pointer group">
+                                <div
+                                    class="w-6 h-6 rounded-lg bg-primary/20 border border-primary/40 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <span
+                                    class="text-sm font-bold text-slate-400 group-hover:text-white transition-colors">Direct
+                                    Routes</span>
+                                <input type="checkbox" class="hidden" checked>
+                            </label>
+                            <label class="flex items-center gap-4 cursor-pointer group">
+                                <div
+                                    class="w-6 h-6 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-transparent transition-all">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <span
+                                    class="text-sm font-bold text-slate-400 group-hover:text-white transition-colors">1+
+                                    Synchronized Stops</span>
+                                <input type="checkbox" class="hidden">
+                            </label>
+                        </div>
+                    </div>
 
-                <div id="flights-container" class="space-y-6">
-                    <!-- Cards will be dynamically injected here -->
-                    <div class="animate-pulse bg-gray-100 h-48 rounded-[40px]"></div>
-                    <div class="animate-pulse bg-gray-100 h-48 rounded-[40px]"></div>
+                    <button
+                        class="w-full py-4 border border-white/5 rounded-2xl text-[9px] font-black tracking-widest uppercase hover:bg-white/5 transition-all">Reset
+                        Matrix</button>
                 </div>
             </div>
+        </aside>
 
+        <!-- Dynamic Results Stream -->
+        <div class="flex-1 space-y-12">
+            <div class="flex justify-between items-end mb-12 reveal-up">
+                <h2 class="text-5xl font-heading font-black italic">Live <span
+                        class="not-italic text-white">Inventory.</span></h2>
+                <span id="results-count"
+                    class="text-[9px] font-black text-slate-700 tracking-[0.3em] uppercase">Authenticating
+                    Nodes...</span>
+            </div>
+
+            <div id="flights-container" class="space-y-8">
+                <!-- Data injection point -->
+                <div class="glass-dock h-64 rounded-[48px] animate-pulse"></div>
+                <div class="glass-dock h-64 rounded-[48px] animate-pulse"></div>
+            </div>
         </div>
     </main>
 
-    <!-- Footer mirroring other pages -->
-    <footer class="bg-white pt-24 pb-12 border-t border-gray-100 mt-20">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <div class="flex flex-wrap justify-center items-center gap-16 md:gap-24 opacity-40 grayscale mb-12">
-                <span class="text-xl font-bold italic tracking-tighter">Emirates</span>
-                <span class="text-xl font-bold tracking-tight">QATAR</span>
-                <span class="text-xl font-black">ETIHAD</span>
-                <span class="text-xl font-serif">Singapore Airlines</span>
+    <!-- Footer Experience -->
+    <footer class="bg-[#050A18] py-40 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="marquee-wrapper mb-20 overflow-hidden">
+                <div
+                    class="flex gap-24 items-center justify-center opacity-20 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-1000">
+                    <span class="text-3xl font-heading italic">Emirates</span>
+                    <span class="text-3xl font-black tracking-tighter uppercase p-2 border-2 border-white/5">Qatar
+                        Airways</span>
+                    <span class="text-3xl font-bold tracking-widest">ETIHAD</span>
+                    <span class="text-3xl font-heading underline">Singapore Airlines</span>
+                </div>
             </div>
-            <div class="pt-12 border-t border-gray-50 text-[10px] text-gray-300 font-bold tracking-widest uppercase">
-                © 2026 CK TRAVELS • PREMIUM LOGISTICS SYNCED
-            </div>
+            <p class="text-[9px] font-black tracking-[0.5em] text-slate-700 uppercase">© 2026 CK TRAVELS // STATION_UAE
+            </p>
         </div>
     </footer>
 
-    <!-- Firebase System -->
+    <!-- Mobile Navigation -->
+    <div class="lg:hidden fixed bottom-0 w-full z-50 px-6 pb-8 pt-4 mobile-tab-bar">
+        <div class="flex justify-between items-center text-white/40">
+            <a href="index.html" class="flex flex-col items-center gap-1">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                </svg>
+                <span class="text-[8px] font-black uppercase tracking-widest">Home</span>
+            </a>
+            <a href="flights.html" class="flex flex-col items-center gap-1 text-primary">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+                </svg>
+                <span class="text-[8px] font-black uppercase tracking-widest">Flights</span>
+            </a>
+            <a href="booking.html" class="flex flex-col items-center gap-1">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M19 3h-1V1h-2v2H8V1H6v3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" />
+                </svg>
+                <span class="text-[8px] font-black uppercase tracking-widest">Trips</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Firebase Terminal Configuration -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <script>
+        const lenis = new Lenis()
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
         const firebaseConfig = {
             apiKey: "AIzaSyBsrtZh0PBOjNA8c8-9sifdtVqKMk7q-fs",
             authDomain: "ck-travels-8926e.firebaseapp.com",
@@ -249,93 +257,86 @@
 
         db.collection("flights").get().then(qs => {
             container.innerHTML = '';
-            document.getElementById('results-count').textContent = qs.size + ' ROUTES VERIFIED';
+            document.getElementById('results-count').textContent = qs.size + ' NODES VERIFIED';
 
             qs.forEach(doc => {
                 const f = doc.data();
                 const card = `
-                    <div class="bg-white rounded-[40px] border border-gray-50 shadow-sm flight-card overflow-hidden group">
-                        <div class="p-8 md:p-12 flex flex-col md:flex-row items-center gap-12 relative">
-                            
-                            <!-- Left: Airline Identity -->
-                            <div class="flex flex-col items-center md:items-start w-full md:w-32">
-                                <div class="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center font-black text-primary text-xl border border-gray-100 group-hover:scale-110 group-hover:bg-blue-50 transition-all duration-500">
+                    <div class="glass-dock rounded-[48px] flight-card overflow-hidden group border border-white/5 hover:bg-[#0A1229]">
+                        <div class="p-10 md:p-14 flex flex-col md:flex-row items-center gap-12 relative">
+                            <!-- Provider -->
+                            <div class="flex flex-col items-center md:items-start w-full md:w-40">
+                                <div class="w-24 h-24 bg-white/5 rounded-[32px] flex items-center justify-center font-black text-primary text-2xl border border-white/5 group-hover:scale-110 group-hover:bg-primary/10 transition-all duration-700">
                                     ${f.airline.substring(0, 2).toUpperCase()}
                                 </div>
-                                <div class="mt-4 text-center md:text-left">
-                                    <h4 class="font-bold text-gray-900">${f.airline}</h4>
-                                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${f.aircraft || 'Premium Jet'}</span>
+                                <div class="mt-6 text-center md:text-left">
+                                    <h4 class="font-black text-white italic text-lg tracking-tighter">${f.airline}</h4>
+                                    <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest italic">${f.aircraft || 'Vogue Class'}</span>
                                 </div>
                             </div>
 
-                            <!-- Center: The Route Architecture -->
-                            <div class="flex-1 flex flex-col items-center px-0 md:px-12 w-full">
-                                <div class="flex justify-between items-end w-full mb-6">
-                                    <div class="flex flex-col text-center md:text-left">
-                                        <span class="text-4xl font-bold tracking-tighter">${f.departure}</span>
-                                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">${f.from}</span>
+                            <!-- Route Architecture -->
+                            <div class="flex-1 flex flex-col items-center w-full px-12">
+                                <div class="flex justify-between items-center w-full">
+                                    <div class="text-center md:text-left">
+                                        <div class="text-5xl font-heading font-black text-white italic mb-2">${f.departure}</div>
+                                        <div class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">${f.from}</div>
                                     </div>
                                     
-                                    <div class="flex-1 px-8 mb-3 relative flex flex-col items-center">
-                                         <div class="text-[10px] font-medium text-gray-400 mb-2 italic">${f.duration || '6h 45m'}</div>
-                                         <div class="w-full h-[2px] bg-gray-100 rounded-full"></div>
-                                         <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 bg-white px-3">
-                                            <span class="px-3 py-0.5 rounded-full border border-gray-100 text-[9px] font-bold text-primary uppercase whitespace-nowrap">${f.stops}</span>
+                                    <div class="flex-1 px-12 relative h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent">
+                                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#050A18] px-4">
+                                            <svg class="w-6 h-6 text-primary animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
                                          </div>
                                     </div>
 
-                                    <div class="flex flex-col text-center md:text-right">
-                                        <span class="text-4xl font-bold tracking-tighter">${f.arrival}</span>
-                                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">${f.to}</span>
+                                    <div class="text-center md:text-right">
+                                        <div class="text-5xl font-heading font-black text-white italic mb-2">${f.arrival}</div>
+                                        <div class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">${f.to}</div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Right: Logistics & Payment -->
-                            <div class="w-full md:w-56 flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-6 md:pl-12 md:border-l border-gray-50">
+                            <!-- Valuation -->
+                            <div class="w-full md:w-64 flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-8 md:pl-12 md:border-l border-white/5">
                                 <div class="text-right">
-                                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">ALL-IN FROM</div>
-                                    <div class="text-4xl font-black text-primary">$${f.price}</div>
+                                    <div class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2">Node Value</div>
+                                    <div class="text-5xl font-black text-white italic">$${f.price}</div>
                                 </div>
-                                <a href="booking.html?id=${doc.id}&type=flight" class="flex-1 md:w-full bg-primary hover:bg-black text-white py-5 rounded-2xl font-bold tracking-widest text-xs transition-all shadow-xl shadow-primary/20 text-center uppercase">SELECT</a>
+                                <a href="booking.html?id=${doc.id}&type=flight" class="flex-1 md:w-full bg-primary hover:bg-white text-white hover:text-black py-6 rounded-full font-black tracking-[0.3em] text-[10px] transition-all shadow-2xl shadow-primary/20 text-center uppercase active:scale-95">Select Node</a>
                             </div>
                         </div>
 
-                        <!-- Amenities Bar (Simplified) -->
-                        <div class="bg-gray-50/50 border-t border-gray-50 px-10 py-4 flex justify-between items-center cursor-pointer hover:bg-amber-50/30 transition-colors" onclick="toggleDetails('${doc.id}')">
-                            <div class="flex gap-6">
-                                <div class="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                    <svg class="w-3.5 h-3.5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                                    Premium WiFi
-                                </div>
-                                <div class="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                    <svg class="w-3.5 h-3.5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                                    Fine Dining
-                                </div>
+                        <!-- Logistics Footer -->
+                        <div class="bg-white/5 px-14 py-6 flex justify-between items-center cursor-pointer hover:bg-white/10 transition-colors" onclick="toggleDetails('${doc.id}')">
+                            <div class="flex gap-10">
+                                <span class="flex items-center gap-2 text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                                    <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div> WiFi Ready
+                                </span>
+                                <span class="flex items-center gap-2 text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                                    <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div> Elite Cuisine
+                                </span>
                             </div>
-                            <div class="text-[10px] font-bold text-primary flex items-center gap-2 uppercase tracking-widest">
-                                LOGISTICS DATA
-                                <svg id="chevron-${doc.id}" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            <div class="text-[9px] font-black text-primary flex items-center gap-4 uppercase tracking-[0.4em]">
+                                Sync Metrics <svg id="chevron-${doc.id}" class="w-4 h-4 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="3"/></svg>
                             </div>
                         </div>
 
-                        <!-- Details Accordion -->
-                        <div id="details-${doc.id}" class="accordion-content bg-white border-t border-gray-50">
-                            <div class="p-10 grid grid-cols-1 md:grid-cols-2 gap-12">
-                                <div class="space-y-4">
-                                     <h5 class="text-[10px] font-bold text-gray-900 uppercase tracking-widest mb-4">SPECIFICATIONS</h5>
-                                     <div class="grid grid-cols-2 gap-y-3 text-sm font-medium">
-                                        <span class="text-gray-400">Class:</span><span>First / Business</span>
-                                        <span class="text-gray-400">Baggage:</span><span>${f.baggage?.checked || 23}kg + 8kg Cabin</span>
-                                        <span class="text-gray-400">Aircraft:</span><span>Airbus A350-1000</span>
-                                     </div>
+                        <div id="details-${doc.id}" class="accordion-content border-t border-white/5">
+                            <div class="p-14 grid md:grid-cols-2 gap-20">
+                                <div class="space-y-6">
+                                    <h5 class="text-[10px] font-black text-white uppercase tracking-[0.4em] mb-6">Asset Specs</h5>
+                                    <div class="space-y-4 text-slate-400 text-xs font-bold uppercase tracking-widest">
+                                        <div class="flex justify-between"><span>Registry</span><span class="text-white">Commercial Elite</span></div>
+                                        <div class="flex justify-between"><span>Baggage</span><span class="text-white">${f.baggage?.checked || 23}kg + 8kg Cabin</span></div>
+                                        <div class="flex justify-between"><span>Hull Type</span><span class="text-white">Boeing 787 Node</span></div>
+                                    </div>
                                 </div>
-                                <div class="space-y-4">
-                                     <h5 class="text-[10px] font-bold text-gray-900 uppercase tracking-widest mb-4">POLICIES</h5>
-                                     <div class="grid grid-cols-2 gap-y-3 text-sm font-medium">
-                                        <span class="text-gray-400">Refundable:</span><span class="${f.isRefundable ? 'text-green-600' : 'text-amber-600'}">${f.isRefundable ? 'Qualified' : 'Restricted'}</span>
-                                        <span class="text-gray-400">Seat Selection:</span><span class="text-green-600">Complimentary</span>
-                                     </div>
+                                <div class="space-y-6">
+                                    <h5 class="text-[10px] font-black text-white uppercase tracking-[0.4em] mb-6">Protocol Logic</h5>
+                                    <div class="space-y-4 text-slate-400 text-xs font-bold uppercase tracking-widest">
+                                        <div class="flex justify-between"><span>Refundable</span><span class="text-green-500">Qualified Matrix</span></div>
+                                        <div class="flex justify-between"><span>Seat Grid</span><span class="text-white italic">Self Selection Aware</span></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -343,33 +344,25 @@
                 `;
                 container.innerHTML += card;
             });
-            animateCards();
-        });
 
-        // Detail Toggle
-        function toggleDetails(id) {
-            const el = document.getElementById('details-' + id);
-            const icon = document.getElementById('chevron-' + id);
-            el.classList.toggle('open');
-            icon.classList.toggle('rotate-180');
-        }
-
-        // GSAP Animations
-        window.addEventListener('load', () => {
-            gsap.from("#header-matrix", { opacity: 0, y: -20, duration: 1, ease: "power4.out" });
-            gsap.from("aside", { opacity: 0, x: -50, duration: 1, delay: 0.3, ease: "power4.out" });
-        });
-
-        // Stagger cards on load
-        function animateCards() {
             gsap.from(".flight-card", {
                 opacity: 0,
                 y: 30,
                 stagger: 0.1,
-                duration: 0.8,
-                ease: "power2.out"
+                duration: 1,
+                ease: "power4.out"
             });
+        });
+
+        function toggleDetails(id) {
+            document.getElementById('details-' + id).classList.toggle('open');
+            document.getElementById('chevron-' + id).classList.toggle('rotate-180');
         }
+
+        window.addEventListener('load', () => {
+            gsap.from(".reveal-up", { y: 30, opacity: 0, duration: 1, ease: "power4.out" });
+            gsap.from(".reveal-left", { x: -30, opacity: 0, duration: 1, ease: "power4.out", delay: 0.2 });
+        });
     </script>
 </body>
 

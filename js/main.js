@@ -1,6 +1,3 @@
-/**
- * CK Travels - Main Entry Point
- */
 import { flights, packages } from './data.js';
 import { updateNavigation } from './auth.js';
 
@@ -8,75 +5,91 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('CK Travels Premium OS loaded.');
 
     // Update navigation based on auth state
-    updateNavigation();
-
-    // 🛠️ Date Input Fix for Floating Labels
-    const dateInput = document.getElementById('date');
-    if (dateInput) {
-        dateInput.valueAsDate = new Date();
-    }
+    if (typeof updateNavigation === 'function') updateNavigation();
 
     // Render Home Page Content
-    renderHomeFlights();
-    renderHomePackages();
+    renderHomeExperiences();
 });
 
-function renderHomeFlights() {
-    const container = document.getElementById('home-flights-container');
+function renderHomeExperiences() {
+    const container = document.getElementById('home-experiences-grid');
     if (!container) return;
 
-    // Take first 2 flights
-    const homeFlights = flights.slice(0, 2);
+    // Combine some flights and packages for a mixed discovery experience
+    const featuredPackages = packages.slice(0, 3);
+    const featuredFlights = flights.slice(0, 3);
+
     container.innerHTML = '';
 
-    homeFlights.forEach(flight => {
+    // Render Packages first
+    featuredPackages.forEach((pkg, index) => {
         const card = document.createElement('div');
-        card.className = 'flight-card';
-        card.style.background = '#fff';
+        card.className = 'card-perspective reveal-up opacity-0';
         card.innerHTML = `
-            <div class="flex-center" style="gap: 12px; justify-content: flex-start;">
-                <div style="font-weight: 700; font-size: 1.2rem;">${flight.from.split(' ')[0]}</div> <!-- Simplified Logic for demo -->
-                <div style="flex-grow: 1; height: 1px; background: #ccc; width: 40px;"></div>
-                <div style="font-weight: 700; font-size: 1.2rem;">${flight.to.split(' ')[0]}</div>
-            </div>
-            <div style="margin-top: 12px; color: var(--sh-black); font-size: 0.9rem;">
-                <div style="margin-bottom: 4px;"><strong>${flight.departure}</strong> - ${flight.arrival}</div>
-                <div style="color: #666; font-size: 0.8rem;">${flight.stops} • ${flight.duration}</div>
-            </div>
-            <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-weight: 700;">$${flight.price}</div>
-                <a href="booking.html?id=${flight.id}&type=flight" class="btn btn-secondary btn-sm" style="padding: 6px 16px;">Book</a>
-            </div>
-        `;
-        container.appendChild(card);
-    });
-}
-
-function renderHomePackages() {
-    const container = document.getElementById('home-packages-container');
-    if (!container) return;
-
-    // Take first 3 packages
-    const homePackages = packages.slice(0, 3);
-    container.innerHTML = '';
-
-    homePackages.forEach(pkg => {
-        const card = document.createElement('div');
-        card.className = 'package-card';
-        card.onclick = () => window.location.href = `package-details.html?id=${pkg.id}`;
-
-        card.innerHTML = `
-            <div class="package-bg"
-                style="background-image: url('${pkg.image}');">
-            </div>
-            <div class="package-overlay">
-                <h3 style="font-size: 1.2rem; margin-bottom: 4px;">${pkg.location}</h3>
-                <div class="flex-between">
-                    <span style="opacity: 0.7;">${pkg.duration}</span>
-                    <span style="font-weight: 700; font-size: 1.1rem;">$${pkg.price}</span>
+            <div class="hover-3d-tilt glass-dock rounded-[48px] overflow-hidden group cursor-pointer" onclick="window.location.href='package-details.html?id=${pkg.id}'">
+                <div class="img-zoom-container h-80 relative overflow-hidden">
+                    <img src="${pkg.image}" class="w-full h-full object-cover brightness-75 group-hover:brightness-100" alt="${pkg.location}">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0A1229] via-transparent to-transparent"></div>
+                    <div class="absolute top-6 left-6 px-4 py-1.5 bg-brand/20 backdrop-blur-md border border-brand/30 rounded-full text-[8px] font-black text-white uppercase tracking-[0.2em]">${pkg.location}</div>
+                </div>
+                <div class="p-10 space-y-4">
+                    <h3 class="text-3xl font-heading font-black italic text-white leading-tight group-hover:text-primary transition-colors">${pkg.title || 'Luxury Experience'}</h3>
+                    <div class="flex justify-between items-center pt-6 border-t border-white/5">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">${pkg.duration}</span>
+                        <span class="text-2xl font-black text-white">$${pkg.price.toLocaleString()}</span>
+                    </div>
                 </div>
             </div>
         `;
         container.appendChild(card);
     });
+
+    // Render Flights
+    featuredFlights.forEach((flight, index) => {
+        const card = document.createElement('div');
+        card.className = 'card-perspective reveal-up opacity-0';
+        card.innerHTML = `
+            <div class="hover-3d-tilt glass-dock rounded-[48px] p-10 space-y-8 group border border-white/5 hover:border-primary/30 transition-all">
+                <div class="flex justify-between items-center">
+                    <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center font-black text-primary text-xs">${flight.airline.substring(0, 2).toUpperCase()}</div>
+                    <span class="text-[9px] font-black text-white/30 tracking-[0.3em] uppercase">${flight.flightNumber}</span>
+                </div>
+                <div class="flex items-center justify-between gap-6">
+                    <div class="text-center">
+                        <div class="text-4xl font-heading font-black text-white italic mb-1">${flight.from.split(' ')[0]}</div>
+                        <div class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">${flight.departure}</div>
+                    </div>
+                    <div class="flex-1 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent relative">
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-primary">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-heading font-black text-white italic mb-1">${flight.to.split(' ')[0]}</div>
+                        <div class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">${flight.arrival}</div>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center pt-8 border-t border-white/5">
+                    <span class="text-2xl font-black text-white">$${flight.price}</span>
+                    <button onclick="window.location.href='booking.html?id=${flight.id}&type=flight'" 
+                            class="bg-white/5 hover:bg-white text-white hover:text-black px-8 py-3 rounded-full text-[10px] font-black tracking-widest uppercase transition-all active:scale-90">Secure Seat</button>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+
+    // Re-trigger GSAP for new items
+    if (window.gsap) {
+        gsap.to(".reveal-up", {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.1,
+            scrollTrigger: {
+                trigger: "#home-experiences-grid",
+                start: "top 80%"
+            }
+        });
+    }
 }

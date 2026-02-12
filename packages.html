@@ -8,230 +8,179 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- GSAP for Micro-interactions -->
+    <!-- GSAP & Lenis -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap"
-        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    },
-                    colors: {
-                        primary: '#1e40af',  // Deep Blue
-                        surface: '#fafafa',
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Design System -->
+    <link rel="stylesheet" href="css/main.css">
+
     <style>
-        .glass-header {
-            background: rgba(255, 255, 255, 0.7);
+        .glass-dock {
+            background: rgba(10, 18, 41, 0.4);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6);
         }
 
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.1);
+        .pkg-card {
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
-        .hover-lift {
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        .pkg-card:hover {
+            transform: translateY(-12px) rotateX(4deg) scale(1.02);
+            border-color: rgba(59, 130, 246, 0.3);
         }
 
-        .hover-lift:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.12);
+        .img-zoom-inner {
+            transition: transform 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
-        .text-balance {
-            text-wrap: balance;
+        .pkg-card:hover .img-zoom-inner {
+            transform: scale(1.1);
         }
 
-        /* Thematic Gradients */
-        .bg-matrix {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            background: radial-gradient(circle at 100% 0%, #eff6ff 0%, transparent 40%),
-                radial-gradient(circle at 0% 100%, #fff7ed 0%, transparent 40%),
-                #fafafa;
+        .mobile-tab-bar {
+            background: rgba(10, 18, 41, 0.8);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
 
-<body class="bg-surface font-sans text-gray-900 antialiased overflow-x-hidden">
+<body class="bg-[#050A18] font-body text-[#F8FAFC] antialiased">
 
-    <div class="bg-matrix"></div>
+    <!-- Desktop Nav -->
+    <nav id="main-nav"
+        class="fixed top-8 left-1/2 -translate-x-1/2 w-[90%] max-w-7xl z-50 px-10 py-5 rounded-[32px] transition-all duration-700 glass-dock hidden lg:flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-1 group">
+            <span class="text-3xl font-black tracking-tighter italic text-white">CK<span
+                    class="text-primary not-italic">.</span></span>
+        </a>
 
-    <!-- Navbar -->
-    <nav class="glass-header border-b border-white/20 fixed top-0 w-full z-50 h-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-            <div class="flex justify-between items-center h-full">
-                <div class="flex items-center gap-12">
-                    <a href="index.html" class="flex-shrink-0 flex items-center gap-1 group">
-                        <span
-                            class="text-3xl font-extrabold tracking-tighter text-gray-900 group-hover:text-primary transition-colors">CK<span
-                                class="text-primary group-hover:text-amber-500 transition-colors">.</span></span>
-                    </a>
+        <div class="flex items-center gap-12 font-bold text-[11px] tracking-[0.3em] uppercase opacity-60">
+            <a href="index.html" class="hover:opacity-100 transition-opacity">Home</a>
+            <a href="flights.html" class="hover:opacity-100 transition-opacity">Flights</a>
+            <a href="packages.html" class="hover:opacity-100 transition-opacity text-primary">Packages</a>
+            <a href="booking.html" class="hover:opacity-100 transition-opacity">My Trips</a>
+        </div>
 
-                    <div class="hidden lg:flex items-center space-x-10">
-                        <a href="index.html"
-                            class="text-gray-500 hover:text-black font-semibold text-sm tracking-wide transition-colors">HOME</a>
-                        <a href="flights.html"
-                            class="text-gray-500 hover:text-black font-semibold text-sm tracking-wide transition-colors">FLIGHTS</a>
-                        <a href="packages.html"
-                            class="text-primary font-bold text-sm tracking-wide border-b-2 border-primary pb-1">PACKAGES</a>
-                        <a href="login.html"
-                            class="text-gray-500 hover:text-black font-semibold text-sm tracking-wide transition-colors">PORTAL</a>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-4">
-                    <a href="login.html"
-                        class="bg-primary hover:bg-black text-white px-8 py-3 rounded-full text-sm font-bold shadow-xl shadow-primary/20 transition-all hover:scale-105 active:scale-95">BOOK
-                        NOW</a>
-
-                    <button class="lg:hidden p-2 text-gray-900" onclick="toggleMobileMenu()">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
+        <div class="flex items-center gap-6">
+            <a href="login.html"
+                class="text-[11px] font-bold tracking-[0.3em] hover:text-primary transition-colors uppercase">Account</a>
+            <a href="flights.html"
+                class="bg-primary hover:bg-blue-600 text-white px-8 py-4 rounded-full text-[11px] font-black tracking-[0.3em] transition-all active:scale-95 shadow-2xl shadow-primary/20 uppercase">Book
+                Now</a>
         </div>
     </nav>
 
-    <!-- Mobile Menu (Mirror Index) -->
-    <div id="mobile-menu"
-        class="fixed inset-0 bg-white z-[60] flex flex-col p-8 transform translate-x-full transition-transform duration-500 ease-in-out lg:hidden">
-        <div class="flex justify-between items-center mb-12">
-            <span class="text-3xl font-extrabold tracking-tighter">CK<span class="text-primary">.</span></span>
-            <button class="p-2 text-gray-900" onclick="toggleMobileMenu()">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-        <div class="flex flex-col space-y-8">
-            <a href="index.html" class="text-4xl font-bold hover:text-primary transition-colors">Home</a>
-            <a href="flights.html" class="text-4xl font-bold hover:text-primary transition-colors">Flights</a>
-            <a href="packages.html" class="text-4xl font-bold text-primary">Packages</a>
-            <a href="booking.html" class="text-4xl font-bold hover:text-primary transition-colors">My Trips</a>
-        </div>
-    </div>
-
-    <!-- Header Section -->
-    <header class="pt-32 pb-16 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="glass-panel p-12 rounded-[64px]" id="header-matrix">
-                <div class="max-w-3xl">
+    <!-- Cinematic Header -->
+    <header class="pt-48 pb-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="glass-dock p-16 rounded-[64px] reveal-up">
+                <div class="max-w-4xl">
                     <div
-                        class="inline-flex items-center gap-2 bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest mb-8">
-                        MEMBER EXCLUSIVE RATES
+                        class="inline-flex items-center gap-3 bg-primary/10 text-primary px-5 py-2 rounded-full text-[9px] font-black tracking-[0.3em] mb-10 uppercase border border-primary/20">
+                        Exclusive Member Inventory
                     </div>
-                    <h1 class="text-5xl md:text-8xl font-serif font-bold text-gray-900 mb-8 leading-tight">
-                        Curated <span class="text-primary italic">Experiences.</span>
+                    <h1 class="text-6xl md:text-[100px] font-heading font-black text-white leading-[0.9] italic mb-10">
+                        Curated <span class="not-italic text-primary font-bold">Experiences.</span>
                     </h1>
-                    <p class="text-xl text-gray-500 leading-relaxed max-w-xl">
-                        Hand-selected journeys that combine private flight logistics with the world's most sought-after
-                        hidden gems.
+                    <p class="text-xl text-slate-400 leading-relaxed font-medium max-w-2xl">
+                        Hand-selected journeys mirroring the standard of first-class aviation. Private logistics synced
+                        with the world's most elusive retreats.
                     </p>
                 </div>
 
-                <!-- Filter Pills -->
-                <div class="flex gap-4 mt-12 overflow-x-auto no-scrollbar pb-2">
+                <!-- Region Selector Matrix -->
+                <div class="flex gap-4 mt-16 overflow-x-auto no-scrollbar pb-4">
                     <button
-                        class="px-8 py-4 rounded-2xl bg-primary text-white text-[10px] font-bold tracking-[0.2em] whitespace-nowrap shadow-xl shadow-primary/25 uppercase">ALL
-                        DESTINATIONS</button>
+                        class="px-10 py-5 rounded-full bg-primary text-white text-[9px] font-black tracking-[0.3em] uppercase shadow-2xl shadow-primary/30">Global
+                        Portfolio</button>
                     <button
-                        class="px-8 py-4 rounded-2xl bg-white border border-gray-100 text-gray-400 hover:border-primary hover:text-primary text-[10px] font-bold tracking-[0.2em] whitespace-nowrap transition-all uppercase">EUROPE</button>
+                        class="px-10 py-5 rounded-full bg-white/5 border border-white/5 text-slate-500 hover:text-white hover:bg-white/10 text-[9px] font-black tracking-[0.3em] uppercase transition-all">European
+                        Vogue</button>
                     <button
-                        class="px-8 py-4 rounded-2xl bg-white border border-gray-100 text-gray-400 hover:border-primary hover:text-primary text-[10px] font-bold tracking-[0.2em] whitespace-nowrap transition-all uppercase">ASIA
-                        PACIFIC</button>
+                        class="px-10 py-5 rounded-full bg-white/5 border border-white/5 text-slate-500 hover:text-white hover:bg-white/10 text-[9px] font-black tracking-[0.3em] uppercase transition-all">Asian
+                        Pacific Nodes</button>
                     <button
-                        class="px-8 py-4 rounded-2xl bg-white border border-gray-100 text-gray-400 hover:border-primary hover:text-primary text-[10px] font-bold tracking-[0.2em] whitespace-nowrap transition-all uppercase">AMERICAS</button>
+                        class="px-10 py-5 rounded-full bg-white/5 border border-white/5 text-slate-500 hover:text-white hover:bg-white/10 text-[9px] font-black tracking-[0.3em] uppercase transition-all">Americas
+                        Elite</button>
                 </div>
             </div>
+        </div>
+
+        <!-- Background Decoration -->
+        <div
+            class="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/20 rounded-full blur-[160px] -mr-[400px] -mt-[400px] opacity-30">
         </div>
     </header>
 
-    <!-- Main Results -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div id="packages-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            <!-- Loading Skeletons -->
-            <div class="animate-pulse bg-gray-100 h-96 rounded-[40px]"></div>
-            <div class="animate-pulse bg-gray-100 h-96 rounded-[40px]"></div>
-            <div class="animate-pulse bg-gray-100 h-96 rounded-[40px]"></div>
+    <!-- Experience Stream -->
+    <main class="max-w-7xl mx-auto px-6 py-20">
+        <div id="packages-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+            <!-- Loading States -->
+            <div class="glass-dock h-[500px] rounded-[48px] animate-pulse"></div>
+            <div class="glass-dock h-[500px] rounded-[48px] animate-pulse"></div>
+            <div class="glass-dock h-[500px] rounded-[48px] animate-pulse"></div>
         </div>
     </main>
 
-    <!-- Trusted By / Partners (Reused from Index) -->
-    <section class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.4em] mb-12">THE CK TRAVELS SIGNATURE OF
-                TRUST</p>
-            <div class="flex flex-wrap justify-center items-center gap-16 opacity-40 grayscale">
-                <span class="text-xl font-bold italic tracking-tighter">Emirates</span>
-                <span class="text-xl font-bold tracking-tight">QATAR</span>
-                <span class="text-xl font-black">ETIHAD</span>
-                <span class="text-xl font-serif">Singpore Airlines</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer (Same as Index) -->
-    <footer class="bg-white pt-24 pb-12 border-t border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20">
-                <div class="col-span-2 md:col-span-1">
-                    <span class="text-3xl font-extrabold tracking-tighter mb-6 inline-block">CK<span
-                            class="text-primary">.</span></span>
-                    <p class="text-gray-400 text-sm leading-relaxed">The pinnacle of luxury travel logistics.</p>
-                </div>
-                <div>
-                    <h4 class="font-bold text-gray-900 mb-6 uppercase tracking-wider text-[10px]">Platform</h4>
-                    <ul class="space-y-4 text-sm text-gray-500 italic">
-                        <li><a href="flights.html" class="hover:text-primary">Flights</a></li>
-                        <li><a href="packages.html" class="hover:text-primary">Packages</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold text-gray-900 mb-6 uppercase tracking-wider text-[10px]">Connect</h4>
-                    <ul class="space-y-4 text-sm text-gray-500 italic">
-                        <li><a href="#" class="hover:text-primary">Instagram</a></li>
-                        <li><a href="#" class="hover:text-primary">Concierge</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold text-gray-900 mb-6 uppercase tracking-wider text-[10px]">Admin</h4>
-                    <ul class="space-y-4 text-sm text-gray-500 font-bold">
-                        <li><a href="admin-login.html" class="hover:text-amber-500">PARTNER LOGIN</a></li>
-                    </ul>
+    <!-- Footer Experience -->
+    <footer class="bg-[#050A18] py-40 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="marquee-wrapper mb-20 overflow-hidden">
+                <div
+                    class="flex gap-24 items-center justify-center opacity-20 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-1000">
+                    <span class="text-3xl font-heading italic">Emirates</span>
+                    <span class="text-3xl font-black tracking-tighter uppercase p-2 border-2 border-white/5">Qatar
+                        Airways</span>
+                    <span class="text-3xl font-bold tracking-widest">ETIHAD</span>
+                    <span class="text-3xl font-heading underline">Singapore Airlines</span>
                 </div>
             </div>
-            <div class="text-center pt-12 border-t border-gray-50 text-[10px] text-gray-300 font-bold tracking-widest">
-                © 2026 CK TRAVELS & TOURS • SYNCED WITH CLOUD INVENTORY
-            </div>
+            <p class="text-[9px] font-black tracking-[0.5em] text-slate-700 uppercase">© 2026 CK TRAVELS // STATION_UAE
+            </p>
         </div>
     </footer>
 
-    <!-- Firebase Logic -->
+    <!-- Mobile Nav -->
+    <div class="lg:hidden fixed bottom-0 w-full z-50 px-6 pb-8 pt-4 mobile-tab-bar">
+        <div class="flex justify-between items-center text-white/40">
+            <a href="index.html" class="flex flex-col items-center gap-1">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                </svg>
+                <span class="text-[8px] font-black uppercase tracking-widest">Home</span>
+            </a>
+            <a href="flights.html" class="flex flex-col items-center gap-1">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+                </svg>
+                <span class="text-[8px] font-black uppercase tracking-widest">Flights</span>
+            </a>
+            <a href="packages.html" class="flex flex-col items-center gap-1 text-primary">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span class="text-[8px] font-black uppercase tracking-widest">Packages</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Firebase Connection -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <script>
+        const lenis = new Lenis()
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
         const firebaseConfig = {
             apiKey: "AIzaSyBsrtZh0PBOjNA8c8-9sifdtVqKMk7q-fs",
             authDomain: "ck-travels-8926e.firebaseapp.com",
@@ -241,60 +190,39 @@
             appId: "1:310809428136:web:74e2b0216f58088cf3829d",
             measurementId: "G-HNT07JXC3C"
         };
-
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         db.settings({ experimentalForceLongPolling: true });
-
-        // GSAP Animations
-        window.addEventListener('load', () => {
-            gsap.from("#header-matrix", { opacity: 0, y: 30, duration: 1, ease: "power4.out" });
-        });
-
-        function animateCards() {
-            gsap.from(".hover-lift", {
-                opacity: 0,
-                y: 50,
-                stagger: 0.1,
-                duration: 1,
-                ease: "power3.out"
-            });
-        }
 
         db.collection("packages").get().then(qs => {
             const container = document.getElementById('packages-container');
             container.innerHTML = '';
 
-            if (qs.empty) {
-                container.innerHTML = `<div class="col-span-full py-20 text-center text-gray-400 border border-dashed border-gray-200 rounded-[40px]">No exclusive packages available in your region.</div>`;
-                return;
-            }
-
             qs.forEach(doc => {
-                const pkg = doc.data();
+                const p = doc.data();
                 container.innerHTML += `
-                    <div class="bg-white rounded-[40px] overflow-hidden hover-lift border border-gray-50 shadow-sm relative group cursor-pointer" onclick="window.location.href='booking.html?id=${doc.id}&type=package'">
-                        <div class="h-[420px] relative overflow-hidden">
-                            <img src="${pkg.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s]" alt="${pkg.title}">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="glass-dock rounded-[48px] pkg-card overflow-hidden group cursor-pointer border border-white/5 hover:bg-[#0A1229] transition-all" onclick="window.location.href='package-details.html?id=${doc.id}'">
+                        <div class="h-[460px] relative overflow-hidden">
+                            <img src="${p.image}" class="img-zoom-inner w-full h-full object-cover brightness-[0.7] group-hover:brightness-100" alt="${p.title}">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#0A1229] via-transparent to-transparent"></div>
                             
-                            <div class="absolute top-6 left-6 flex gap-2">
-                                <div class="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-white border border-white/20">
-                                    ${pkg.location}
-                                </div>
+                            <div class="absolute top-8 left-8">
+                                <span class="bg-primary/20 backdrop-blur-md px-4 py-1.5 rounded-full text-[8px] font-black text-white uppercase tracking-[0.2em] border border-primary/30">
+                                    ${p.location}
+                                </span>
                             </div>
 
-                            <div class="absolute bottom-8 left-8 right-8 text-white">
-                                <div class="text-[10px] font-bold text-amber-400 uppercase tracking-widest mb-2">${pkg.duration}</div>
-                                <h3 class="text-3xl font-serif font-bold mb-4 leading-tight">${pkg.title}</h3>
+                            <div class="absolute bottom-10 left-10 right-10">
+                                <div class="text-[9px] font-black text-primary uppercase tracking-[0.3em] mb-4">${p.duration} Deployment</div>
+                                <h3 class="text-4xl font-heading font-black text-white italic mb-8 leading-tight">${p.title}</h3>
                                 
-                                <div class="flex justify-between items-end">
+                                <div class="flex justify-between items-end border-t border-white/10 pt-8">
                                     <div>
-                                        <div class="text-[10px] text-white/50 uppercase tracking-widest mb-1">ALL-INCLUSIVE FROM</div>
-                                        <div class="text-3xl font-bold">$${pkg.price}</div>
+                                        <div class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1">Valuation Starts</div>
+                                        <div class="text-4xl font-black text-white italic">$${p.price.toLocaleString()}</div>
                                     </div>
-                                    <div class="w-14 h-14 bg-white text-primary rounded-2xl flex items-center justify-center font-bold shadow-xl transition-transform group-hover:bg-amber-50 group-hover:-translate-y-2">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                                    <div class="w-16 h-16 bg-primary text-white rounded-[24px] flex items-center justify-center shadow-2xl transition-all group-hover:scale-110 active:scale-90">
+                                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="3"/></svg>
                                     </div>
                                 </div>
                             </div>
@@ -302,10 +230,18 @@
                     </div>
                 `;
             });
-            animateCards();
-        }).catch(err => {
-            console.error(err);
-            document.getElementById('packages-container').innerHTML = `<div class="col-span-full py-20 text-center text-red-400">Connection error. Please refresh.</div>`;
+
+            gsap.from(".pkg-card", {
+                opacity: 0,
+                y: 50,
+                stagger: 0.1,
+                duration: 1.2,
+                ease: "power4.out"
+            });
+        });
+
+        window.addEventListener('load', () => {
+            gsap.from(".reveal-up", { y: 40, opacity: 0, duration: 1.2, ease: "power4.out" });
         });
     </script>
 </body>

@@ -4,165 +4,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Packages | Admin | CK Travels</title>
+    <title>Asset Control | Experience Packages</title>
 
-    <link rel="stylesheet" href="css/main.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: '#1e40af',
+                        dark: '#0f172a',
+                        panel: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        .admin-sidebar {
-            background: #fdfdfd;
-            border-right: 1px solid #eee;
-            height: calc(100vh - 72px);
-            padding: 24px 0;
+        .sidebar-item-active {
+            background: rgba(30, 64, 175, 0.1);
+            border-left: 4px solid #3b82f6;
+            color: #fff;
         }
 
-        .admin-nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 24px;
-            color: #444;
-            text-decoration: none;
-            font-weight: 500;
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
         }
 
-        .admin-nav-item:hover,
-        .admin-nav-item.active {
-            background: #f0f0f0;
-            color: var(--color-primary);
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
         }
 
-        .admin-content {
-            padding: 32px;
-            background: #fbfbfb;
-            min-height: calc(100vh - 72px);
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 10px;
         }
 
-        .package-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 24px;
-        }
-
-        .admin-card {
-            background: white;
-            border-radius: 12px;
-            border: 1px solid #eee;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .card-img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 99px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 8px;
+        .pkg-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-4px);
         }
     </style>
 </head>
 
-<body>
-    <nav class="navbar">
-        <a href="index.html" class="logo">CK Travels <span
-                style="font-size: 0.7rem; color: var(--color-primary); font-weight: 800; vertical-align: middle; margin-left: 4px; border: 1px solid var(--color-primary); padding: 2px 4px; border-radius: 4px;">ADMIN</span></a>
-        <div class="nav-links">
-            <a href="index.html" class="nav-item">Home</a>
-            <a href="admin-dashboard.html" class="nav-item">Dashboard</a>
+<body class="bg-dark font-sans text-slate-300 antialiased overflow-hidden flex h-screen">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-72 bg-slate-900 border-r border-slate-800 flex flex-col">
+        <div class="p-8 border-b border-slate-800">
+            <div class="flex items-center gap-3 mb-2">
+                <div
+                    class="w-8 h-8 bg-brand rounded-lg flex items-center justify-center font-black text-white text-xs tracking-tighter">
+                    CK</div>
+                <span class="text-white font-bold tracking-tight">STATION CONTROL</span>
+            </div>
+            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest pl-1">V2.4 ADMIN PANEL</p>
         </div>
-        <div style="display: flex; gap: 12px; align-items: center;">
-            <span id="admin-name" style="font-weight: 600; font-size: 0.9rem;">Admin</span>
-            <a href="#" onclick="handleLogout(event)" class="btn btn-secondary btn-sm">Logout</a>
+
+        <nav class="flex-1 py-8 px-4 space-y-1">
+            <a href="admin-dashboard.html"
+                class="flex items-center gap-4 px-6 py-4 rounded-xl text-slate-500 hover:bg-slate-800 hover:text-white font-bold text-sm transition-all group">
+                <svg class="w-5 h-5 opacity-40 group-hover:opacity-100" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Overview
+            </a>
+            <a href="admin-bookings.html"
+                class="flex items-center gap-4 px-6 py-4 rounded-xl text-slate-500 hover:bg-slate-800 hover:text-white font-bold text-sm transition-all group">
+                <svg class="w-5 h-5 opacity-40 group-hover:opacity-100" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5z" />
+                </svg>
+                Global Bookings
+            </a>
+            <a href="admin-flights.html"
+                class="flex items-center gap-4 px-6 py-4 rounded-xl text-slate-500 hover:bg-slate-800 hover:text-white font-bold text-sm transition-all group">
+                <svg class="w-5 h-5 opacity-40 group-hover:opacity-100" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+                Flight Asset Mgmt
+            </a>
+            <a href="admin-packages.html"
+                class="sidebar-item-active flex items-center gap-4 px-6 py-4 rounded-xl font-bold text-sm transition-all">
+                <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Experience Packages
+            </a>
+        </nav>
+
+        <div class="p-8 border-t border-slate-800">
+            <button onclick="logout()"
+                class="flex items-center gap-3 text-red-500 font-bold text-[10px] tracking-widest uppercase hover:text-red-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                De-authenticate
+            </button>
         </div>
-    </nav>
+    </aside>
 
-    <div style="display: grid; grid-template-columns: 240px 1fr;">
-        <aside class="admin-sidebar">
-            <a href="admin-dashboard.html" class="admin-nav-item"><span>📊</span> Overview</a>
-            <a href="admin-bookings.html" class="admin-nav-item"><span>🎫</span> Bookings</a>
-            <a href="admin-flights.html" class="admin-nav-item"><span>✈️</span> Manage Flights</a>
-            <a href="admin-packages.html" class="admin-nav-item active"><span>🗺️</span> Manage Packages</a>
-        </aside>
-
-        <main class="admin-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
-                <h1 style="font-size: 2rem;">Manage Packages</h1>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-secondary btn-sm" onclick="testConnection()">Test Connection</button>
-                    <button class="btn btn-primary btn-sm" onclick="showPackageModal()">+ Create New Package</button>
-                </div>
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Header -->
+        <header class="h-20 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-12 z-10">
+            <div>
+                <h1 class="text-xl font-bold text-white tracking-tight uppercase">Package Inventory</h1>
             </div>
-
-            <div id="loading-indicator" style="text-align: center; padding: 20px; color: #666;">Loading packages...
+            <div class="flex items-center gap-4">
+                <button onclick="fetchPackages()" class="p-2 text-slate-500 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <button onclick="showPackageModal()"
+                    class="bg-brand hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold tracking-widest uppercase transition-all shadow-xl shadow-brand/20">+
+                    Create Experience</button>
             </div>
+        </header>
 
-            <div class="package-grid" id="package-list" style="display:none;">
-                <!-- Cards will be populated by JS -->
+        <!-- Grid Content -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-12">
+            <div id="package-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Content Injected via JS -->
+                <div
+                    class="col-span-full py-24 text-center animate-pulse text-slate-700 font-mono italic uppercase tracking-widest">
+                    Scanning Global Experience Arrays...</div>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
-    <!-- Add/Edit Package Modal -->
-    <div id="add-package-modal"
-        style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+    <!-- Modal System -->
+    <div id="package-modal"
+        class="fixed inset-0 bg-dark/90 backdrop-blur-sm z-50 hidden items-center justify-center p-6">
         <div
-            style="background: white; padding: 32px; border-radius: 12px; width: 450px; max-width: 90%; max-height: 90vh; overflow-y: auto;">
-            <h2 id="modal-title" style="margin-bottom: 24px;">Create New Package</h2>
-            <form id="add-package-form">
+            class="bg-slate-900 w-[600px] rounded-[40px] border border-slate-800 shadow-2xl flex flex-col max-h-full overflow-hidden">
+            <div class="p-8 border-b border-slate-800 flex justify-between items-center bg-slate-950/30">
+                <div>
+                    <h2 id="modal-title" class="text-xl font-bold text-white uppercase tracking-tight">Construct New
+                        Experience</h2>
+                    <p class="text-xs text-slate-500 mt-1">Configure asset visual and logistics data</p>
+                </div>
+                <button onclick="hidePackageModal()" class="text-slate-500 hover:text-white text-2xl">&times;</button>
+            </div>
+
+            <form id="package-form" class="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-8">
                 <input type="hidden" id="edit-id">
-                <div class="form-group" style="margin-bottom: 16px;">
-                    <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">Package Title</label>
-                    <input type="text" id="pkg-title" class="input-field" required
-                        style="border: 1px solid #ddd; padding: 8px; width: 100%;">
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Asset Title
+                        (Naming Convention)</label>
+                    <input type="text" id="pkg-title" required placeholder="Luxurious Escape to..."
+                        class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white font-bold outline-none transition-all placeholder-slate-700">
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-                    <div>
-                        <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">Location</label>
-                        <input type="text" id="pkg-location" class="input-field" required
-                            style="border: 1px solid #ddd; padding: 8px; width: 100%;">
+
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Visual
+                            Identifier (Image URL)</label>
+                        <input type="url" id="pkg-image" required placeholder="https://..."
+                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white text-xs outline-none transition-all placeholder-slate-700">
                     </div>
-                    <div>
-                        <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">Price ($)</label>
-                        <input type="number" id="pkg-price" class="input-field" required
-                            style="border: 1px solid #ddd; padding: 8px; width: 100%;">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Regional
+                            Code</label>
+                        <input type="text" id="pkg-location" required placeholder="Dubai, UAE"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white font-bold outline-none transition-all placeholder-slate-700">
                     </div>
                 </div>
-                <div class="form-group" style="margin-bottom: 16px;">
-                    <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">Duration</label>
-                    <input type="text" id="pkg-duration" class="input-field" placeholder="e.g. 5 Days / 4 Nights"
-                        required style="border: 1px solid #ddd; padding: 8px; width: 100%;">
+
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Time Bracket
+                            (Duration)</label>
+                        <input type="text" id="pkg-duration" required placeholder="7 Days / 6 Nights"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white outline-none transition-all placeholder-slate-700">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Retail
+                            Valuation ($)</label>
+                        <input type="number" id="pkg-price" required placeholder="1250"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white font-black text-xl outline-none transition-all placeholder-slate-700">
+                    </div>
                 </div>
-                <div class="form-group" style="margin-bottom: 16px;">
-                    <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">Image URL</label>
-                    <input type="url" id="pkg-image" class="input-field" placeholder="https://..." required
-                        style="border: 1px solid #ddd; padding: 8px; width: 100%;">
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Inclusion Matrix
+                        (Comma Separated)</label>
+                    <textarea id="pkg-features" placeholder="Private Jet, Hotel, Gourmet Dining..."
+                        class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-slate-300 text-sm outline-none transition-all placeholder-slate-700 h-24"></textarea>
                 </div>
-                <div class="form-group" style="margin-bottom: 24px;">
-                    <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">Features (comma
-                        separated)</label>
-                    <input type="text" id="pkg-features" class="input-field" placeholder="Flights, Hotel, Tours..."
-                        style="border: 1px solid #ddd; padding: 8px; width: 100%;">
-                </div>
-                <div style="display: flex; gap: 12px;">
-                    <button type="button" class="btn btn-secondary btn-block"
-                        onclick="hidePackageModal()">Cancel</button>
-                    <button type="submit" id="submit-btn" class="btn btn-primary btn-block">Create Package</button>
+
+                <div class="flex gap-4 pt-4 sticky bottom-0 bg-slate-900 pb-10">
+                    <button type="button" onclick="hidePackageModal()"
+                        class="flex-1 py-5 border border-slate-800 rounded-2xl text-slate-500 font-bold hover:bg-slate-800 transition-all uppercase tracking-widest text-[10px]">Cancel</button>
+                    <button type="submit" id="submit-btn"
+                        class="flex-1 py-5 bg-brand hover:bg-blue-600 text-white rounded-2xl font-bold transition-all shadow-2xl shadow-brand/20 uppercase tracking-widest text-[10px]">Deploy
+                        Experience</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Firebase SDK v8.10.0 (Robust) -->
+    <!-- Firebase SDK v8.10.0 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
@@ -176,188 +240,126 @@
             appId: "1:310809428136:web:74e2b0216f58088cf3829d",
             measurementId: "G-HNT07JXC3C"
         };
-
-        // Initialize Firebase
-        if (!firebase.apps.length) {
-            try {
-                firebase.initializeApp(firebaseConfig);
-            } catch (e) {
-                console.error(e);
-                alert("Error initializing database.");
-            }
-        }
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-
-        // CRITICAL FIX: ENABLE LONG POLLING
         db.settings({ experimentalForceLongPolling: true });
+
+        function logout() { localStorage.removeItem('ck_travels_user'); window.location.href = 'index.html'; }
 
         let packages = [];
 
-        function checkAuth() {
-            try {
-                const user = JSON.parse(localStorage.getItem('ck_travels_user') || 'null');
-                if (!user) window.location.href = 'admin-login.html';
-            } catch (e) {
-                window.location.href = 'admin-login.html';
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('ck_travels_user');
-            window.location.href = 'index.html';
-        }
-
-        function renderPackages() {
+        async function fetchPackages() {
             const list = document.getElementById('package-list');
-            list.innerHTML = '';
+            list.innerHTML = '<div class="col-span-full py-24 text-center animate-pulse text-slate-700 font-mono italic uppercase tracking-widest">Querying Cloud Inventory...</div>';
 
-            packages.forEach((pkg) => {
-                const card = document.createElement('div');
-                card.className = 'admin-card shadow-sm';
-                card.innerHTML = `
-                    <img src="${pkg.image}" class="card-img" alt="${pkg.title}" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
-                    <div class="card-body">
-                        <span class="badge" style="background: #eff6ff; color: #1e40af;">${pkg.location}</span>
-                        <h3 style="font-size: 1.1rem; margin-bottom: 8px;">${pkg.title}</h3>
-                        <div style="font-size: 0.85rem; color: #666; margin-bottom: 12px;">${pkg.duration}</div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
-                            <div style="font-weight: 700; color: var(--color-primary);">$${pkg.price}</div>
-                            <div>
-                                <button class="btn btn-link btn-sm" onclick="editPackage('${pkg.id}')">Edit</button>
-                                <button class="btn btn-link btn-sm" style="color: #ef4444;" onclick="deletePackage('${pkg.id}')">Delete</button>
+            try {
+                const qs = await db.collection("packages").get();
+                packages = [];
+                list.innerHTML = '';
+
+                if (qs.empty) {
+                    list.innerHTML = '<div class="col-span-full py-24 text-center text-slate-600 uppercase font-bold tracking-widest">No Active Experiences Found</div>';
+                    return;
+                }
+
+                qs.forEach(doc => {
+                    const p = doc.data();
+                    packages.push({ id: doc.id, ...p });
+                    const card = `
+                        <div class="bg-slate-900/50 rounded-[32px] border border-slate-800 overflow-hidden pkg-card transition-all duration-300 group">
+                            <div class="h-40 relative">
+                                <img src="${p.image}" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" alt="${p.title}">
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
+                                <div class="absolute top-4 left-4 px-3 py-1 bg-brand rounded-full text-[8px] font-bold text-white uppercase tracking-widest">${p.location}</div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-white font-bold text-lg mb-1 leading-tight group-hover:text-blue-400 transition-colors">${p.title}</h3>
+                                <p class="text-slate-500 text-xs font-medium mb-6">${p.duration}</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-brand font-black text-lg">$${p.price}</span>
+                                    <div class="space-x-1">
+                                        <button onclick="editPackage('${doc.id}')" class="p-2 text-slate-400 hover:text-white transition-colors">✏️</button>
+                                        <button onclick="deletePackage('${doc.id}')" class="p-2 text-slate-400 hover:text-red-500 transition-colors">🗑️</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
-                list.appendChild(card);
-            });
-
-            document.getElementById('loading-indicator').style.display = 'none';
-            document.getElementById('package-list').style.display = 'grid';
-
-            if (packages.length === 0) {
-                list.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 20px; color: #666;">No packages found. Click "Create New Package" to add one.</div>';
-                document.getElementById('package-list').style.display = 'block';
-            }
-        }
-
-        // --- GLOBAL ACTIONS ---
-        window.fetchPackages = function () {
-            console.log("Fetching packages...");
-
-            db.collection("packages").get().then((querySnapshot) => {
-                packages = [];
-                querySnapshot.forEach((doc) => {
-                    packages.push({ id: doc.id, ...doc.data() });
+                    `;
+                    list.innerHTML += card;
                 });
-                renderPackages();
-            }).catch(e => {
-                console.error(e);
-                document.getElementById('loading-indicator').textContent = "Error loading packages: " + e.message;
-            });
-        }
-
-        window.testConnection = function () {
-            alert("Testing connection to Firebase...");
-            db.collection("packages").limit(1).get()
-                .then(() => alert("Connection Successful! You are connected to Firebase."))
-                .catch(e => alert("Connection Failed: " + e.message));
+            } catch (err) { console.error(err); }
         }
 
         window.showPackageModal = function (isEdit = false) {
-            const modal = document.getElementById('add-package-modal');
+            const modal = document.getElementById('package-modal');
             const title = document.getElementById('modal-title');
-            const btn = document.getElementById('submit-btn');
-
             if (!isEdit) {
+                document.getElementById('package-form').reset();
                 document.getElementById('edit-id').value = '';
-                document.getElementById('add-package-form').reset();
-                title.textContent = "Create New Package";
-                btn.textContent = "Create Package";
-                btn.disabled = false;
+                title.textContent = "Construct New Experience";
             } else {
-                title.textContent = "Edit Package";
-                btn.textContent = "Update Package";
-                btn.disabled = false;
+                title.textContent = "Reconfigure Experience";
             }
-            modal.style.display = 'flex';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         };
 
-        window.hidePackageModal = function () { document.getElementById('add-package-modal').style.display = 'none'; };
+        window.hidePackageModal = function () {
+            document.getElementById('package-modal').classList.add('hidden');
+        };
 
         window.editPackage = function (id) {
-            const pkg = packages.find(p => p.id === id);
-            if (!pkg) return;
-
+            const p = packages.find(x => x.id === id);
+            if (!p) return;
             document.getElementById('edit-id').value = id;
-            document.getElementById('pkg-title').value = pkg.title;
-            document.getElementById('pkg-location').value = pkg.location;
-            document.getElementById('pkg-price').value = pkg.price;
-            document.getElementById('pkg-duration').value = pkg.duration;
-            document.getElementById('pkg-image').value = pkg.image;
-            document.getElementById('pkg-features').value = (pkg.features || []).join(', ');
+            document.getElementById('pkg-title').value = p.title;
+            document.getElementById('pkg-location').value = p.location;
+            document.getElementById('pkg-duration').value = p.duration;
+            document.getElementById('pkg-price').value = p.price;
+            document.getElementById('pkg-image').value = p.image;
+            document.getElementById('pkg-features').value = (p.features || []).join(', ');
             showPackageModal(true);
         };
 
-        window.deletePackage = function (id) {
-            if (confirm('Are you sure you want to delete this package?')) {
-                db.collection("packages").doc(id).delete().then(() => {
-                    fetchPackages();
-                }).catch(e => alert(e.message));
+        window.deletePackage = async function (id) {
+            if (confirm("Terminate experience asset? This action is irreversible.")) {
+                await db.collection("packages").doc(id).delete();
+                fetchPackages();
             }
         };
 
-        window.handleLogout = function (e) { if (e) e.preventDefault(); logout(); };
-
-        document.getElementById('add-package-form').addEventListener('submit', function (e) {
+        document.getElementById('package-form').addEventListener('submit', async function (e) {
             e.preventDefault();
-
             const btn = document.getElementById('submit-btn');
-            const originalText = btn.textContent;
-            btn.textContent = "Saving...";
+            btn.textContent = "DEPLOYING...";
             btn.disabled = true;
 
-            const title = document.getElementById('pkg-title').value;
-            const location = document.getElementById('pkg-location').value;
-            const price = document.getElementById('pkg-price').value;
-            const duration = document.getElementById('pkg-duration').value;
-            const image = document.getElementById('pkg-image').value;
-            const features = document.getElementById('pkg-features').value.split(',').map(f => f.trim()).filter(f => f);
-            const editId = document.getElementById('edit-id').value;
-
-            const pkgData = {
-                title, location, price, duration, image, features
+            const id = document.getElementById('edit-id').value;
+            const data = {
+                title: document.getElementById('pkg-title').value,
+                location: document.getElementById('pkg-location').value,
+                duration: document.getElementById('pkg-duration').value,
+                price: Number(document.getElementById('pkg-price').value),
+                image: document.getElementById('pkg-image').value,
+                features: document.getElementById('pkg-features').value.split(',').map(f => f.trim()).filter(f => f),
+                modifiedAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
-            const action = editId ?
-                db.collection("packages").doc(editId).update(pkgData) :
-                db.collection("packages").add(pkgData);
-
-            // 20 Second Timeout
-            const timeout = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error("Request timed out. Firewall blocking connection.")), 20000)
-            );
-
-            Promise.race([action, timeout])
-                .then(() => {
-                    fetchPackages();
-                    hidePackageModal();
-                    alert("Success! Package Saved.");
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                }).catch(e => {
-                    console.error(e);
-                    alert("Error saving: " + e.message);
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                });
+            try {
+                if (id) await db.collection("packages").doc(id).update(data);
+                else await db.collection("packages").add(data);
+                hidePackageModal();
+                fetchPackages();
+            } catch (err) { alert("Operation failed: " + err.message); }
+            finally {
+                btn.textContent = "Deploy Experience";
+                btn.disabled = false;
+            }
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            checkAuth();
-            fetchPackages();
-        });
+        document.addEventListener('DOMContentLoaded', fetchPackages);
     </script>
+
 </body>
 
 </html>

@@ -4,104 +4,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login | CK Travels</title>
+    <title>Station Control | ADMIN PORTAL</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Modular CSS System -->
-    <link rel="stylesheet" href="css/main.css">
-
-    <style>
-        .login-layout {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: #f8f9fa;
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: '#1e40af',
+                    }
+                }
+            }
         }
-
-        .login-card {
-            width: 100%;
-            max-width: 400px;
-            padding: 40px;
-            border: 1px solid #ddd;
-        }
-
-        .admin-badge {
-            display: inline-block;
-            background: var(--color-primary);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
-    </style>
+    </script>
 </head>
 
-<body>
+<body class="bg-[#0f172a] font-sans text-slate-200 antialiased h-screen flex items-center justify-center p-6">
 
-    <div class="login-layout">
-        <div class="glass-panel login-card">
-            <div style="text-align: center; margin-bottom: 32px;">
-                <div class="admin-badge">Admin Portal</div>
-                <h1 style="font-size: 1.5rem; margin-bottom: 8px;">Staff Access</h1>
-                <p style="color: var(--color-text-muted);">Please enter your administrator ID</p>
+    <div class="w-full max-w-[420px] space-y-8">
+        <!-- Logo Area -->
+        <div class="text-center">
+            <div
+                class="inline-flex items-center justify-center w-20 h-20 bg-brand/10 border border-brand/20 rounded-3xl mb-8">
+                <svg class="w-10 h-10 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
             </div>
+            <h1 class="text-3xl font-bold tracking-tighter text-white uppercase">Station Control</h1>
+            <p class="text-slate-500 font-medium mt-2 text-sm tracking-widest uppercase">Administrative Terminal v2.4
+            </p>
+        </div>
 
-            <form id="adminLoginForm">
-                <div class="form-group">
-                    <input type="text" id="adminId" class="input-field" placeholder=" " required autofocus>
-                    <label for="adminId" class="input-label">Admin ID or Email</label>
+        <!-- Login Panel -->
+        <div class="bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-[32px] p-10 shadow-2xl">
+            <form id="adminForm" class="space-y-6">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-4">Terminal
+                        ID</label>
+                    <input type="text" id="adminId" required placeholder="ADM-778"
+                        class="w-full bg-slate-950/50 border border-slate-800 rounded-2xl px-6 py-4 focus:border-brand focus:ring-4 focus:ring-brand/5 outline-none transition-all font-mono text-brand placeholder-slate-700">
                 </div>
 
-                <div class="form-group">
-                    <input type="password" id="adminPass" class="input-field" placeholder=" ">
-                    <label for="adminPass" class="input-label">Security Key</label>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-4">Access
+                        Key</label>
+                    <input type="password" id="adminPass" required placeholder="••••••••"
+                        class="w-full bg-slate-950/50 border border-slate-800 rounded-2xl px-6 py-4 focus:border-brand focus:ring-4 focus:ring-brand/5 outline-none transition-all font-mono text-brand placeholder-slate-700">
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block" style="margin-top: 24px;">Confirm
-                    Identity</button>
+                <div class="pt-4">
+                    <button type="submit"
+                        class="w-full bg-brand hover:bg-blue-600 text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand/20 transition-all active:scale-[0.98] tracking-widest text-xs uppercase">
+                        INITIATE HANDSHAKE
+                    </button>
+                </div>
             </form>
+        </div>
 
-            <div style="margin-top: 32px; text-align: center;">
-                <a href="index.html" style="color: var(--color-text-muted); font-size: 0.9rem;">&larr; Return to main
-                    site</a>
-            </div>
+        <div class="text-center">
+            <a href="index.html"
+                class="text-[10px] font-bold text-slate-600 hover:text-slate-400 tracking-widest uppercase transition-colors">Abort
+                & Return to Public Site</a>
         </div>
     </div>
 
+    <!-- Security Overlay Decor -->
+    <div class="fixed inset-0 pointer-events-none border-[40px] border-slate-900/20 opacity-50"></div>
+    <div
+        class="fixed top-10 left-10 text-[8px] font-mono text-slate-800 tracking-widest uppercase vertical-text hidden lg:block">
+        SECURE ENCRYPTION ACTIVE // IP LOGGING ON</div>
+
+    <style>
+        .vertical-text {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+        }
+    </style>
+
     <script>
-        document.getElementById('adminLoginForm').addEventListener('submit', function (e) {
+        document.getElementById('adminForm').addEventListener('submit', function (e) {
             e.preventDefault();
-
             const id = document.getElementById('adminId').value.trim().toLowerCase();
-            console.log('Admin login attempt ID:', id);
+            const btn = e.target.querySelector('button');
 
-            if (id === 'admin' || id === 'admin@cktravels.com') {
-                // Manually set user data to avoid import issues in file:// protocol
-                const userData = {
-                    name: 'Administrator',
-                    email: id.includes('@') ? id : 'admin@cktravels.com',
-                    loginMethod: 'admin-portal',
-                    role: 'admin'
-                };
+            btn.textContent = "VERIFYING ENCRYPTION...";
+            btn.disabled = true;
 
-                localStorage.setItem('ck_travels_user', JSON.stringify(userData));
-
-                alert('Success! Access Granted.');
-                window.location.href = './admin-dashboard.html';
-            } else {
-                alert('Access Denied: Invalid Administrative ID. Please type: admin');
-            }
+            setTimeout(() => {
+                if (id === 'admin' || id === 'admin@cktravels.com') {
+                    const userData = {
+                        name: 'System Admin',
+                        role: 'admin',
+                        session: Date.now()
+                    };
+                    localStorage.setItem('ck_travels_user', JSON.stringify(userData));
+                    window.location.href = './admin-dashboard.html';
+                } else {
+                    alert('ACCESS DENIED: STATION ID UNRECOGNIZED');
+                    btn.textContent = "INITIATE HANDSHAKE";
+                    btn.disabled = false;
+                }
+            }, 1500);
         });
     </script>
 </body>

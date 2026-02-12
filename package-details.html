@@ -4,230 +4,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Package Details | CK Travels</title>
+    <title>Package Details | CK Travels Premium</title>
 
-    <link rel="stylesheet" href="css/main.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
 
-    <style>
-        .details-hero {
-            height: 50vh;
-            position: relative;
-            background-color: #334155;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: flex-end;
-            padding-bottom: 4rem;
-            color: white;
-            /* Keep white text on image */
-            margin-bottom: -4rem;
-        }
-
-        .hero-text {
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Overlay for legibility */
-        .details-hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7));
-        }
-
-        .hero-text h1 {
-            font-size: 3.5rem;
-            margin-bottom: 0.5rem;
-            color: #fff;
-        }
-
-        .content-wrapper {
-            position: relative;
-            z-index: 10;
-        }
-
-        .details-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .main-details {
-            background: #fff;
-            border: var(--sh-border);
-            border-radius: 8px;
-            padding: 2rem;
-        }
-
-        .itinerary-item {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            border-left: 2px solid #e2e8f0;
-            padding-left: 2rem;
-            position: relative;
-        }
-
-        .itinerary-item::before {
-            content: '';
-            position: absolute;
-            left: -9px;
-            top: 0;
-            width: 16px;
-            height: 16px;
-            background: var(--sh-black);
-            border-radius: 50%;
-            border: 3px solid white;
-        }
-
-        .day-badge {
-            font-weight: 700;
-            color: var(--sh-black);
-            min-width: 60px;
-        }
-
-        .booking-sidebar {
-            position: sticky;
-            top: 100px;
-            height: fit-content;
-            padding: 2rem;
-            background: #fff;
-            border: var(--sh-border);
-            border-radius: 8px;
-        }
-
-        .booking-sidebar h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--sh-black);
-        }
-
-        .price-large {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--sh-black);
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-list {
-            margin: 1.5rem 0;
-        }
-
-        .feature-list li {
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #666;
-        }
-
-        .feature-list li::before {
-            content: '✓';
-            color: var(--sh-black);
-            font-weight: bold;
-        }
-
-        @media (max-width: 768px) {
-            .details-grid {
-                grid-template-columns: 1fr;
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        primary: '#1e40af',  // Deep Blue
+                        secondary: '#3b82f6', // Bright Blue
+                        surface: '#fafafa',
+                    }
+                }
             }
+        }
+    </script>
+    <style>
+        .glass-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .hero-zoom:hover img {
+            transform: scale(1.05);
+        }
+
+        .sticky-sidebar {
+            top: 120px;
         }
     </style>
 </head>
 
-<body>
+<body class="bg-surface font-sans text-gray-900 antialiased overflow-x-hidden">
 
-    <nav class="navbar">
-        <a href="index.html" class="logo">CK Travels</a>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="flights.html">Flights</a>
-            <a href="packages.html" class="active">Packages</a>
-            <a href="booking.html">My Trips</a>
-        </div>
-        <div style="display: flex; gap: 12px;">
-            <a href="login.html" class="btn btn-signup btn-sm">Sign Up</a>
-            <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
+    <!-- Navbar -->
+    <nav class="glass-header border-b border-gray-100 sticky top-0 z-50 h-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+            <div class="flex justify-between items-center h-full">
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-1 group">
+                    <span
+                        class="text-3xl font-extrabold tracking-tighter text-gray-900 group-hover:text-primary transition-colors">CK<span
+                            class="text-primary group-hover:text-amber-500 transition-colors">.</span></span>
+                </a>
+
+                <div class="hidden md:flex gap-8">
+                    <a href="index.html"
+                        class="text-gray-500 hover:text-black font-semibold text-sm tracking-wide transition-colors">HOME</a>
+                    <a href="flights.html"
+                        class="text-gray-500 hover:text-black font-semibold text-sm tracking-wide transition-colors">FLIGHTS</a>
+                    <a href="packages.html" class="text-primary font-bold text-sm tracking-wide">PACKAGES</a>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <!-- Content injected via JS -->
-    <main id="details-container"></main>
+    <main id="package-content">
+        <!-- Loading State -->
+        <div class="max-w-7xl mx-auto px-4 py-20 text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+        </div>
+    </main>
 
-    <script type="module">
-        import { packages } from './js/data.js';
+    <!-- Footer -->
+    <footer class="bg-white py-12 border-t border-gray-50 mt-20">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-[10px] text-gray-300 font-bold uppercase tracking-widest italic">CK Travels • Premium
+                Experience Verified</p>
+        </div>
+    </footer>
 
-        // Get ID from URL
+    <!-- Firebase Logic -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsrtZh0PBOjNA8c8-9sifdtVqKMk7q-fs",
+            authDomain: "ck-travels-8926e.firebaseapp.com",
+            projectId: "ck-travels-8926e",
+            storageBucket: "ck-travels-8926e.firebasestorage.app",
+            messagingSenderId: "310809428136",
+            appId: "1:310809428136:web:74e2b0216f58088cf3829d",
+            measurementId: "G-HNT07JXC3C"
+        };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        db.settings({ experimentalForceLongPolling: true });
+
         const params = new URLSearchParams(window.location.search);
-        const pkgId = params.get('id') || 'p1';
+        const pkgId = params.get('id');
 
-        const pkg = packages.find(p => p.id === pkgId) || packages[0];
-        const container = document.getElementById('details-container');
+        if (pkgId) {
+            db.collection("packages").doc(pkgId).get().then(doc => {
+                if (doc.exists) {
+                    const pkg = doc.data();
+                    renderDetails(pkg, doc.id);
+                } else {
+                    document.getElementById('package-content').innerHTML = "Package not found.";
+                }
+            });
+        }
 
-        // Dynamic HTML injection
-        container.innerHTML = `
-            <section class="details-hero" style="background-image: url('${pkg.image}')">
-                <div class="container hero-text">
-                    <h1>${pkg.title}</h1>
-                    <p style="font-size: 1.25rem;">${pkg.location} • ${pkg.duration}</p>
-                </div>
-            </section>
-
-            <div class="container content-wrapper">
-                <div class="details-grid">
-                    <div class="main-details">
-                        <h2 style="margin-bottom: 1.5rem;">Itinerary Highlights</h2>
-                        
-                        <div class="itinerary">
-                            <div class="itinerary-item">
-                                <div class="day-badge">Day 1</div>
-                                <div>
-                                    <h3>Arrival & Check-in</h3>
-                                    <p style="color: #64748b">Private transfer from airport to your luxury accommodation. Welcome drinks and sunset viewing.</p>
+        function renderDetails(pkg, id) {
+            document.getElementById('package-content').innerHTML = `
+                <!-- Hero Section -->
+                <div class="relative h-[70vh] min-h-[500px] overflow-hidden">
+                    <img src="${pkg.image}" class="w-full h-full object-cover" alt="${pkg.title}">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                    
+                    <div class="absolute inset-0 flex items-end">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 w-full">
+                            <div class="max-w-3xl">
+                                <div class="bg-amber-500 text-white px-4 py-1.5 rounded-full text-xs font-bold inline-block mb-6 tracking-widest uppercase">EXCLUSIVE PACKAGE</div>
+                                <h1 class="text-6xl md:text-8xl font-serif font-bold text-white mb-6 leading-none">${pkg.title}</h1>
+                                <div class="flex items-center gap-6 text-white/80 text-lg font-medium">
+                                    <span class="flex items-center gap-2">
+                                        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
+                                        ${pkg.location}
+                                    </span>
+                                    <span>•</span>
+                                    <span>${pkg.duration}</span>
                                 </div>
                             </div>
-                            <div class="itinerary-item">
-                                <div class="day-badge">Day 2</div>
-                                <div>
-                                    <h3>City Tour & Local Culture</h3>
-                                    <p style="color: #64748b">Guided walking tour of historic sites followed by an authentic culinary experience.</p>
-                                </div>
-                            </div>
-                             <div class="itinerary-item">
-                                <div class="day-badge">Day 3</div>
-                                <div>
-                                    <h3>Adventure & Leisure</h3>
-                                    <p style="color: #64748b">Morning excursion to nearby landmarks. Afternoon free for spa or shopping.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <h2 style="margin-top: 3rem; margin-bottom: 1rem;">Gallery</h2>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div style="height: 200px; background: #eee; border-radius: 8px;"></div>
-                            <div style="height: 200px; background: #ddd; border-radius: 8px;"></div>
                         </div>
                     </div>
-
-                    <aside class="booking-sidebar">
-                        <h3>Book this Trip</h3>
-                        <div class="price-large">$${pkg.price} <span style="font-size: 1rem; font-weight: 400; color: #64748b">/ person</span></div>
-                        
-                        <p style="color: #64748b; margin-bottom: 1rem;">Includes:</p>
-                        <ul class="feature-list">
-                            ${pkg.features.map(f => `<li>${f}</li>`).join('')}
-                        </ul>
-
-                        <a href="booking.html?id=${pkg.id}&type=package" class="btn btn-primary btn-block">Proceed to Booking</a>
-                    </aside>
                 </div>
-            </div>
-        `;
+
+                <!-- Content Grid -->
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-20">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                        
+                        <!-- Main Story -->
+                        <div class="lg:col-span-2 space-y-12">
+                            <div class="bg-white rounded-[48px] p-10 md:p-16 shadow-2xl shadow-gray-200/50 border border-gray-50">
+                                <h2 class="text-4xl font-serif font-bold mb-8">The <span class="italic text-primary">Journey.</span></h2>
+                                <p class="text-xl text-gray-500 leading-relaxed mb-10">
+                                    Experience the absolute pinnacle of luxury travel. Our bespoke itinerary for ${pkg.title} is designed to provide seamless logistics and unparalleled comfort.
+                                </p>
+                                
+                                <div class="space-y-10">
+                                    <div class="flex gap-6 items-start">
+                                        <div class="w-12 h-12 bg-blue-50 text-primary rounded-full flex items-center justify-center font-bold flex-shrink-0">01</div>
+                                        <div>
+                                            <h3 class="text-xl font-bold mb-2">Private Arrival</h3>
+                                            <p class="text-gray-500">Chauffeur-driven transfer in a premium luxury sedan directly from the tarmac to your five-star villa.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-6 items-start">
+                                        <div class="w-12 h-12 bg-blue-50 text-primary rounded-full flex items-center justify-center font-bold flex-shrink-0">02</div>
+                                        <div>
+                                            <h3 class="text-xl font-bold mb-2">Curated Exploration</h3>
+                                            <p class="text-gray-500">Expert-led private tours exploring hidden locations that standard tourists never see.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-16 grid grid-cols-2 gap-4">
+                                     <div class="h-64 rounded-3xl overflow-hidden shadow-lg border-4 border-white">
+                                        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Luxury Interior">
+                                     </div>
+                                      <div class="h-64 rounded-3xl overflow-hidden shadow-lg border-4 border-white mt-8">
+                                        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Luxury Hotel">
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Side Booking Card -->
+                        <div class="lg:col-span-1">
+                            <div class="bg-white rounded-[40px] p-10 shadow-2xl shadow-gray-100 border border-gray-50 sticky sticky-sidebar">
+                                <div class="mb-10">
+                                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">ALL-INCLUSIVE FROM</div>
+                                    <div class="text-5xl font-black text-gray-900">$${pkg.price}</div>
+                                    <div class="text-xs text-gray-400 mt-2 font-medium italic">Price per guest based on double occupancy.</div>
+                                </div>
+
+                                <div class="space-y-4 mb-10">
+                                    <h4 class="text-xs font-bold text-gray-900 uppercase tracking-widest">Inclusions</h4>
+                                    <ul class="space-y-3">
+                                        ${pkg.features.map(f => `
+                                            <li class="flex items-center gap-3 text-sm text-gray-600">
+                                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                                ${f}
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+
+                                <a href="booking.html?id=${id}&type=package" class="block w-full bg-primary hover:bg-black text-white text-center py-6 rounded-3xl font-bold tracking-widest shadow-2xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95">BOOK EXPERIENCE</a>
+                                
+                                <p class="mt-6 text-center text-[10px] text-gray-300 font-bold uppercase tracking-widest italic">Inventory Limited • 24/7 Concierge Included</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            `;
+        }
     </script>
 </body>
 

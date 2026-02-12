@@ -4,246 +4,296 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Flights | Admin | CK Travels</title>
+    <title>Asset Control | Flight Inventory</title>
 
-    <link rel="stylesheet" href="css/main.css">
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
                     colors: {
-                        primary: '#1e40af',
+                        brand: '#1e40af',
+                        dark: '#0f172a',
+                        panel: '#1e293b',
                     }
                 }
             }
         }
     </script>
     <style>
-        .admin-sidebar {
-            background: #fdfdfd;
-            border-right: 1px solid #eee;
-            height: calc(100vh - 72px);
-            padding: 24px 0;
+        .sidebar-item-active {
+            background: rgba(30, 64, 175, 0.1);
+            border-left: 4px solid #3b82f6;
+            color: #fff;
         }
 
-        .admin-nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 24px;
-            color: #444;
-            text-decoration: none;
-            font-weight: 500;
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
         }
 
-        .admin-nav-item:hover,
-        .admin-nav-item.active {
-            background: #f0f0f0;
-            color: var(--color-primary);
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
         }
 
-        .admin-content {
-            padding: 32px;
-            background: #fbfbfb;
-            min-height: calc(100vh - 72px);
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 10px;
         }
 
-        /* Reverting generic table styles to avoid conflict with Tailwind */
+        input:focus,
+        select:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+        }
     </style>
 </head>
 
-<body>
-    <nav class="navbar bg-white border-b border-gray-200 px-6 py-3 flex justify-between items-center">
-        <a href="index.html" class="logo font-bold text-xl text-gray-800">CK Travels <span
-                class="text-xs text-primary font-bold border border-primary px-1 rounded ml-1 align-middle">ADMIN</span></a>
+<body class="bg-dark font-sans text-slate-300 antialiased overflow-hidden flex h-screen">
 
-        <div class="flex gap-3 items-center">
-            <span id="admin-name" class="font-semibold text-sm">Admin</span>
-            <a href="#" onclick="handleLogout(event)" class="text-sm text-gray-600 hover:text-gray-900">Logout</a>
+    <!-- Sidebar Navigation -->
+    <aside class="w-72 bg-slate-900 border-r border-slate-800 flex flex-col">
+        <div class="p-8 border-b border-slate-800">
+            <div class="flex items-center gap-3 mb-2">
+                <div
+                    class="w-8 h-8 bg-brand rounded-lg flex items-center justify-center font-black text-white text-xs tracking-tighter">
+                    CK</div>
+                <span class="text-white font-bold tracking-tight">STATION CONTROL</span>
+            </div>
+            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest pl-1">V2.4 ADMIN PANEL</p>
         </div>
-    </nav>
 
-    <div class="grid grid-cols-[240px_1fr]">
-        <aside class="admin-sidebar hidden md:block">
-            <a href="admin-dashboard.html" class="admin-nav-item"><span>📊</span> Overview</a>
-            <a href="admin-bookings.html" class="admin-nav-item"><span>🎫</span> Bookings</a>
-            <a href="admin-flights.html" class="admin-nav-item active"><span>✈️</span> Manage Flights</a>
-            <a href="admin-packages.html" class="admin-nav-item"><span>🗺️</span> Manage Packages</a>
-        </aside>
+        <nav class="flex-1 py-8 px-4 space-y-1">
+            <a href="admin-dashboard.html"
+                class="flex items-center gap-4 px-6 py-4 rounded-xl text-slate-500 hover:bg-slate-800 hover:text-white font-bold text-sm transition-all group">
+                <svg class="w-5 h-5 opacity-40 group-hover:opacity-100" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Overview
+            </a>
+            <a href="admin-bookings.html"
+                class="flex items-center gap-4 px-6 py-4 rounded-xl text-slate-500 hover:bg-slate-800 hover:text-white font-bold text-sm transition-all group">
+                <svg class="w-5 h-5 opacity-40 group-hover:opacity-100" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5z" />
+                </svg>
+                Global Bookings
+            </a>
+            <a href="admin-flights.html"
+                class="sidebar-item-active flex items-center gap-4 px-6 py-4 rounded-xl font-bold text-sm transition-all">
+                <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+                Flight Asset Mgmt
+            </a>
+            <a href="admin-packages.html"
+                class="flex items-center gap-4 px-6 py-4 rounded-xl text-slate-500 hover:bg-slate-800 hover:text-white font-bold text-sm transition-all group">
+                <svg class="w-5 h-5 opacity-40 group-hover:opacity-100" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Experience Packages
+            </a>
+        </nav>
 
-        <main class="admin-content">
-            <div class="flex justify-between items-center mb-8">
-                <h1 class="text-2xl font-bold">Manage Flights</h1>
-                <div class="flex gap-2">
-                    <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded text-sm"
-                        onclick="testConnection()">Test Connection</button>
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm"
-                        onclick="showAddModal()">+ Add New Flight</button>
+        <div class="p-8 border-t border-slate-800">
+            <button onclick="logout()"
+                class="flex items-center gap-3 text-red-500 font-bold text-[10px] tracking-widest uppercase hover:text-red-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                De-authenticate
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Header -->
+        <header class="h-20 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-12 z-10">
+            <div>
+                <h1 class="text-xl font-bold text-white tracking-tight uppercase">Flight Inventory</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="fetchFlights()" class="p-2 text-slate-500 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <button onclick="showAddModal()"
+                    class="bg-brand hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold tracking-widest uppercase transition-all shadow-xl shadow-brand/20">+
+                    Deploy Asset</button>
+            </div>
+        </header>
+
+        <!-- Tool Bar -->
+        <div class="bg-slate-900 border-b border-slate-800 px-12 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="relative w-64">
+                    <input type="text" placeholder="Search Assets..."
+                        class="w-full bg-slate-950/50 border border-slate-800 rounded-lg pl-10 pr-4 py-2 text-xs text-white focus:outline-none placeholder-slate-600">
+                    <svg class="w-4 h-4 text-slate-600 absolute left-3 top-2.5" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
                 </div>
             </div>
+            <div class="text-[10px] font-mono text-slate-500">TERMINAL_ID: DXB_CENTRAL_FLT</div>
+        </div>
 
-            <div id="loading-indicator" class="text-center p-5 text-gray-500">
-                Connecting to Firebase...
-            </div>
-
-            <div class="bg-white rounded-lg shadow overflow-hidden">
-                <table class="w-full text-left border-collapse" id="flights-table" style="display: none;">
+        <!-- Table Content -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-12">
+            <div class="bg-slate-900/30 rounded-[32px] border border-slate-800 overflow-hidden">
+                <table class="w-full text-left">
                     <thead>
-                        <tr class="bg-gray-50 text-gray-600 text-xs uppercase border-b border-gray-200">
-                            <th class="p-4">Airline</th>
-                            <th class="p-4">Flight #</th>
-                            <th class="p-4">Route</th>
-                            <th class="p-4">Time</th>
-                            <th class="p-4">Stops</th>
-                            <th class="p-4">Price</th>
-                            <th class="p-4 text-right">Actions</th>
+                        <tr class="text-[10px] text-slate-500 uppercase tracking-widest border-b border-slate-800">
+                            <th class="py-6 pl-10">Carrier</th>
+                            <th class="py-6">Code</th>
+                            <th class="py-6">Route Matrix</th>
+                            <th class="py-6">Schedule</th>
+                            <th class="py-6">Unit Price</th>
+                            <th class="py-6 pr-10 text-right">Ops</th>
                         </tr>
                     </thead>
-                    <tbody id="flights-table-body" class="text-sm">
-                        <!-- Rows will be populated by JS -->
+                    <tbody id="flights-table-body" class="text-xs font-medium">
+                        <!-- Content Injected via JS -->
+                        <tr>
+                            <td colspan="6" class="py-20 text-center animate-pulse text-slate-600">ACCESSING DEPLOYED
+                                ASSETS...</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
-    <!-- Add/Edit Modal (Expanded for more details) -->
-    <div id="add-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center overflow-auto py-10">
-        <div class="bg-white rounded-xl shadow-2xl w-[600px] max-w-[95%] max-h-[90vh] overflow-y-auto">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center sticky top-0 bg-white z-10">
-                <h2 id="modal-title" class="text-xl font-bold">Add New Flight</h2>
-                <button onclick="hideAddModal()" class="text-gray-400 hover:text-gray-600">&times;</button>
+    <!-- Modal System -->
+    <div id="add-modal" class="fixed inset-0 bg-dark/90 backdrop-blur-sm z-50 hidden items-center justify-center p-6">
+        <div
+            class="bg-slate-900 w-[700px] rounded-[40px] border border-slate-800 shadow-2xl flex flex-col max-h-full overflow-hidden">
+            <div class="p-8 border-b border-slate-800 flex justify-between items-center bg-slate-950/30">
+                <div>
+                    <h2 id="modal-title" class="text-xl font-bold text-white uppercase tracking-tight">Deploy New Flight
+                        Asset</h2>
+                    <p class="text-xs text-slate-500 mt-1">Populate all required routing parameters</p>
+                </div>
+                <button onclick="hideAddModal()" class="text-slate-500 hover:text-white text-2xl">&times;</button>
             </div>
 
-            <form id="add-flight-form" class="p-6 space-y-6">
+            <form id="add-flight-form" class="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-8">
                 <input type="hidden" id="edit-id">
 
-                <!-- Section 1: Basic Info -->
-                <div class="space-y-4">
-                    <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider">Flight Information</h3>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Airline</label>
-                            <input type="text" id="airline"
-                                class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none"
-                                placeholder="e.g. Emirates" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Flight Number</label>
-                            <input type="text" id="flightNumber"
-                                class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none"
-                                placeholder="e.g. EK202" required>
-                        </div>
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Airline
+                            Identity</label>
+                        <input type="text" id="airline" required placeholder="e.g. Emirates"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white font-bold outline-none transition-all placeholder-slate-700">
                     </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">From (City Code)</label>
-                            <input type="text" id="from"
-                                class="w-full border border-gray-300 rounded px-3 py-2 text-sm uppercase"
-                                placeholder="DXB" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">To (City Code)</label>
-                            <input type="text" id="to"
-                                class="w-full border border-gray-300 rounded px-3 py-2 text-sm uppercase"
-                                placeholder="LHR" required>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Departure Time</label>
-                            <input type="time" id="departureTime"
-                                class="w-full border border-gray-300 rounded px-3 py-2 text-sm" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Arrival Time</label>
-                            <input type="time" id="arrivalTime"
-                                class="w-full border border-gray-300 rounded px-3 py-2 text-sm" required>
-                        </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Asset Serial
+                            (Flight #)</label>
+                        <input type="text" id="flightNumber" required placeholder="e.g. EK-202"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white font-mono outline-none transition-all placeholder-slate-700">
                     </div>
                 </div>
 
-                <!-- Section 2: Details & Pricing -->
-                <div class="space-y-4 pt-4 border-t border-gray-100">
-                    <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider">Details & Pricing</h3>
-
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="col-span-1">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
-                            <input type="number" id="price"
-                                class="w-full border border-gray-300 rounded px-3 py-2 text-sm font-bold"
-                                placeholder="500" required>
-                        </div>
-                        <div class="col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Stops</label>
-                            <select id="stops" class="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white">
-                                <option value="Non-stop">Non-stop</option>
-                                <option value="1 Stop">1 Stop</option>
-                                <option value="2+ Stops">2+ Stops</option>
-                            </select>
-                        </div>
+                <div class="grid grid-cols-2 gap-8 border-t border-slate-800 pt-8">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Origin
+                            Port</label>
+                        <input type="text" id="from" required placeholder="DXB"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white font-black uppercase outline-none transition-all placeholder-slate-700">
                     </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Aircraft Type</label>
-                            <input type="text" id="aircraft"
-                                class="w-full border border-gray-300 rounded px-3 py-2 text-sm" placeholder="Boeing 777"
-                                value="Boeing 777">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Total Duration</label>
-                            <input type="text" id="duration"
-                                class="w-full border border-gray-300 rounded px-3 py-2 text-sm" placeholder="7h 30m"
-                                required>
-                        </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Destination
+                            Port</label>
+                        <input type="text" id="to" required placeholder="LHR"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white font-black uppercase outline-none transition-all placeholder-slate-700">
                     </div>
                 </div>
 
-                <!-- Section 3: Amenities & Baggage -->
-                <div class="space-y-4 pt-4 border-t border-gray-100">
-                    <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider">Amenities & Policy</h3>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Cabin Baggage (kg)</label>
-                            <input type="number" id="baggageCabin"
-                                class="w-full border border-gray-300 rounded px-3 py-2 text-sm" value="7">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Checked Baggage (kg)</label>
-                            <input type="number" id="baggageChecked"
-                                class="w-full border border-gray-300 rounded px-3 py-2 text-sm" value="23">
-                        </div>
+                <div class="grid grid-cols-3 gap-8 border-t border-slate-800 pt-8">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Dep
+                            Time</label>
+                        <input type="time" id="departureTime" required
+                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white outline-none appearance-none">
                     </div>
-
-                    <div class="flex flex-col gap-2">
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" id="isRefundable" class="w-4 h-4 text-blue-600 rounded">
-                            <span class="text-sm text-gray-700">Refundable Ticket</span>
-                        </label>
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" id="hasWifi" class="w-4 h-4 text-blue-600 rounded" checked>
-                            <span class="text-sm text-gray-700">In-flight Wi-Fi Available</span>
-                        </label>
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" id="hasMeal" class="w-4 h-4 text-blue-600 rounded" checked>
-                            <span class="text-sm text-gray-700">Meal Included</span>
-                        </label>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Arr
+                            Time</label>
+                        <input type="time" id="arrivalTime" required
+                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white outline-none appearance-none">
+                    </div>
+                    <div class="space-y-2">
+                        <label
+                            class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Duration</label>
+                        <input type="text" id="duration" required placeholder="7h 30m"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white outline-none placeholder-slate-700">
                     </div>
                 </div>
 
-                <div class="flex gap-3 pt-4 border-t border-gray-100 sticky bottom-0 bg-white pb-6">
-                    <button type="button"
-                        class="flex-1 py-3 border border-gray-300 rounded text-gray-600 hover:bg-gray-50 font-medium transition-colors"
-                        onclick="hideAddModal()">Cancel</button>
+                <div class="grid grid-cols-2 gap-8 border-t border-slate-800 pt-8">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Base
+                            Valuation ($)</label>
+                        <input type="number" id="price" required placeholder="500"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white text-lg font-black outline-none placeholder-slate-700">
+                    </div>
+                    <div class="space-y-2">
+                        <label
+                            class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Connectivity</label>
+                        <select id="stops"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white outline-none">
+                            <option value="Non-stop">Non-stop (Direct)</option>
+                            <option value="1 Stop">1 Connection Stop</option>
+                            <option value="2+ Stops">2+ Multi-Link</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="p-8 bg-slate-950/50 rounded-3xl space-y-4">
+                    <label class="flex items-center gap-4 cursor-pointer group">
+                        <input type="checkbox" id="hasWifi" checked
+                            class="w-6 h-6 rounded-lg bg-slate-900 border-slate-800 text-brand focus:ring-brand">
+                        <span class="text-sm font-bold text-slate-400 group-hover:text-white transition-colors">Digital
+                            Connectivity Active (Wi-Fi)</span>
+                    </label>
+                    <label class="flex items-center gap-4 cursor-pointer group">
+                        <input type="checkbox" id="isRefundable"
+                            class="w-6 h-6 rounded-lg bg-slate-900 border-slate-800 text-brand focus:ring-brand">
+                        <span
+                            class="text-sm font-bold text-slate-400 group-hover:text-white transition-colors">Logistics
+                            Fully Refundable</span>
+                    </label>
+                </div>
+
+                <div class="flex gap-4 pt-4 sticky bottom-0 bg-slate-900 pb-10">
+                    <button type="button" onclick="hideAddModal()"
+                        class="flex-1 py-5 border border-slate-800 rounded-2xl text-slate-500 font-bold hover:bg-slate-800 transition-all uppercase tracking-widest text-[10px]">Cancel</button>
                     <button type="submit" id="submit-btn"
-                        class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium shadow-lg transition-all transform active:scale-95">Save
-                        Flight</button>
+                        class="flex-1 py-5 bg-brand hover:bg-blue-600 text-white rounded-2xl font-bold transition-all shadow-2xl shadow-brand/20 uppercase tracking-widest text-[10px]">Execute
+                        Operation</button>
                 </div>
             </form>
         </div>
@@ -263,210 +313,141 @@
             appId: "1:310809428136:web:74e2b0216f58088cf3829d",
             measurementId: "G-HNT07JXC3C"
         };
-
-        // Initialize Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         db.settings({ experimentalForceLongPolling: true });
 
+        function logout() { localStorage.removeItem('ck_travels_user'); window.location.href = 'index.html'; }
+
         let flights = [];
 
-        function checkAuth() {
+        async function fetchFlights() {
+            const container = document.getElementById('flights-table-body');
+            container.innerHTML = '<tr><td colspan="6" class="py-24 text-center animate-pulse text-slate-700 font-mono italic uppercase tracking-widest">Querying Global Flight Arrays...</td></tr>';
+
             try {
-                const user = JSON.parse(localStorage.getItem('ck_travels_user') || 'null');
-                if (!user) window.location.href = 'admin-login.html';
-            } catch (e) {
-                window.location.href = 'admin-login.html';
-            }
-        }
+                const qs = await db.collection("flights").get();
+                flights = [];
+                container.innerHTML = '';
 
-        function logout() {
-            localStorage.removeItem('ck_travels_user');
-            window.location.href = 'index.html';
-        }
+                if (qs.empty) {
+                    container.innerHTML = '<tr><td colspan="6" class="py-24 text-center text-slate-600">ZERO ASSETS DEPLOYED</td></tr>';
+                    return;
+                }
 
-        function renderTable() {
-            const tbody = document.getElementById('flights-table-body');
-            tbody.innerHTML = '';
-
-            flights.forEach((flight) => {
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-gray-100 hover:bg-gray-50 transition-colors";
-                tr.innerHTML = `
-                    <td class="p-4 font-medium text-gray-900">${flight.airline}</td>
-                    <td class="p-4"><code class="bg-gray-100 px-2 py-1 rounded text-xs text-gray-600">${flight.flightNumber}</code></td>
-                    <td class="p-4 text-gray-600 font-medium">${flight.from} <span class="text-gray-400 mx-1">→</span> ${flight.to}</td>
-                    <td class="p-4 text-gray-500">${flight.departure}</td>
-                    <td class="p-4"><span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${flight.stops === 'Non-stop' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">${flight.stops}</span></td>
-                    <td class="p-4 font-bold text-gray-900">$${flight.price}</td>
-                    <td class="p-4 text-right">
-                        <button class="text-blue-600 hover:text-blue-800 p-2" title="Edit" onclick="editFlight('${flight.id}')">✏️</button>
-                        <button class="text-red-500 hover:text-red-700 p-2" title="Delete" onclick="deleteFlight('${flight.id}')">🗑️</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            document.getElementById('loading-indicator').style.display = 'none';
-            document.getElementById('flights-table').style.display = 'table';
-
-            if (flights.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="text-center p-8 text-gray-500">No flights found. Click "Add New Flight" to create one.</td></tr>';
-            }
-        }
-
-        // --- GLOBAL ACTIONS ---
-        window.fetchFlights = function () {
-            console.log("Fetching flights from Firebase...");
-            document.getElementById('loading-indicator').textContent = "Fetching data from cloud...";
-
-            db.collection("flights").get()
-                .then((querySnapshot) => {
-                    console.log("Successfully fetched " + querySnapshot.size + " flights.");
-                    flights = [];
-                    querySnapshot.forEach((doc) => {
-                        flights.push({ id: doc.id, ...doc.data() });
-                    });
-                    renderTable();
-                })
-                .catch((error) => {
-                    console.error("Error getting documents: ", error);
-                    document.getElementById('loading-indicator').textContent = "Error loading data: " + error.message;
-                    alert("Network Error: " + error.message);
+                qs.forEach(doc => {
+                    const f = doc.data();
+                    flights.push({ id: doc.id, ...f });
+                    const tr = document.createElement('tr');
+                    tr.className = "border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors group";
+                    tr.innerHTML = `
+                        <td class="py-6 pl-10">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center font-black text-brand text-[10px] group-hover:bg-brand group-hover:text-white transition-all">${f.airline.substring(0, 2).toUpperCase()}</div>
+                                <span class="text-white font-bold">${f.airline}</span>
+                            </div>
+                        </td>
+                        <td class="py-6 font-mono text-slate-500">${f.flightNumber}</td>
+                        <td class="py-6">
+                            <span class="text-white font-black">${f.from}</span>
+                            <span class="text-slate-600 mx-2">→</span>
+                            <span class="text-white font-black">${f.to}</span>
+                        </td>
+                        <td class="py-6 text-slate-400 font-mono">${f.departure} / ${f.duration}</td>
+                        <td class="py-6 text-brand font-black text-sm">$${f.price}</td>
+                        <td class="py-6 pr-10 text-right space-x-2">
+                            <button onclick="editFlight('${doc.id}')" class="p-2 text-slate-500 hover:text-white transition-colors bg-slate-800 rounded-lg">✏️</button>
+                            <button onclick="deleteFlight('${doc.id}')" class="p-2 text-slate-500 hover:text-red-500 transition-colors bg-slate-800 rounded-lg">🗑️</button>
+                        </td>
+                    `;
+                    container.appendChild(tr);
                 });
-        }
-
-        window.testConnection = function () {
-            alert("Testing connection to Firebase...");
-            db.collection("flights").limit(1).get()
-                .then(() => alert("Connection Successful!"))
-                .catch(e => alert("Connection Failed: " + e.message));
+            } catch (err) {
+                console.error(err);
+            }
         }
 
         window.showAddModal = function (isEdit = false) {
             const modal = document.getElementById('add-modal');
             const title = document.getElementById('modal-title');
-            const btn = document.getElementById('submit-btn');
-
             if (!isEdit) {
                 document.getElementById('add-flight-form').reset();
                 document.getElementById('edit-id').value = '';
-                title.textContent = "Add New Flight";
-                btn.textContent = "Save Flight";
-                btn.disabled = false;
+                title.textContent = "Deploy New Flight Asset";
             } else {
-                title.textContent = "Edit Flight";
-                btn.textContent = "Update Flight";
-                btn.disabled = false;
+                title.textContent = "Reconfigure Flight Asset";
             }
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         };
 
         window.hideAddModal = function () {
-            const modal = document.getElementById('add-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            document.getElementById('add-modal').classList.add('hidden');
         };
 
         window.editFlight = function (id) {
-            const flight = flights.find(f => f.id === id);
-            if (!flight) return;
-
+            const f = flights.find(x => x.id === id);
+            if (!f) return;
             document.getElementById('edit-id').value = id;
-            document.getElementById('airline').value = flight.airline;
-            document.getElementById('flightNumber').value = flight.flightNumber || '';
-            document.getElementById('from').value = flight.from;
-            document.getElementById('to').value = flight.to;
-            document.getElementById('price').value = flight.price;
-            document.getElementById('departureTime').value = flight.departure;
-            document.getElementById('arrivalTime').value = flight.arrival;
-            document.getElementById('stops').value = flight.stops || 'Non-stop';
-            document.getElementById('duration').value = flight.duration || '';
-            document.getElementById('aircraft').value = flight.aircraft || '';
-            document.getElementById('baggageCabin').value = flight.baggage?.cabin || 7;
-            document.getElementById('baggageChecked').value = flight.baggage?.checked || 23;
-            document.getElementById('isRefundable').checked = flight.isRefundable || false;
-            document.getElementById('hasWifi').checked = flight.hasWifi !== false;
-            document.getElementById('hasMeal').checked = flight.hasMeal !== false;
-
+            document.getElementById('airline').value = f.airline;
+            document.getElementById('flightNumber').value = f.flightNumber;
+            document.getElementById('from').value = f.from;
+            document.getElementById('to').value = f.to;
+            document.getElementById('departureTime').value = f.departure;
+            document.getElementById('arrivalTime').value = f.arrival;
+            document.getElementById('duration').value = f.duration;
+            document.getElementById('price').value = f.price;
+            document.getElementById('stops').value = f.stops;
+            document.getElementById('hasWifi').checked = f.hasWifi !== false;
+            document.getElementById('isRefundable').checked = f.isRefundable || false;
             showAddModal(true);
         };
 
-        window.deleteFlight = function (id) {
-            if (confirm('Are you sure you want to delete this flight?')) {
-                db.collection("flights").doc(id).delete()
-                    .then(() => {
-                        fetchFlights();
-                    })
-                    .catch(e => alert("Error deleting: " + e.message));
+        window.deleteFlight = async function (id) {
+            if (confirm("Confirm asset termination? All associated data will be purged.")) {
+                await db.collection("flights").doc(id).delete();
+                fetchFlights();
             }
         };
 
-        window.handleLogout = function (e) { if (e) e.preventDefault(); logout(); };
-
-        document.getElementById('add-flight-form').addEventListener('submit', function (e) {
+        document.getElementById('add-flight-form').addEventListener('submit', async function (e) {
             e.preventDefault();
-
             const btn = document.getElementById('submit-btn');
-            const originalText = btn.textContent;
-            btn.textContent = "Saving...";
+            btn.textContent = "PROCESSING...";
             btn.disabled = true;
 
-            const editId = document.getElementById('edit-id').value;
-
-            const flightData = {
+            const id = document.getElementById('edit-id').value;
+            const data = {
                 airline: document.getElementById('airline').value,
                 flightNumber: document.getElementById('flightNumber').value,
                 from: document.getElementById('from').value.toUpperCase(),
                 to: document.getElementById('to').value.toUpperCase(),
-                price: parseFloat(document.getElementById('price').value),
                 departure: document.getElementById('departureTime').value,
                 arrival: document.getElementById('arrivalTime').value,
-                stops: document.getElementById('stops').value,
                 duration: document.getElementById('duration').value,
-                aircraft: document.getElementById('aircraft').value,
-                baggage: {
-                    cabin: parseInt(document.getElementById('baggageCabin').value),
-                    checked: parseInt(document.getElementById('baggageChecked').value)
-                },
-                isRefundable: document.getElementById('isRefundable').checked,
+                price: Number(document.getElementById('price').value),
+                stops: document.getElementById('stops').value,
                 hasWifi: document.getElementById('hasWifi').checked,
-                hasMeal: document.getElementById('hasMeal').checked,
-                class: 'Economy' // Default for now
+                isRefundable: document.getElementById('isRefundable').checked,
+                modifiedAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
-            const action = editId ?
-                db.collection("flights").doc(editId).update(flightData) :
-                db.collection("flights").add(flightData);
-
-            const timeout = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error("Request timed out.")), 20000)
-            );
-
-            Promise.race([action, timeout])
-                .then(() => {
-                    alert("Flight Saved Successfully!");
-                    fetchFlights();
-                    hideAddModal();
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    alert("Error saving: " + error.message);
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                });
+            try {
+                if (id) await db.collection("flights").doc(id).update(data);
+                else await db.collection("flights").add(data);
+                hideAddModal();
+                fetchFlights();
+            } catch (err) {
+                alert("Operation failed: " + err.message);
+            } finally {
+                btn.textContent = "Execute Operation";
+                btn.disabled = false;
+            }
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            checkAuth();
-            fetchFlights();
-        });
+        document.addEventListener('DOMContentLoaded', fetchFlights);
     </script>
+
 </body>
 
 </html>

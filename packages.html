@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Curated Experiences | CK Travels Premium Packages</title>
+    <title>Curated Experiences | CK Travels Nautical</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- GSAP & Lenis -->
+    <!-- GSAP Master Stack -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
@@ -17,138 +17,149 @@
     <link rel="stylesheet" href="css/main.css">
 
     <style>
-        .glass-dock {
-            background: rgba(10, 18, 41, 0.4);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6);
+        .glass-2 {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.4);
+        }
+
+        .glass-2:hover {
+            border-color: #FF6B00;
         }
 
         .pkg-card {
-            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transition: all 0.6s var(--ease-expo);
         }
 
         .pkg-card:hover {
-            transform: translateY(-12px) rotateX(4deg) scale(1.02);
-            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-12px) scale(1.02);
         }
 
-        .img-zoom-inner {
-            transition: transform 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        .btn-orange {
+            background-color: #FF6B00;
+            color: white;
+            transition: all 0.4s var(--ease-expo);
         }
 
-        .pkg-card:hover .img-zoom-inner {
-            transform: scale(1.1);
+        .btn-orange:hover {
+            box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
+        }
+
+        #page-curtain {
+            position: fixed;
+            top: 0;
+            left: 100%;
+            width: 100%;
+            height: 100%;
+            background-color: #FF6B00;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .bento-pkg-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 40px;
         }
 
         .mobile-tab-bar {
-            background: rgba(10, 18, 41, 0.8);
+            background: rgba(0, 20, 61, 0.95);
             backdrop-filter: blur(20px);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
 
-<body class="bg-[#050A18] font-body text-[#F8FAFC] antialiased">
+<body class="bg-white font-body text-[#00143D] antialiased">
 
-    <!-- Desktop Nav -->
+    <!-- Page Transition Curtain -->
+    <div id="page-curtain"></div>
+
+    <!-- Nav Dock -->
     <nav id="main-nav"
-        class="fixed top-8 left-1/2 -translate-x-1/2 w-[90%] max-w-7xl z-50 px-10 py-5 rounded-[32px] transition-all duration-700 glass-dock hidden lg:flex items-center justify-between">
+        class="fixed top-8 left-1/2 -translate-x-1/2 w-[90%] max-w-7xl z-50 px-10 py-5 rounded-[40px] transition-all duration-700 glass-2 hidden lg:flex items-center justify-between">
         <a href="index.html" class="flex items-center gap-1 group">
-            <span class="text-3xl font-black tracking-tighter italic text-white">CK<span
-                    class="text-primary not-italic">.</span></span>
+            <span class="text-3xl font-black tracking-tighter italic text-[#00143D]">CK<span
+                    class="text-[#FF6B00] not-italic">.</span></span>
         </a>
 
         <div class="flex items-center gap-12 font-bold text-[11px] tracking-[0.3em] uppercase opacity-60">
-            <a href="index.html" class="hover:opacity-100 transition-opacity">Home</a>
-            <a href="flights.html" class="hover:opacity-100 transition-opacity">Flights</a>
-            <a href="packages.html" class="hover:opacity-100 transition-opacity text-primary">Packages</a>
-            <a href="booking.html" class="hover:opacity-100 transition-opacity">My Trips</a>
+            <a href="index.html" class="hover:text-[#FF6B00] transition-colors">Home</a>
+            <a href="flights.html" class="hover:text-[#FF6B00] transition-colors">Flights</a>
+            <a href="packages.html" class="text-[#FF6B00]">Packages</a>
+            <a href="booking.html" class="hover:text-[#FF6B00] transition-colors">My Trips</a>
         </div>
 
         <div class="flex items-center gap-6">
-            <a href="login.html"
-                class="text-[11px] font-bold tracking-[0.3em] hover:text-primary transition-colors uppercase">Account</a>
+            <a href="login.html" class="text-[11px] font-black tracking-[0.3em] uppercase text-[#00143D]">Member
+                Link</a>
             <a href="flights.html"
-                class="bg-primary hover:bg-blue-600 text-white px-8 py-4 rounded-full text-[11px] font-black tracking-[0.3em] transition-all active:scale-95 shadow-2xl shadow-primary/20 uppercase">Book
+                class="btn-orange px-8 py-4 rounded-full text-[11px] font-black tracking-[0.3em] uppercase transition-all shadow-xl">Book
                 Now</a>
         </div>
     </nav>
 
     <!-- Cinematic Header -->
-    <header class="pt-48 pb-24 relative overflow-hidden">
+    <header class="pt-48 pb-24 relative overflow-hidden bg-[#00143D]">
         <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="glass-dock p-16 rounded-[64px] reveal-up">
+            <div class="glass-2 p-16 rounded-[64px] reveal-up">
                 <div class="max-w-4xl">
                     <div
-                        class="inline-flex items-center gap-3 bg-primary/10 text-primary px-5 py-2 rounded-full text-[9px] font-black tracking-[0.3em] mb-10 uppercase border border-primary/20">
-                        Exclusive Member Inventory
+                        class="inline-flex items-center gap-3 bg-orange-600/10 text-[#FF6B00] px-5 py-2 rounded-full text-[9px] font-black tracking-[0.3em] mb-10 uppercase border border-orange-600/20">
+                        Exclusive Nautical Portfolio
                     </div>
                     <h1 class="text-6xl md:text-[100px] font-heading font-black text-white leading-[0.9] italic mb-10">
-                        Curated <span class="not-italic text-primary font-bold">Experiences.</span>
+                        Nautical <span class="not-italic text-[#FF6B00] font-bold">Experiences.</span>
                     </h1>
                     <p class="text-xl text-slate-400 leading-relaxed font-medium max-w-2xl">
-                        Hand-selected journeys mirroring the standard of first-class aviation. Private logistics synced
-                        with the world's most elusive retreats.
+                        Hand-selected deployments that redefine the standard of maritime and aerial luxury. Synchronized
+                        routes for the high-end traveler.
                     </p>
                 </div>
 
-                <!-- Region Selector Matrix -->
+                <!-- Region Matrix -->
                 <div class="flex gap-4 mt-16 overflow-x-auto no-scrollbar pb-4">
                     <button
-                        class="px-10 py-5 rounded-full bg-primary text-white text-[9px] font-black tracking-[0.3em] uppercase shadow-2xl shadow-primary/30">Global
-                        Portfolio</button>
+                        class="px-10 py-5 rounded-full bg-[#FF6B00] text-white text-[9px] font-black tracking-[0.3em] uppercase shadow-2xl">Global
+                        Collective</button>
                     <button
-                        class="px-10 py-5 rounded-full bg-white/5 border border-white/5 text-slate-500 hover:text-white hover:bg-white/10 text-[9px] font-black tracking-[0.3em] uppercase transition-all">European
-                        Vogue</button>
+                        class="px-10 py-5 rounded-full bg-white/5 border border-white/5 text-slate-400 hover:text-white hover:bg-white/10 text-[9px] font-black tracking-[0.3em] uppercase transition-all">European
+                        Node</button>
                     <button
-                        class="px-10 py-5 rounded-full bg-white/5 border border-white/5 text-slate-500 hover:text-white hover:bg-white/10 text-[9px] font-black tracking-[0.3em] uppercase transition-all">Asian
-                        Pacific Nodes</button>
-                    <button
-                        class="px-10 py-5 rounded-full bg-white/5 border border-white/5 text-slate-500 hover:text-white hover:bg-white/10 text-[9px] font-black tracking-[0.3em] uppercase transition-all">Americas
-                        Elite</button>
+                        class="px-10 py-5 rounded-full bg-white/5 border border-white/5 text-slate-400 hover:text-white hover:bg-white/10 text-[9px] font-black tracking-[0.3em] uppercase transition-all">Asian
+                        Sector</button>
                 </div>
             </div>
         </div>
 
-        <!-- Background Decoration -->
+        <!-- Decoration -->
         <div
-            class="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/20 rounded-full blur-[160px] -mr-[400px] -mt-[400px] opacity-30">
+            class="absolute top-0 right-0 w-[800px] h-[800px] bg-orange-600/10 rounded-full blur-[160px] -mr-[400px] -mt-[400px] opacity-30">
         </div>
     </header>
 
     <!-- Experience Stream -->
-    <main class="max-w-7xl mx-auto px-6 py-20">
-        <div id="packages-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+    <main class="max-w-7xl mx-auto px-6 py-40">
+        <div id="packages-container" class="bento-pkg-grid">
             <!-- Loading States -->
-            <div class="glass-dock h-[500px] rounded-[48px] animate-pulse"></div>
-            <div class="glass-dock h-[500px] rounded-[48px] animate-pulse"></div>
-            <div class="glass-dock h-[500px] rounded-[48px] animate-pulse"></div>
+            <div class="glass-2 h-[500px] rounded-[48px] animate-pulse"></div>
+            <div class="glass-2 h-[500px] rounded-[48px] animate-pulse"></div>
+            <div class="glass-2 h-[500px] rounded-[48px] animate-pulse"></div>
         </div>
     </main>
 
-    <!-- Footer Experience -->
-    <footer class="bg-[#050A18] py-40 border-t border-white/5">
+    <!-- Footer -->
+    <footer class="bg-[#00143D] py-40">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <div class="marquee-wrapper mb-20 overflow-hidden">
-                <div
-                    class="flex gap-24 items-center justify-center opacity-20 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-1000">
-                    <span class="text-3xl font-heading italic">Emirates</span>
-                    <span class="text-3xl font-black tracking-tighter uppercase p-2 border-2 border-white/5">Qatar
-                        Airways</span>
-                    <span class="text-3xl font-bold tracking-widest">ETIHAD</span>
-                    <span class="text-3xl font-heading underline">Singapore Airlines</span>
-                </div>
-            </div>
-            <p class="text-[9px] font-black tracking-[0.5em] text-slate-700 uppercase">© 2026 CK TRAVELS // STATION_UAE
-            </p>
+            <p class="text-[10px] font-black tracking-[0.6em] text-slate-700 uppercase mb-20">© 2026 CK TRAVELS //
+                STN_NAUTICAL_SYNC</p>
         </div>
     </footer>
 
     <!-- Mobile Nav -->
-    <div class="lg:hidden fixed bottom-0 w-full z-50 px-6 pb-8 pt-4 mobile-tab-bar">
-        <div class="flex justify-between items-center text-white/40">
+    <div class="lg:hidden fixed bottom-0 w-full z-50 px-6 pb-8 pt-4 mobile-tab-bar text-white">
+        <div class="flex justify-between items-center opacity-40">
             <a href="index.html" class="flex flex-col items-center gap-1">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
@@ -162,7 +173,7 @@
                 </svg>
                 <span class="text-[8px] font-black uppercase tracking-widest">Flights</span>
             </a>
-            <a href="packages.html" class="flex flex-col items-center gap-1 text-primary">
+            <a href="packages.html" class="flex flex-col items-center gap-1 text-[#FF6B00] opacity-100">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -172,7 +183,7 @@
         </div>
     </div>
 
-    <!-- Firebase Connection -->
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
@@ -201,28 +212,28 @@
             qs.forEach(doc => {
                 const p = doc.data();
                 container.innerHTML += `
-                    <div class="glass-dock rounded-[48px] pkg-card overflow-hidden group cursor-pointer border border-white/5 hover:bg-[#0A1229] transition-all" onclick="window.location.href='package-details.html?id=${doc.id}'">
-                        <div class="h-[460px] relative overflow-hidden">
-                            <img src="${p.image}" class="img-zoom-inner w-full h-full object-cover brightness-[0.7] group-hover:brightness-100" alt="${p.title}">
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#0A1229] via-transparent to-transparent"></div>
+                    <div class="bg-white rounded-[48px] pkg-card overflow-hidden group cursor-pointer border border-slate-100 shadow-sm relative reveal-up" onclick="window.location.href='package-details.html?id=${doc.id}'">
+                        <div class="h-[480px] relative overflow-hidden">
+                            <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" alt="${p.title}">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#00143D] via-transparent to-transparent"></div>
                             
-                            <div class="absolute top-8 left-8">
-                                <span class="bg-primary/20 backdrop-blur-md px-4 py-1.5 rounded-full text-[8px] font-black text-white uppercase tracking-[0.2em] border border-primary/30">
+                            <div class="absolute top-10 left-10">
+                                <span class="bg-orange-600/20 backdrop-blur-md px-5 py-2 rounded-full text-[9px] font-black text-white uppercase tracking-[0.2em] border border-orange-600/30">
                                     ${p.location}
                                 </span>
                             </div>
 
-                            <div class="absolute bottom-10 left-10 right-10">
-                                <div class="text-[9px] font-black text-primary uppercase tracking-[0.3em] mb-4">${p.duration} Deployment</div>
-                                <h3 class="text-4xl font-heading font-black text-white italic mb-8 leading-tight">${p.title}</h3>
+                            <div class="absolute bottom-12 left-12 right-12">
+                                <div class="text-[10px] font-black text-[#FF6B00] uppercase tracking-[0.4em] mb-4">${p.duration} Deployment</div>
+                                <h3 class="text-4xl font-heading font-black text-white italic mb-10 leading-tight">${p.title}</h3>
                                 
-                                <div class="flex justify-between items-end border-t border-white/10 pt-8">
+                                <div class="flex justify-between items-end border-t border-white/10 pt-10">
                                     <div>
-                                        <div class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1">Valuation Starts</div>
+                                        <div class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1">Passage Starts</div>
                                         <div class="text-4xl font-black text-white italic">$${p.price.toLocaleString()}</div>
                                     </div>
-                                    <div class="w-16 h-16 bg-primary text-white rounded-[24px] flex items-center justify-center shadow-2xl transition-all group-hover:scale-110 active:scale-90">
-                                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="3"/></svg>
+                                    <div class="w-16 h-16 bg-[#FF6B00] text-white rounded-[24px] flex items-center justify-center shadow-2xl transition-all group-hover:scale-110 active:scale-95">
+                                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="3"/></svg>
                                     </div>
                                 </div>
                             </div>
@@ -234,14 +245,30 @@
             gsap.from(".pkg-card", {
                 opacity: 0,
                 y: 50,
-                stagger: 0.1,
-                duration: 1.2,
-                ease: "power4.out"
+                stagger: 0.15,
+                duration: 1.5,
+                ease: "expo.out"
             });
         });
 
         window.addEventListener('load', () => {
             gsap.from(".reveal-up", { y: 40, opacity: 0, duration: 1.2, ease: "power4.out" });
+
+            // Curtain Entry
+            gsap.to("#page-curtain", { left: "-100%", duration: 1.2, ease: "expo.inOut" });
+
+            // Exit back to Home
+            document.querySelectorAll('a[href="index.html"]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    gsap.to("#page-curtain", {
+                        left: 0,
+                        duration: 1,
+                        ease: "expo.inOut",
+                        onComplete: () => window.location.href = link.getAttribute('href')
+                    });
+                });
+            });
         });
     </script>
 </body>

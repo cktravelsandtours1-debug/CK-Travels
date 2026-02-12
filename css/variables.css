@@ -1,34 +1,35 @@
 :root {
-    /* 🎨 2026 High-End Travel Palette */
-    --color-bg: #050A18;
-    --color-surface: #0A1229;
-    --color-surface-glass: rgba(10, 18, 41, 0.6);
-    --color-primary: #3B82F6; /* Electric Blue */
-    --color-secondary: #1E293B;
-    --color-accent: #D4AF37; /* Gold */
-    --color-text: #F8FAFC;
-    --color-text-muted: #94A3B8;
+    /* 🎨 Modern Nautical Palette */
+    --color-bg: #00143D; /* Deep Midnight Blue */
+    --color-surface: #FFFFFF; /* Pure White */
+    --color-primary: #FF6B00; /* Sunset Orange */
+    --color-text: #00143D;
+    --color-text-on-dark: #FFFFFF;
+    --color-text-muted: #64748B;
     
-    /* Global Glass Settings */
-    --glass-blur: 20px;
+    /* Glassmorphism 2.0 */
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-blur: 25px;
     --glass-border: 1px solid rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6);
+    --glass-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.4);
+    --accent-glow: 0 0 20px rgba(255, 107, 0, 0.3);
 
     /* Typography */
     --font-heading: 'Playfair Display', serif;
     --font-body: 'Plus Jakarta Sans', sans-serif;
 
     /* Layout */
-    --container-width: 1400px;
-    --header-height: 80px;
-    --radius-sm: 12px;
-    --radius-md: 24px;
-    --radius-lg: 48px;
+    --container-width: 1440px;
+    --header-height: 90px;
+    --radius-sm: 16px;
+    --radius-md: 32px;
+    --radius-lg: 64px;
     --radius-full: 9999px;
 
     /* Animation & Transitions */
-    --transition-standard: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-    --transition-fast: 0.3s ease;
+    --duration-slow: 1.5s;
+    --duration-standard: 0.6s;
+    --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');

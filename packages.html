@@ -4,79 +4,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trip Packages | CK Travels</title>
+    <title>Curated Packages | CK Travels</title>
 
-    <link rel="stylesheet" href="css/main.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#1e40af',  // Deep Blue
+                        secondary: '#3b82f6', // Bright Blue
+                        accent: '#f59e0b',    // Amber
+                        surface: '#f3f4f6',
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        .package-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 24px;
-        }
-
-        .pkg-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-            border: 1px solid #eee;
-        }
-
-        .pkg-card:hover {
+        .pkg-card-hover:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        }
-
-        .pkg-img {
-            height: 200px;
-            width: 100%;
-            object-fit: cover;
-        }
-
-        .pkg-content {
-            padding: 20px;
         }
     </style>
 </head>
 
-<body>
+<body class="bg-surface font-sans text-gray-800 antialiased">
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <a href="index.html" class="logo">CK Travels</a>
-        <div class="nav-links">
-            <a href="index.html" class="nav-item">Home</a>
-            <a href="flights.html" class="nav-item">Flights</a>
-            <a href="packages.html" class="nav-item active">Packages</a>
-            <a href="booking.html" class="nav-item">My Trips</a>
-        </div>
-        <div style="display: flex; gap: 12px;">
-            <a href="login.html" class="btn btn-signup btn-sm">Sign Up</a>
-            <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
+    <!-- Navbar -->
+    <nav class="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex-shrink-0 flex items-center gap-2 group">
+                        <span
+                            class="text-3xl font-bold tracking-tighter text-gray-900 group-hover:text-primary transition-colors">CK<span
+                                class="text-primary group-hover:text-amber-500 transition-colors">.</span></span>
+                    </a>
+                    <div class="hidden sm:ml-10 sm:flex sm:space-x-8">
+                        <a href="index.html"
+                            class="border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">Home</a>
+                        <a href="flights.html"
+                            class="border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">Flights</a>
+                        <a href="packages.html"
+                            class="border-primary text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Packages</a>
+                        <a href="booking.html"
+                            class="border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">My
+                            Trips</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="login.html"
+                        class="bg-primary hover:bg-blue-800 text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">Sign
+                        In</a>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <main class="container" style="padding-top: 100px; padding-bottom: 60px;">
-        <div class="flex-between" style="margin-bottom: 40px;">
-            <div>
-                <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Curated Experiences</h1>
-                <p style="color: #666;">Handpicked luxury packages for next-level travel.</p>
+    <!-- Header -->
+    <div class="bg-white border-b border-gray-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-base text-primary font-semibold tracking-wide uppercase">Curated Collections</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    Discover your next adventure
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                    Handpicked luxury experiences tailored for the discerning traveler. From city breaks to tropical
+                    escapes.
+                </p>
             </div>
-            <!-- Simple Filter Tabs (Visual Only for now) -->
-            <div style="background: #f0f0f0; padding: 4px; border-radius: 4px;">
-                <button class="btn btn-sm btn-primary" style="height: 36px;">All</button>
-                <button class="btn btn-sm btn-link" style="color: #666; padding: 0 16px;">Beach</button>
-                <button class="btn btn-sm btn-link" style="color: #666; padding: 0 16px;">City</button>
-                <button class="btn btn-sm btn-link" style="color: #666; padding: 0 16px;">Adventure</button>
+
+            <!-- Filters -->
+            <div class="mt-8 flex justify-center gap-2">
+                <button class="px-4 py-2 bg-gray-900 text-white rounded-full text-sm font-medium shadow-md">All</button>
+                <button
+                    class="px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-full text-sm font-medium hover:bg-gray-50 hover:border-gray-300 transition-all">Beach</button>
+                <button
+                    class="px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-full text-sm font-medium hover:bg-gray-50 hover:border-gray-300 transition-all">Mountain</button>
+                <button
+                    class="px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-full text-sm font-medium hover:bg-gray-50 hover:border-gray-300 transition-all">City</button>
             </div>
         </div>
+    </div>
 
-        <div class="package-grid" id="packages-container">
-            <!-- Loading -->
-            <div style="grid-column: 1/-1; text-align: center; color: #666; padding: 40px;">
-                Loading exclusive packages from cloud...
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div id="packages-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Loading State -->
+            <div class="col-span-full text-center py-20">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+                <p class="text-gray-500">Curating best experiences from the cloud...</p>
             </div>
         </div>
     </main>
@@ -84,11 +109,6 @@
     <!-- Firebase SDK v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
-    <script type="module">
-        import { updateNavigation } from './js/auth.js';
-        updateNavigation();
-    </script>
 
     <script>
         const firebaseConfig = {
@@ -120,7 +140,7 @@
             })
             .catch((error) => {
                 console.error(error);
-                container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: red;">Error loading packages: ${error.message}</div>`;
+                container.innerHTML = `<div class="col-span-full text-center text-red-500 py-10 bg-red-50 rounded-lg">Error loading packages: ${error.message}</div>`;
             });
 
         function renderPackages(packages) {
@@ -128,9 +148,10 @@
 
             if (packages.length === 0) {
                 container.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 60px; background: #f9f9f9; border-radius: 12px;">
-                        <h3 style="color: #444; margin-bottom: 8px;">No packages available yet</h3>
-                        <p style="color: #666;">Check back later for new travel experiences.</p>
+                    <div class="col-span-full text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900">No packages ready</h3>
+                        <p class="mt-1 text-sm text-gray-500">Check back later for new travel experiences.</p>
                     </div>
                 `;
                 return;
@@ -138,25 +159,35 @@
 
             packages.forEach(pkg => {
                 const card = document.createElement('div');
-                card.className = 'pkg-card';
-                card.onclick = () => window.location.href = `package-details.html?id=${pkg.id}`;
+                card.className = 'group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 cursor-pointer pkg-card-hover';
+                card.onclick = () => window.location.href = `booking.html?id=${pkg.id}&type=package`;
 
                 card.innerHTML = `
-                    <img src="${pkg.image}" class="pkg-img" alt="${pkg.title}" onerror="this.src='https://via.placeholder.com/400x300?text=CK+Travels'">
-                    <div class="pkg-content">
-                        <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
-                            <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--color-primary); letter-spacing: 1px;">
-                                ${pkg.location}
-                            </span>
-                            <span style="font-size: 0.8rem; background: #f0f0f0; padding: 2px 8px; border-radius: 4px;">${pkg.duration}</span>
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="${pkg.image}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" alt="${pkg.title}" onerror="this.src='https://via.placeholder.com/400x300?text=CK+Luxury'">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-gray-900 shadow-sm">
+                            ${pkg.location}
                         </div>
-                        <h3 style="font-size: 1.25rem; margin-bottom: 8px; color: #111;">${pkg.title}</h3>
-                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                            ${(pkg.features || []).join(', ')}
-                        </p>
-                        <div style="display:flex; justify-content:space-between; align-items: center; border-top: 1px solid #eee; padding-top: 16px;">
-                            <span style="font-size: 0.9rem; color: #888;">Starting from</span>
-                            <span style="font-size: 1.25rem; font-weight: 700;">$${pkg.price}</span>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">${pkg.title}</h3>
+                                <div class="flex flex-wrap gap-2">
+                                     ${(pkg.features || []).slice(0, 3).map(f => `<span class="bg-gray-50 text-gray-600 text-xs px-2 py-1 rounded-md border border-gray-100">${f}</span>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-gray-100 pt-4 flex justify-between items-center">
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                ${pkg.duration}
+                            </div>
+                            <div class="text-right">
+                                <span class="block text-xs text-gray-400 font-medium uppercase">Starting at</span>
+                                <span class="text-2xl font-bold text-primary">$${pkg.price}</span>
+                            </div>
                         </div>
                     </div>
                 `;

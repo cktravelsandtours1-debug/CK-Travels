@@ -1,0 +1,49 @@
+/* Layout Utilities */
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Better responsiveness */
+    gap: 20px;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-padding {
+    padding: 60px 0;
+}
+
+/* OS Layout converted to Standard Page Layout */
+.os-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 40px;
+    padding-top: 40px;
+    padding-bottom: 60px;
+    min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+    .grid-2, .grid-3, .os-layout { grid-template-columns: 1fr; }
+}

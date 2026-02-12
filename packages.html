@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Packages | CK Travels</title>
+
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">CK Travels</a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="flights.html" class="nav-item">Flights</a>
+            <a href="packages.html" class="nav-item active">Packages</a>
+            <a href="booking.html" class="nav-item">My Trips</a>
+        </div>
+        <div style="display: flex; gap: 12px;">
+            <a href="login.html" class="btn btn-signup btn-sm">Sign Up</a>
+            <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
+        </div>
+    </nav>
+
+    <main class="container" style="padding-top: 100px; padding-bottom: 60px;">
+        <div class="flex-between" style="margin-bottom: 40px;">
+            <div>
+                <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Curated Experiences</h1>
+                <p style="color: #666;">Handpicked luxury packages for next-level travel.</p>
+            </div>
+            <!-- Simple Filter Tabs -->
+            <div style="background: #f0f0f0; padding: 4px; border-radius: 4px;">
+                <button class="btn btn-sm btn-primary" style="height: 36px;">All</button>
+                <button class="btn btn-sm btn-link" style="color: #666; padding: 0 16px;">Beach</button>
+                <button class="btn btn-sm btn-link" style="color: #666; padding: 0 16px;">City</button>
+                <button class="btn btn-sm btn-link" style="color: #666; padding: 0 16px;">Adventure</button>
+            </div>
+        </div>
+
+        <div class="grid-3" id="packages-container">
+            <!-- Loading -->
+            <div style="grid-column: 1/-1; text-align: center; color: #666;">Loading experiences...</div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { packages } from './js/data.js';
+        import { updateNavigation } from './js/auth.js';
+
+        // Update navigation based on auth state
+        updateNavigation();
+
+        const container = document.getElementById('packages-container');
+
+        // Render
+        container.innerHTML = '';
+        packages.forEach(pkg => {
+            const card = document.createElement('div');
+            card.className = 'package-card'; // New bordered style
+            card.onclick = () => window.location.href = `package-details.html?id=${pkg.id}`;
+
+            card.innerHTML = `
+                <div class="package-bg" style="background-image: url('${pkg.image}');"></div>
+                <div class="package-overlay" style="border-top: 1px solid #e0e0e0;">
+                    <div style="display:flex; justify-content:space-between; align-items:start;">
+                        <div>
+                            <h3 style="font-size: 1.25rem; margin-bottom: 4px; color: var(--sh-black);">${pkg.location}</h3>
+                            <div style="font-size: 0.9rem; color: #666; margin-bottom: 16px;">${pkg.title}</div>
+                        </div>
+                        <div style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight:700;">${pkg.rating} ★</div>
+                    </div>
+                    
+                    <div class="flex-between">
+                        <div>
+                            <span style="font-size: 0.8rem; background: #f8f8f8; padding: 4px 8px; border-radius: 4px; color: #333; border:1px solid #eee;">${pkg.duration}</span>
+                        </div>
+                        <span style="font-weight: 700; font-size: 1.25rem; color: var(--sh-black);">$${pkg.price}</span>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    </script>
+</body>
+
+</html>

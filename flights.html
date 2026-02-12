@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Results | CK Travels</title>
+
+    <link rel="stylesheet" href="css/main.css">
+
+    <style>
+        .filter-title {
+            font-size: 1rem;
+            text-transform: uppercase;
+            margin-top: 0;
+            margin-bottom: 2rem;
+            border-bottom: var(--sh-border);
+            padding-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-section {
+            margin-bottom: 2rem;
+        }
+
+        /* Minimalist Airline Logo Placeholder */
+        .airline-logo-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            /* Square/Rect for brutalist feel */
+            border: var(--sh-border);
+            background: #f8f8f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--sh-black);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">CK Travels</a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="flights.html" class="nav-item active">Flights</a>
+            <a href="packages.html" class="nav-item">Packages</a>
+            <a href="booking.html" class="nav-item">My Trips</a>
+        </div>
+        <div style="display: flex; gap: 12px;">
+            <a href="login.html" class="btn btn-signup btn-sm">Sign Up</a>
+            <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
+        </div>
+    </nav>
+
+    <!-- Page Layout -->
+    <div class="bg-morph-blue"></div>
+    <div class="container os-layout" style="padding-left: 0;">
+
+        <!-- Sidebar -->
+        <aside class="glass-panel"
+            style="background: #fff; padding: 20px 24px; margin-left: -200px; padding-left: 20px; max-width: 300px;">
+            <h3 class="filter-title">Filter Results</h3>
+
+            <div class="filter-section">
+                <h4 style="margin-bottom: 12px; font-size: 0.8rem; text-transform: uppercase;">Stops</h4>
+                <div class="checkbox-wrap">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" checked>
+                        <span class="custom-checkbox"></span>
+                        <span style="font-size: 0.9rem;">Non-stop</span>
+                    </label>
+                </div>
+                <div class="checkbox-wrap">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" checked>
+                        <span class="custom-checkbox"></span>
+                        <span style="font-size: 0.9rem;">1 Stop</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h4 style="margin-bottom: 12px; font-size: 0.8rem; text-transform: uppercase;">Airlines</h4>
+                <div class="checkbox-wrap">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" checked>
+                        <span class="custom-checkbox"></span>
+                        <span style="font-size: 0.9rem;">Emirates</span>
+                    </label>
+                </div>
+                <div class="checkbox-wrap">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" checked>
+                        <span class="custom-checkbox"></span>
+                        <span style="font-size: 0.9rem;">Delta</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <button class="btn btn-secondary btn-block btn-sm">Reset Filters</button>
+            </div>
+        </aside>
+
+        <!-- Main Feed -->
+        <main id="flights-container">
+            <!-- Loading State -->
+            <div class="flex-center" style="height: 200px; color: var(--color-text-muted);">
+                LOADING ROUTES FROM CLOUD...
+            </div>
+        </main>
+
+    </div>
+
+    <!-- Firebase SDK v8.10.0 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsrtZh0PBOjNA8c8-9sifdtVqKMk7q-fs",
+            authDomain: "ck-travels-8926e.firebaseapp.com",
+            projectId: "ck-travels-8926e",
+            storageBucket: "ck-travels-8926e.firebasestorage.app",
+            messagingSenderId: "310809428136",
+            appId: "1:310809428136:web:74e2b0216f58088cf3829d",
+            measurementId: "G-HNT07JXC3C"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+
+        // FORCE LONG POLLING HERE TOO
+        db.settings({ experimentalForceLongPolling: true });
+
+        const container = document.getElementById('flights-container');
+
+        // Render immediately
+        fetchFlights();
+
+        function fetchFlights() {
+            db.collection("flights").get()
+                .then((querySnapshot) => {
+                    const flights = [];
+                    querySnapshot.forEach((doc) => {
+                        flights.push({ id: doc.id, ...doc.data() });
+                    });
+                    renderFlights(flights);
+                })
+                .catch((error) => {
+                    container.innerHTML = `<div class="flex-center" style="height: 200px; color: red;">Error loading flights: ${error.message}</div>`;
+                });
+        }
+
+        function renderFlights(flights) {
+            container.innerHTML = '';
+
+            if (flights.length === 0) {
+                container.innerHTML = '<div class="flex-center" style="height: 200px; color: #666;">No flights found. Please add some from the Admin Panel.</div>';
+                return;
+            }
+
+            // Header
+            const header = document.createElement('div');
+            header.className = 'flex-between';
+            header.style.marginBottom = '24px';
+            header.innerHTML = `
+                <h2 style="font-size: 1.5rem;">Available Flights</h2>
+                <span style="color: var(--color-text-muted); font-size: 0.9rem;">${flights.length} FLIGHTS FOUND</span>
+            `;
+            container.appendChild(header);
+
+            // Cards
+            flights.forEach(flight => {
+                const card = document.createElement('div');
+                card.className = 'flight-card';
+                card.innerHTML = `
+                    <!-- Left: Airline -->
+                    <div class="flex-center" style="flex-direction: column; gap: 8px;">
+                        <div class="airline-logo-circle">${flight.airline ? flight.airline.substring(0, 2).toUpperCase() : 'FL'}</div>
+                        <div style="font-size: 0.8rem;">${flight.airline}</div>
+                    </div>
+
+                    <!-- Center: Timeline -->
+                    <div style="flex-grow: 1; padding: 0 24px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-weight: 700;">${flight.departure || '00:00'}</div>
+                            <div style="font-size: 0.8rem; color: #999;">${flight.duration || 'Direct'}</div>
+                            <div style="font-weight: 700;">${flight.arrival || '00:00'}</div>
+                        </div>
+                        
+                        <div style="height: 1px; background: #e0e0e0; position: relative;">
+                            <div style="position: absolute; top: -3px; left: 0; width: 6px; height: 6px; background: #000; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: -3px; right: 0; width: 6px; height: 6px; background: #000; border-radius: 50%;"></div>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; margin-top: 8px;">
+                            <div style="font-size: 0.8rem; color: #666;">${flight.from}</div>
+                            <div style="font-size: 0.8rem; color: #666;">${flight.stops || 'Non-stop'}</div>
+                            <div style="font-size: 0.8rem; color: #666;">${flight.to}</div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Price & CTA -->
+                    <div style="text-align: right; min-width: 120px;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--sh-black); margin-bottom: 8px;">
+                            $${flight.price}
+                        </div>
+                        <a href="booking.html?id=${flight.id}&type=flight" class="btn btn-primary btn-sm btn-block">Select</a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+    </script>
+</body>
+
+</html>

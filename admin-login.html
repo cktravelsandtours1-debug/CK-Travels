@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | CK Travels</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Modular CSS System -->
+    <link rel="stylesheet" href="css/main.css">
+
+    <style>
+        .login-layout {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            border: 1px solid #ddd;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            background: var(--color-primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-layout">
+        <div class="glass-panel login-card">
+            <div style="text-align: center; margin-bottom: 32px;">
+                <div class="admin-badge">Admin Portal</div>
+                <h1 style="font-size: 1.5rem; margin-bottom: 8px;">Staff Access</h1>
+                <p style="color: var(--color-text-muted);">Please enter your administrator ID</p>
+            </div>
+
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <input type="text" id="adminId" class="input-field" placeholder=" " required autofocus>
+                    <label for="adminId" class="input-label">Admin ID or Email</label>
+                </div>
+
+                <div class="form-group">
+                    <input type="password" id="adminPass" class="input-field" placeholder=" ">
+                    <label for="adminPass" class="input-label">Security Key</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" style="margin-top: 24px;">Confirm
+                    Identity</button>
+            </form>
+
+            <div style="margin-top: 32px; text-align: center;">
+                <a href="index.html" style="color: var(--color-text-muted); font-size: 0.9rem;">&larr; Return to main
+                    site</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('adminLoginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const id = document.getElementById('adminId').value.trim().toLowerCase();
+            console.log('Admin login attempt ID:', id);
+
+            if (id === 'admin' || id === 'admin@cktravels.com') {
+                // Manually set user data to avoid import issues in file:// protocol
+                const userData = {
+                    name: 'Administrator',
+                    email: id.includes('@') ? id : 'admin@cktravels.com',
+                    loginMethod: 'admin-portal',
+                    role: 'admin'
+                };
+
+                localStorage.setItem('ck_travels_user', JSON.stringify(userData));
+
+                alert('Success! Access Granted.');
+                window.location.href = './admin-dashboard.html';
+            } else {
+                alert('Access Denied: Invalid Administrative ID. Please type: admin');
+            }
+        });
+    </script>
+</body>
+
+</html>

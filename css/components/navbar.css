@@ -1,0 +1,66 @@
+/* Minimalist Navbar */
+
+.navbar {
+    background: var(--sh-white);
+    border-bottom: var(--sh-border);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    /* Reset old floating styles */
+    transform: none;
+    left: 0;
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    height: auto;
+    display: block; /* It wraps a container now */
+}
+
+/* We need to restructure the inner content to match the provided layout logic if possible, 
+   but since we are replacing CSS, let's adapt the existing HTML structure to this look */
+
+.navbar .logo {
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    color: var(--sh-black);
+    background: none;
+    -webkit-text-fill-color: initial;
+}
+
+/* The HTML has direct children, we simulate the .wrap behavior on the existing flex container */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 32px; /* Match container padding roughly */
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-item {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--sh-black);
+    padding: 0;
+}
+
+.nav-item:hover, .nav-item.active {
+    opacity: 0.7;
+    color: var(--sh-black);
+}
+
+.nav-item::after {
+    display: none; /* Remove underline animation */
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .nav-links { display: none; }
+}

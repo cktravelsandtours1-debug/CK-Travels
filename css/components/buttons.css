@@ -1,0 +1,103 @@
+/* Minimalist Buttons */
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 30px;
+    height: auto; /* Allow auto height */
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.2s;
+    border-radius: 4px; /* Minimal radius */
+    text-decoration: none;
+    border: none;
+    letter-spacing: 0.5px;
+}
+
+.btn:active {
+    transform: none; /* Remove scale effect */
+    opacity: 0.8;
+}
+
+/* Primary Black Button */
+.btn-primary {
+    background: var(--sh-black);
+    color: #fff;
+    box-shadow: none;
+}
+
+.btn-primary:hover {
+    background: var(--sh-gray-hover);
+    color: var(--sh-black);
+    transform: none;
+    box-shadow: none;
+}
+
+/* Ghost / Secondary Button */
+.btn-secondary {
+    background: transparent;
+    border: var(--sh-border);
+    color: var(--sh-black);
+    backdrop-filter: none;
+}
+
+.btn-secondary:hover {
+    background: var(--sh-gray-header);
+    border-color: var(--sh-black);
+    transform: none;
+}
+
+/* Link Button */
+.btn-link {
+    background: transparent;
+    color: var(--sh-black);
+    padding: 0;
+    text-transform: none;
+    font-weight: 500;
+}
+
+.btn-link:hover {
+    opacity: 0.7;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.btn-sm {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+}
+
+/* Premium Sign Up Button */
+.btn-signup {
+    background: var(--sh-black);
+    color: var(--sh-white);
+    border: 1px solid var(--sh-black);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-signup:hover {
+    background: transparent;
+    color: var(--sh-black);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Premium Sign In Button */
+.btn-signin {
+    background: transparent;
+    color: var(--sh-black);
+    border: 1px solid var(--sh-black);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-signin:hover {
+    background: var(--sh-black);
+    color: var(--sh-white);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}

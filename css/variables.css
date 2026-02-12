@@ -1,0 +1,30 @@
+:root {
+    /* 🎨 Minimalist Color Palette (User Provided) */
+    --sh-gray-header: #f8f8f8;
+    --sh-gray-input: #ffffff;
+    --sh-gray-stub: #f5f5f5;
+    --sh-gray-hover: #f0f0f0;
+    --sh-black: #1a1a1a;
+    --sh-white: #ffffff;
+    --sh-border: 1px solid #e0e0e0;
+    
+    /* Mapping old logic to new tokens for compatibility */
+    --color-bg-main: var(--sh-white);
+    --color-bg-secondary: var(--sh-gray-header);
+    
+    --color-primary: var(--sh-black);
+    --color-accent: #333; /* Darker grey for accents */
+    
+    --color-text-main: var(--sh-black);
+    --color-text-muted: #666;
+    
+    /* Layout */
+    --container-width: 1200px;
+    --header-height: 70px;
+    --radius-sm: 4px; /* Sharper corners */
+    --radius-md: 8px;
+    --radius-full: 4px; /* Buttons are now rectangular */
+
+    /* Animation */
+    --transition-fast: 0.2s ease;
+}

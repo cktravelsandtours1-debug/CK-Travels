@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | CK Travels</title>
+
+    <link rel="stylesheet" href="css/main.css">
+
+    <style>
+        .dashboard-card {
+            background: #fff;
+            border: var(--sh-border);
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--sh-black);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">CK Travels</a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="flights.html" class="nav-item">Flights</a>
+            <a href="packages.html" class="nav-item">Packages</a>
+            <a href="booking.html" class="nav-item active">My Trips</a>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <a href="login.html" class="btn btn-signup btn-sm">Sign Up</a>
+            <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
+        </div>
+    </nav>
+
+    <script type="module">
+        import { updateNavigation, getUser, logout } from './js/auth.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNavigation();
+
+            // Custom handle for dashboard profile
+            const user = getUser();
+            if (user) {
+                document.getElementById('user-name').textContent = user.name || user.email;
+            }
+        });
+
+        // Handle Logout in dashboard specifically
+        window.handleLogout = function (e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to log out?')) {
+                logout();
+            }
+        };
+    </script>
+
+    <div class="container os-layout" style="grid-template-columns: 240px 1fr;">
+
+        <!-- Sidebar Menu -->
+        <aside>
+            <div class="dashboard-card" style="padding: 16px;">
+                <a href="#" class="btn btn-secondary btn-block btn-sm"
+                    style="justify-content: flex-start; margin-bottom: 8px; background: #f0f0f0; border-color: transparent;">Overview</a>
+                <a href="#" class="btn btn-link btn-block btn-sm"
+                    style="justify-content: flex-start; padding: 12px; color: #666;">Bookings</a>
+                <a href="#" class="btn btn-link btn-block btn-sm"
+                    style="justify-content: flex-start; padding: 12px; color: #666;">Saved</a>
+                <a href="#" class="btn btn-link btn-block btn-sm"
+                    style="justify-content: flex-start; padding: 12px; color: #666;">Settings</a>
+                <div style="height: 1px; background: #eee; margin: 12px 0;"></div>
+                <a href="#" onclick="handleLogout(event)"
+                    style="font-size: 0.85rem; color: #ef4444; padding-left: 12px; font-weight: 600;">Log Out</a>
+            </div>
+        </aside>
+
+        <!-- Dashboard Content -->
+        <main>
+            <h1 style="font-size: 2rem; margin-bottom: 24px;">Dashboard</h1>
+
+            <!-- Stats -->
+            <div class="grid-3" style="margin-bottom: 32px;">
+                <div class="dashboard-card">
+                    <div class="stat-label">Upcoming</div>
+                    <div class="stat-value">1</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="stat-label">Total Trips</div>
+                    <div class="stat-value">8</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="stat-label">Status</div>
+                    <div class="stat-value" style="color: var(--sh-black);">Platinum</div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <h2 style="font-size: 1.25rem; margin-bottom: 16px;">Upcoming Travel</h2>
+
+            <div class="dashboard-card" style="display: flex; align-items: center; gap: 24px;">
+                <div style="padding: 12px; background: #f8f8f8; border-radius: 8px; border: 1px solid #eee;">
+                    <span style="font-size: 1.5rem;">✈️</span>
+                </div>
+                <div style="flex-grow: 1;">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Flight to London (LHR)</h3>
+                    <p style="color: #666; font-size: 0.9rem;">Oct 24 • Emirates • First Class</p>
+                </div>
+                <button class="btn btn-secondary btn-sm">Manage</button>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+
+</html>

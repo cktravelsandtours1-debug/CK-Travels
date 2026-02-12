@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Bookings | Admin | CK Travels</title>
+
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .admin-sidebar {
+            background: #fdfdfd;
+            border-right: 1px solid #eee;
+            height: calc(100vh - 72px);
+            padding: 24px 0;
+        }
+
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            color: #444;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .admin-nav-item:hover,
+        .admin-nav-item.active {
+            background: #f0f0f0;
+            color: var(--color-primary);
+        }
+
+        .admin-content {
+            padding: 32px;
+            background: #fbfbfb;
+            min-height: calc(100vh - 72px);
+        }
+
+        .booking-row {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            padding: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .customer-avatar {
+            width: 44px;
+            height: 44px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #666;
+        }
+
+        .status-pill {
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">CK Travels <span
+                style="font-size: 0.7rem; color: var(--color-primary); font-weight: 800; vertical-align: middle; margin-left: 4px; border: 1px solid var(--color-primary); padding: 2px 4px; border-radius: 4px;">ADMIN</span></a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="admin-dashboard.html" class="nav-item">Dashboard</a>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <span id="admin-name" style="font-weight: 600; font-size: 0.9rem;">Admin</span>
+            <a href="#" onclick="handleLogout(event)" class="btn btn-secondary btn-sm">Logout</a>
+        </div>
+    </nav>
+
+    <div style="display: grid; grid-template-columns: 240px 1fr;">
+        <aside class="admin-sidebar">
+            <a href="admin-dashboard.html" class="admin-nav-item"><span>📊</span> Overview</a>
+            <a href="admin-bookings.html" class="admin-nav-item active"><span>🎫</span> Bookings</a>
+            <a href="admin-flights.html" class="admin-nav-item"><span>✈️</span> Manage Flights</a>
+            <a href="admin-packages.html" class="admin-nav-item"><span>🗺️</span> Manage Packages</a>
+        </aside>
+
+        <main class="admin-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+                <h1 style="font-size: 2rem;">Customer Bookings</h1>
+                <div style="display: flex; gap: 12px;">
+                    <select class="input-field" style="width: 150px; padding: 4px 12px; height: 36px;">
+                        <option>All Status</option>
+                        <option>Confirmed</option>
+                        <option>Pending</option>
+                        <option>Cancelled</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="loading-indicator" style="text-align: center; padding: 20px; color: #666;">Loading bookings...
+            </div>
+            <div id="bookings-list"></div>
+        </main>
+    </div>
+
+    <!-- Firebase Compat Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsrtZh0PBOjNA8c8-9sifdtVqKMk7q-fs",
+            authDomain: "ck-travels-8926e.firebaseapp.com",
+            projectId: "ck-travels-8926e",
+            storageBucket: "ck-travels-8926e.firebasestorage.app",
+            messagingSenderId: "310809428136",
+            appId: "1:310809428136:web:74e2b0216f58088cf3829d",
+            measurementId: "G-HNT07JXC3C"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let bookings = [];
+
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('ck_travels_user') || 'null');
+            // Simplified check
+            if (!user) window.location.href = 'admin-login.html';
+        }
+
+        function logout() {
+            localStorage.removeItem('ck_travels_user');
+            window.location.href = 'index.html';
+        }
+
+        function renderBookings(filterStatus = 'All Status') {
+            const list = document.getElementById('bookings-list');
+            list.innerHTML = '';
+            document.getElementById('loading-indicator').style.display = 'none';
+
+            const filtered = filterStatus === 'All Status' ? bookings : bookings.filter(b => b.status === filterStatus);
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">No bookings found.</div>';
+                return;
+            }
+
+            filtered.forEach((booking) => {
+                const initials = booking.customer.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+                let statusColor = '#dcfce7'; // green
+                let statusText = '#166534';
+                if (booking.status === 'Pending') { statusColor = '#fef9c3'; statusText = '#854d0e'; }
+                if (booking.status === 'Cancelled') { statusColor = '#fee2e2'; statusText = '#991b1b'; }
+
+                const row = document.createElement('div');
+                row.className = 'booking-row shadow-sm';
+                row.innerHTML = `
+                    <div class="customer-avatar">${initials}</div>
+                    <div style="flex-grow: 1;">
+                        <div style="font-weight: 600;">${booking.customer}</div>
+                        <div style="font-size: 0.85rem; color: #666;">${booking.email}</div>
+                    </div>
+                    <div>
+                        <div style="font-weight: 500;">${booking.item}</div>
+                        <div style="font-size: 0.85rem; color: #666;">${booking.type} • ${booking.date}</div>
+                    </div>
+                    <div style="font-weight: 700; color: var(--color-primary);">$${booking.price}</div>
+                    <span class="status-pill" style="background: ${statusColor}; color: ${statusText};">${booking.status}</span>
+                    <div style="display: flex; gap: 8px;">
+                         ${booking.status !== 'Cancelled' ? `<button class="btn btn-secondary btn-sm" onclick="updateStatus('${booking.id}', 'Cancelled')" style="color: #ef4444; border-color: #fee2e2;">Cancel</button>` : ''}
+                         ${booking.status === 'Pending' ? `<button class="btn btn-primary btn-sm" onclick="updateStatus('${booking.id}', 'Confirmed')" style="background: #166534; border-color: #166534;">Confirm</button>` : ''}
+                         <button class="btn btn-link btn-sm" title="Delete Booking" onclick="deleteBooking('${booking.id}')" style="color: #666; margin-left: 8px;">🗑️</button>
+                    </div>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        window.fetchBookings = function () {
+            db.collection("bookings").orderBy("date", "desc").get().then((querySnapshot) => {
+                bookings = [];
+                querySnapshot.forEach((doc) => {
+                    bookings.push({ id: doc.id, ...doc.data() });
+                });
+                renderBookings(document.querySelector('select').value);
+            }).catch(e => {
+                console.log(e);
+                // Fallback for sorting error (index not created yet)
+                db.collection("bookings").get().then((querySnapshot) => {
+                    bookings = [];
+                    querySnapshot.forEach((doc) => {
+                        bookings.push({ id: doc.id, ...doc.data() });
+                    });
+                    renderBookings(document.querySelector('select').value);
+                });
+            });
+        }
+
+        window.updateStatus = function (id, newStatus) {
+            if (confirm(`Are you sure you want to mark this booking as ${newStatus}?`)) {
+                db.collection("bookings").doc(id).update({ status: newStatus }).then(() => {
+                    fetchBookings();
+                });
+            }
+        };
+
+        window.deleteBooking = function (id) {
+            if (confirm('Are you sure you want to PERMANENTLY delete this booking?')) {
+                db.collection("bookings").doc(id).delete().then(() => {
+                    fetchBookings();
+                });
+            }
+        };
+
+        window.handleLogout = function (e) { if (e) e.preventDefault(); logout(); };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            fetchBookings();
+
+            document.querySelector('select').addEventListener('change', (e) => {
+                renderBookings(e.target.value);
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout | CK Travels</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Modular CSS System -->
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .checkout-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto 3rem auto;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: -1;
+            transform: translateY(-50%);
+        }
+
+        .step-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            color: var(--sh-black);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .step-node.active {
+            border-color: var(--sh-black);
+            background: var(--sh-black);
+            color: #fff;
+        }
+
+        .step-node.completed {
+            background: #f0f0f0;
+            border-color: #ccc;
+            color: #000;
+        }
+
+        .step-label {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            white-space: nowrap;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">CK Travels</a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="flights.html" class="nav-item">Flights</a>
+            <a href="packages.html" class="nav-item">Packages</a>
+            <a href="booking.html" class="nav-item active">My Trips</a>
+        </div>
+        <div style="display: flex; gap: 12px;">
+            <a href="login.html" class="btn btn-signup btn-sm">Sign Up</a>
+            <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
+        </div>
+    </nav>
+
+    <div class="container os-layout" style="grid-template-columns: 1fr 350px;">
+
+        <!-- Main Form Area -->
+        <main>
+            <!-- Progress -->
+            <div class="checkout-progress">
+                <div class="progress-line"></div>
+                <div class="step-node active" id="step1-node">1 <span class="step-label">Travelers</span></div>
+                <div class="step-node" id="step2-node">2 <span class="step-label">Payment</span></div>
+                <div class="step-node" id="step3-node">3 <span class="step-label">Confirm</span></div>
+            </div>
+
+            <!-- Form Panels -->
+            <form id="checkout-form">
+
+                <!-- STEP 1: Travelers -->
+                <div id="step1" class="glass-panel panel-content" style="display: block;">
+                    <h2 style="margin-bottom: 24px;">Who is traveling?</h2>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="fname" class="input-label">First Name</label>
+                            <input type="text" id="fname" class="input-field" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lname" class="input-label">Last Name</label>
+                            <input type="text" id="lname" class="input-field" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="input-label">Email Address</label>
+                        <input type="email" id="email" class="input-field" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone" class="input-label">Phone Number</label>
+                        <input type="tel" id="phone" class="input-field" required>
+                    </div>
+
+                    <div style="text-align: right; margin-top: 32px;">
+                        <button type="button" class="btn btn-primary" onclick="nextStep(2)">Continue to Payment
+                            &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Payment -->
+                <div id="step2" class="glass-panel panel-content" style="display: none;">
+                    <h2 style="margin-bottom: 24px;">Secure Payment</h2>
+
+                    <div class="form-group">
+                        <label for="card" class="input-label">Card Number</label>
+                        <input type="text" id="card" class="input-field" placeholder="0000 0000 0000 0000" required>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="expiry" class="input-label">MM / YY</label>
+                            <input type="text" id="expiry" class="input-field" placeholder="MM/YY" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvc" class="input-label">CVC</label>
+                            <input type="text" id="cvc" class="input-field" placeholder="123" required>
+                        </div>
+                    </div>
+
+                    <div class="flex-between" style="margin-top: 32px;">
+                        <button type="button" class="btn btn-secondary" onclick="nextStep(1)">&larr; Back</button>
+                        <button type="button" class="btn btn-primary" onclick="processPayment()">Complete Booking
+                            ($<span id="pay-amt">0</span>)</button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Success -->
+                <div id="step3" class="glass-panel panel-content"
+                    style="display: none; text-align: center; padding: 60px 20px;">
+                    <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
+                    <h2 style="margin-bottom: 16px;">Booking Confirmed!</h2>
+                    <p style="color: #666; margin-bottom: 32px;">Your itinerary has been sent to your email.</p>
+                    <a href="index.html" class="btn btn-primary">Back to Home</a>
+                </div>
+
+            </form>
+        </main>
+
+        <!-- Sidebar Summary -->
+        <aside>
+            <div class="glass-panel" style="position: sticky; top: 120px; border: var(--sh-border); padding: 24px;">
+                <h3 style="font-size: 1rem; margin-bottom: 16px; color: #666; text-transform: uppercase;">Order Summary
+                </h3>
+
+                <h4 id="item-title" style="font-size: 1.25rem; margin-bottom: 4px; font-weight: 700;">Loading...</h4>
+                <p id="item-meta"
+                    style="font-size: 0.9rem; color: #666; padding-bottom: 16px; border-bottom: 1px solid #e0e0e0;">
+                    Please wait</p>
+
+                <div class="flex-between" style="padding-top: 16px;">
+                    <span style="font-weight: 600;">Total Due</span>
+                    <span id="item-price" style="font-size: 1.5rem; font-weight: 700; color: var(--sh-black);">-</span>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Firebase Compat Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsrtZh0PBOjNA8c8-9sifdtVqKMk7q-fs",
+            authDomain: "ck-travels-8926e.firebaseapp.com",
+            projectId: "ck-travels-8926e",
+            storageBucket: "ck-travels-8926e.firebasestorage.app",
+            messagingSenderId: "310809428136",
+            appId: "1:310809428136:web:74e2b0216f58088cf3829d",
+            measurementId: "G-HNT07JXC3C"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // 1. Data Loader Logic
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get('type') || 'flight';
+        const id = params.get('id');
+
+        let item = null;
+        let itemPrice = 0;
+
+        window.loadItemDetails = function () {
+            // Wait for auth (or guest access)
+            // For booking, we allow guest access, but ideally database rules should allow read access to 'flights' and 'packages'
+
+            if (!id) {
+                // No ID provided, just dummy load or redirect
+                // If it's a test, we can leave it
+                document.getElementById('item-title').textContent = "Select a Trip";
+                document.getElementById('item-meta').textContent = "Go back to flights or packages";
+                return;
+            }
+
+            const collectionName = type === 'flight' ? 'flights' : 'packages';
+
+            db.collection(collectionName).doc(id).get().then((doc) => {
+                if (doc.exists) {
+                    item = doc.data();
+                    itemPrice = item.price;
+
+                    if (type === 'flight') {
+                        document.getElementById('item-title').textContent = `${item.airline} • ${item.flightNumber}`;
+                        document.getElementById('item-meta').textContent = `${item.from} → ${item.to}`;
+                    } else {
+                        document.getElementById('item-title').textContent = item.title;
+                        document.getElementById('item-meta').textContent = `${item.location} • ${item.duration}`;
+                    }
+
+                    document.getElementById('item-price').textContent = `$${item.price}`;
+                    document.getElementById('pay-amt').textContent = item.price;
+                } else {
+                    document.getElementById('item-title').textContent = "Item Not Found";
+                }
+            }).catch((error) => {
+                console.log("Error getting document:", error);
+                document.getElementById('item-title').textContent = "Error Loading Item";
+            });
+        }
+
+        // 2. Wizard Logic
+        window.nextStep = function (step) {
+            // Hide all
+            ['step1', 'step2', 'step3'].forEach(id => document.getElementById(id).style.display = 'none');
+            // Show target
+            document.getElementById(`step${step}`).style.display = 'block';
+
+            // Minimalist Fade Animation
+            const panel = document.getElementById(`step${step}`);
+            panel.style.opacity = '0';
+            panel.style.transform = 'translateY(10px)';
+
+            // Trigger reflow
+            void panel.offsetWidth;
+
+            panel.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            panel.style.opacity = '1';
+            panel.style.transform = 'translateY(0)';
+
+            // Update Progress
+            updateProgress(step);
+        }
+
+        function updateProgress(step) {
+            const nodes = document.querySelectorAll('.step-node');
+            nodes.forEach((node, idx) => {
+                // Clear previous text
+                node.innerHTML = '';
+                // Add label
+                const label = document.createElement('span');
+                label.className = 'step-label';
+                if (idx === 0) label.textContent = 'Travelers';
+                if (idx === 1) label.textContent = 'Payment';
+                if (idx === 2) label.textContent = 'Confirm';
+
+                if (idx + 1 < step) {
+                    node.classList.add('completed');
+                    node.classList.remove('active');
+                    node.textContent = '✓';
+                } else if (idx + 1 === step) {
+                    node.classList.add('active');
+                    node.classList.remove('completed');
+                    node.textContent = step;
+                } else {
+                    node.classList.remove('active', 'completed');
+                    node.textContent = idx + 1;
+                }
+                node.appendChild(label);
+            });
+        }
+
+        window.processPayment = function () {
+            // Validate inputs briefly
+            const fname = document.getElementById('fname').value;
+            const lname = document.getElementById('lname').value;
+            const email = document.getElementById('email').value;
+
+            if (!fname || !lname || !email) {
+                alert("Please fill in traveller details");
+                nextStep(1);
+                return;
+            }
+
+            // Create Booking Object in Firestore
+            const booking = {
+                customer: `${fname} ${lname}`,
+                email: email,
+                item: item ? (type === 'flight' ? `${item.airline} (${item.from}-${item.to})` : item.title) : "Unknown",
+                type: type === 'flight' ? 'Flight' : 'Package',
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                status: 'Pending', // Default status
+                itemPrice: itemPrice, // Store price at time of booking
+                price: itemPrice,     // Alias for consistency
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            db.collection("bookings").add(booking).then(() => {
+                nextStep(3);
+            }).catch(e => {
+                console.error("Error saving booking: ", e);
+                alert("Error saving booking. Please try again.");
+            });
+        }
+
+        // This ensures auth is ready before we try to read, although public read usually ok
+        document.addEventListener('DOMContentLoaded', () => {
+            loadItemDetails();
+        });
+    </script>
+</body>
+
+</html>

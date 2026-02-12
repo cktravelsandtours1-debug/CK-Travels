@@ -1,0 +1,59 @@
+/* Minimalist Cards */
+
+/* ✈️ Flight Card */
+.flight-card {
+    display: grid;
+    grid-template-columns: 80px 1fr 150px;
+    align-items: center;
+    gap: 24px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: var(--sh-border); /* Explicit border */
+}
+
+.time-large {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--sh-black);
+}
+
+.flight-duration-bar {
+    background: #e0e0e0;
+}
+
+.flight-duration-bar::after {
+    color: var(--sh-black);
+}
+
+/* 🌍 Package Card */
+.package-card {
+    height: auto; /* Remove fixed height constraint */
+    display: flex;
+    flex-direction: column;
+}
+
+.package-bg {
+    position: relative;
+    height: 200px; /* Fixed height for image area */
+    width: 100%;
+    transform: none !important;
+}
+
+.package-card:hover .package-bg {
+    transform: none;
+}
+
+.package-overlay {
+    position: relative;
+    background: white;
+    padding: 20px;
+    color: var(--sh-black);
+}
+
+.package-overlay h3 {
+    color: var(--sh-black);
+}
+
+.package-overlay div {
+    color: var(--sh-black) !important;
+}

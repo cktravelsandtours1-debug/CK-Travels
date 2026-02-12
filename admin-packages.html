@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Packages | Admin | CK Travels</title>
+
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .admin-sidebar {
+            background: #fdfdfd;
+            border-right: 1px solid #eee;
+            height: calc(100vh - 72px);
+            padding: 24px 0;
+        }
+
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            color: #444;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .admin-nav-item:hover,
+        .admin-nav-item.active {
+            background: #f0f0f0;
+            color: var(--color-primary);
+        }
+
+        .admin-content {
+            padding: 32px;
+            background: #fbfbfb;
+            min-height: calc(100vh - 72px);
+        }
+
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .admin-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">CK Travels <span
+                style="font-size: 0.7rem; color: var(--color-primary); font-weight: 800; vertical-align: middle; margin-left: 4px; border: 1px solid var(--color-primary); padding: 2px 4px; border-radius: 4px;">ADMIN</span></a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="admin-dashboard.html" class="nav-item">Dashboard</a>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <span id="admin-name" style="font-weight: 600; font-size: 0.9rem;">Admin</span>
+            <a href="#" onclick="handleLogout(event)" class="btn btn-secondary btn-sm">Logout</a>
+        </div>
+    </nav>
+
+    <div style="display: grid; grid-template-columns: 240px 1fr;">
+        <aside class="admin-sidebar">
+            <a href="admin-dashboard.html" class="admin-nav-item"><span>📊</span> Overview</a>
+            <a href="admin-bookings.html" class="admin-nav-item"><span>🎫</span> Bookings</a>
+            <a href="admin-flights.html" class="admin-nav-item"><span>✈️</span> Manage Flights</a>
+            <a href="admin-packages.html" class="admin-nav-item active"><span>🗺️</span> Manage Packages</a>
+        </aside>
+
+        <main class="admin-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+                <h1 style="font-size: 2rem;">Manage Packages</h1>
+                <button class="btn btn-primary btn-sm" onclick="showPackageModal()">+ Create New Package</button>
+            </div>
+
+            <div id="loading-indicator" style="text-align: center; padding: 20px; color: #666;">Loading packages...
+            </div>
+
+            <div class="package-grid" id="package-list" style="display:none;">
+                <!-- Cards will be populated by JS -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Package Modal -->
+    <div id="add-package-modal"
+        style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div
+            style="background: white; padding: 32px; border-radius: 12px; width: 450px; max-width: 90%; max-height: 90vh; overflow-y: auto;">
+            <h2 id="modal-title" style="margin-bottom: 24px;">Create New Package</h2>
+            <form id="add-package-form">
+                <input type="hidden" id="edit-id">
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">Package Title</label>
+                    <input type="text" id="pkg-title" class="input-field" required
+                        style="border: 1px solid #ddd; padding: 8px; width: 100%;">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">Location</label>
+                        <input type="text" id="pkg-location" class="input-field" required
+                            style="border: 1px solid #ddd; padding: 8px; width: 100%;">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">Price ($)</label>
+                        <input type="number" id="pkg-price" class="input-field" required
+                            style="border: 1px solid #ddd; padding: 8px; width: 100%;">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">Duration</label>
+                    <input type="text" id="pkg-duration" class="input-field" placeholder="e.g. 5 Days / 4 Nights"
+                        required style="border: 1px solid #ddd; padding: 8px; width: 100%;">
+                </div>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">Image URL</label>
+                    <input type="url" id="pkg-image" class="input-field" placeholder="https://..." required
+                        style="border: 1px solid #ddd; padding: 8px; width: 100%;">
+                </div>
+                <div class="form-group" style="margin-bottom: 24px;">
+                    <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">Features (comma
+                        separated)</label>
+                    <input type="text" id="pkg-features" class="input-field" placeholder="Flights, Hotel, Tours..."
+                        style="border: 1px solid #ddd; padding: 8px; width: 100%;">
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button type="button" class="btn btn-secondary btn-block"
+                        onclick="hidePackageModal()">Cancel</button>
+                    <button type="submit" id="submit-btn" class="btn btn-primary btn-block">Create Package</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase Compat Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsrtZh0PBOjNA8c8-9sifdtVqKMk7q-fs",
+            authDomain: "ck-travels-8926e.firebaseapp.com",
+            projectId: "ck-travels-8926e",
+            storageBucket: "ck-travels-8926e.firebasestorage.app",
+            messagingSenderId: "310809428136",
+            appId: "1:310809428136:web:74e2b0216f58088cf3829d",
+            measurementId: "G-HNT07JXC3C"
+        };
+
+        // Initialize Firebase
+        try {
+            firebase.initializeApp(firebaseConfig);
+        } catch (e) {
+            console.error(e);
+            alert("Error initializing database. Please refresh.");
+        }
+        const db = firebase.firestore();
+
+        let packages = [];
+
+        function checkAuth() {
+            try {
+                const user = JSON.parse(localStorage.getItem('ck_travels_user') || 'null');
+                if (!user) window.location.href = 'admin-login.html';
+            } catch (e) {
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('ck_travels_user');
+            window.location.href = 'index.html';
+        }
+
+        function renderPackages() {
+            const list = document.getElementById('package-list');
+            list.innerHTML = '';
+
+            packages.forEach((pkg) => {
+                const card = document.createElement('div');
+                card.className = 'admin-card shadow-sm';
+                card.innerHTML = `
+                    <img src="${pkg.image}" class="card-img" alt="${pkg.title}" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
+                    <div class="card-body">
+                        <span class="badge" style="background: #eff6ff; color: #1e40af;">${pkg.location}</span>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 8px;">${pkg.title}</h3>
+                        <div style="font-size: 0.85rem; color: #666; margin-bottom: 12px;">${pkg.duration}</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
+                            <div style="font-weight: 700; color: var(--color-primary);">$${pkg.price}</div>
+                            <div>
+                                <button class="btn btn-link btn-sm" onclick="editPackage('${pkg.id}')">Edit</button>
+                                <button class="btn btn-link btn-sm" style="color: #ef4444;" onclick="deletePackage('${pkg.id}')">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+
+            document.getElementById('loading-indicator').style.display = 'none';
+            document.getElementById('package-list').style.display = 'grid';
+
+            if (packages.length === 0) {
+                list.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 20px; color: #666;">No packages found. Click "Create New Package" to add one.</div>';
+                document.getElementById('package-list').style.display = 'block';
+            }
+        }
+
+        // --- GLOBAL ACTIONS ---
+        window.fetchPackages = function () {
+            db.collection("packages").get().then((querySnapshot) => {
+                packages = [];
+                querySnapshot.forEach((doc) => {
+                    packages.push({ id: doc.id, ...doc.data() });
+                });
+                renderPackages();
+            }).catch(e => {
+                console.error(e);
+                document.getElementById('loading-indicator').textContent = "Error loading packages: " + e.message;
+            });
+        }
+
+        window.showPackageModal = function (isEdit = false) {
+            const modal = document.getElementById('add-package-modal');
+            const title = document.getElementById('modal-title');
+            const btn = document.getElementById('submit-btn');
+
+            if (!isEdit) {
+                document.getElementById('edit-id').value = '';
+                document.getElementById('add-package-form').reset();
+                title.textContent = "Create New Package";
+                btn.textContent = "Create Package";
+                btn.disabled = false;
+            } else {
+                title.textContent = "Edit Package";
+                btn.textContent = "Update Package";
+                btn.disabled = false;
+            }
+            modal.style.display = 'flex';
+        };
+
+        window.hidePackageModal = function () { document.getElementById('add-package-modal').style.display = 'none'; };
+
+        window.editPackage = function (id) {
+            const pkg = packages.find(p => p.id === id);
+            if (!pkg) return;
+
+            document.getElementById('edit-id').value = id;
+            document.getElementById('pkg-title').value = pkg.title;
+            document.getElementById('pkg-location').value = pkg.location;
+            document.getElementById('pkg-price').value = pkg.price;
+            document.getElementById('pkg-duration').value = pkg.duration;
+            document.getElementById('pkg-image').value = pkg.image;
+            document.getElementById('pkg-features').value = (pkg.features || []).join(', ');
+            showPackageModal(true);
+        };
+
+        window.deletePackage = function (id) {
+            if (confirm('Are you sure you want to delete this package?')) {
+                db.collection("packages").doc(id).delete().then(() => {
+                    fetchPackages();
+                }).catch(e => alert(e.message));
+            }
+        };
+
+        window.handleLogout = function (e) { if (e) e.preventDefault(); logout(); };
+
+        document.getElementById('add-package-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const btn = document.getElementById('submit-btn');
+            const originalText = btn.textContent;
+            btn.textContent = "Saving...";
+            btn.disabled = true;
+
+            const title = document.getElementById('pkg-title').value;
+            const location = document.getElementById('pkg-location').value;
+            const price = document.getElementById('pkg-price').value;
+            const duration = document.getElementById('pkg-duration').value;
+            const image = document.getElementById('pkg-image').value;
+            const features = document.getElementById('pkg-features').value.split(',').map(f => f.trim()).filter(f => f);
+            const editId = document.getElementById('edit-id').value;
+
+            const pkgData = {
+                title, location, price, duration, image, features
+            };
+
+            const action = editId ?
+                db.collection("packages").doc(editId).update(pkgData) :
+                db.collection("packages").add(pkgData);
+
+            action.then(() => {
+                fetchPackages();
+                hidePackageModal();
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }).catch(e => {
+                console.error(e);
+                alert("Error saving: " + e.message);
+                btn.textContent = originalText;
+                btn.disabled = false;
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            fetchPackages();
+        });
+    </script>
+</body>
+
+</html>

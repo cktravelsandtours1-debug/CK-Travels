@@ -239,7 +239,7 @@
                 qs.forEach(doc => {
                     const p = doc.data();
                     gridContainer.innerHTML += `
-                        <div class="pkg-card group opacity-0 reveal-up">
+                        <div class="pkg-card group">
                             <div class="h-64 relative overflow-hidden">
                                 <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s]" alt="">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
@@ -335,8 +335,7 @@
 
         window.addEventListener('load', () => {
             loadPackages();
-            gsap.from("#sidebar", { x: -100, opacity: 0, duration: 1.5, ease: "expo.out" });
-            gsap.to(".reveal-up", { opacity: 1, y: 0, stagger: 0.2, duration: 1.5, ease: "expo.out", delay: 0.2 });
+            // Unified transitions via main.js
         });
     </script>
 </body>

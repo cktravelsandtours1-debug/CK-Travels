@@ -37,99 +37,72 @@ function initLenis() {
 function initGlobalAnimations() {
     console.log("Initializing CK Travels Motion System...");
 
+    // 1. Setup Page Curtain if missing (Guaranteed for Transitions)
+    if (!document.getElementById('page-curtain')) {
+        const curtain = document.createElement('div');
+        curtain.id = 'page-curtain';
+        curtain.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #FF8C00; z-index: 9999; pointer-events: none;`;
+        document.body.appendChild(curtain);
+    }
+
+    const curtain = document.getElementById('page-curtain');
     const introTl = gsap.timeline();
 
-    // A) Global Navigation Logic
+    // A) ONLY Intro Animation: Orange Curtain Wipe OUT
+    if (curtain) {
+        // Reset curtain position for the entrance
+        gsap.set(curtain, { left: 0 });
+        introTl.to(curtain, {
+            left: "100%",
+            duration: 1.2,
+            ease: "expo.inOut"
+        });
+    }
+
+    // B) Global Navigation Static Scroll Behavior
     const nav = document.getElementById('main-nav');
-    if (nav) {
-        // Ensure nav is above curtain for the intro
-        nav.style.zIndex = "10001";
-
-        // 1. Initial State: Slide down
-        introTl.fromTo(nav,
-            { y: -100, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }
-        );
-
-        // 2. Scroll Transformation (The "Floating Glassmorphic Dock")
-        if (typeof ScrollTrigger !== 'undefined') {
-            const navContainer = document.getElementById('nav-container');
-            ScrollTrigger.create({
-                start: "top -50",
-                onEnter: () => {
-                    gsap.to(navContainer, {
-                        backgroundColor: "rgba(255, 250, 240, 0.85)", // Floral White Glass
-                        backdropFilter: "blur(25px)",
-                        webkitBackdropFilter: "blur(25px)",
-                        borderBottom: "2px solid #00BFFF", // Sky Blue
-                        boxShadow: "0 20px 60px rgba(0, 191, 255, 0.1)", // Cloud Shadow
-                        padding: "12px 40px",
-                        marginTop: "12px",
-                        duration: 0.5,
-                        ease: "power2.out"
-                    });
-                },
-                onLeaveBack: () => {
-                    gsap.to(navContainer, {
-                        backgroundColor: "transparent",
-                        backdropFilter: "blur(0px)",
-                        webkitBackdropFilter: "blur(0px)",
-                        borderBottom: "2px solid transparent",
-                        boxShadow: "none",
-                        padding: "20px 40px",
-                        marginTop: "0px",
-                        duration: 0.5,
-                        ease: "power2.out"
-                    });
-                }
-            });
-        }
+    if (nav && typeof ScrollTrigger !== 'undefined') {
+        const navContainer = document.getElementById('nav-container');
+        ScrollTrigger.create({
+            start: "top -50",
+            onEnter: () => {
+                gsap.to(navContainer, {
+                    backgroundColor: "rgba(255, 250, 240, 0.85)",
+                    backdropFilter: "blur(25px)",
+                    webkitBackdropFilter: "blur(25px)",
+                    borderBottom: "2px solid #00BFFF",
+                    boxShadow: "0 20px 60px rgba(0, 191, 255, 0.1)",
+                    padding: "12px 40px",
+                    marginTop: "12px",
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+            },
+            onLeaveBack: () => {
+                gsap.to(navContainer, {
+                    backgroundColor: "transparent",
+                    backdropFilter: "blur(0px)",
+                    webkitBackdropFilter: "blur(0px)",
+                    borderBottom: "2px solid transparent",
+                    boxShadow: "none",
+                    padding: "20px 40px",
+                    marginTop: "0px",
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+            }
+        });
     }
 
     // C) Magnetic Buttons (Global)
     initMagneticButtons();
 
-    // D) Page Transitions (Setup links & create curtain)
+    // D) Page Navigation Hooks (The "Passing" effect on click)
     initPageTransitions();
 
-    // E) Page Intro Curtain Wipe (OUT)
-    // We add this to the intro timeline now that curtain is guaranteed to exist
-    const curtain = document.getElementById('page-curtain');
-    if (curtain) {
-        introTl.to(curtain, {
-            left: "100%",
-            duration: 1.5,
-            ease: "expo.inOut"
-        }, "-=0.2"); // Start slightly before nav finishes
-    }
-
-    // E) Common Reveal Animations
-    const reveals = document.querySelectorAll('.reveal-up');
-    if (reveals.length > 0 && typeof ScrollTrigger !== 'undefined') {
-        gsap.from(reveals, {
-            y: 40,
-            opacity: 0,
-            duration: 1.2,
-            stagger: 0.1,
-            ease: "power4.out",
-            scrollTrigger: {
-                trigger: document.body,
-                start: "top 80%",
-            }
-        });
-    }
-
-    // F) Hero 3D Scene
+    // E) Visual Essentials (Low Distraction)
     createHeroScene();
-
-    // G) AI-Glass Shimmer
     initAIShimmer();
-
-    // H) Raindrop Headings
-    initRaindropText();
-
-    // I) Login Interactions
-    initLoginInteractions();
 }
 
 // === COMPONENT: Magnetic Buttons ===
@@ -334,12 +307,18 @@ function initPageTransitions() {
 }
 
 function navigateWithCurtain(href) {
-    gsap.to("#page-curtain", {
-        left: 0,
-        duration: 0.8,
-        ease: "expo.inOut",
-        onComplete: () => { window.location.href = href; }
-    });
+    const curtain = document.getElementById('page-curtain');
+    if (curtain) {
+        gsap.set(curtain, { left: "-100%" });
+        gsap.to(curtain, {
+            left: 0,
+            duration: 0.8,
+            ease: "expo.inOut",
+            onComplete: () => { window.location.href = href; }
+        });
+    } else {
+        window.location.href = href;
+    }
 }
 
 // === DATA RENDERING (Legacy Support) ===
@@ -356,7 +335,7 @@ function renderHomeExperiences(flights, packages) {
     // Render Packages first
     featuredPackages.forEach((pkg) => {
         const card = document.createElement('div');
-        card.className = 'card-perspective reveal-up opacity-0';
+        card.className = 'card-perspective';
         card.innerHTML = `
             <div class="hover-3d-tilt glass-dock rounded-[48px] overflow-hidden group cursor-pointer" onclick="window.location.href='package-details.html?id=${pkg.id}'">
                 <div class="img-zoom-container h-80 relative overflow-hidden">
@@ -379,7 +358,7 @@ function renderHomeExperiences(flights, packages) {
     // Render Flights
     featuredFlights.forEach((flight) => {
         const card = document.createElement('div');
-        card.className = 'card-perspective reveal-up opacity-0';
+        card.className = 'card-perspective';
         card.innerHTML = `
             <div class="hover-3d-tilt glass-dock rounded-[48px] p-10 space-y-8 group border border-white/5 hover:border-primary/30 transition-all">
                 <div class="flex justify-between items-center">

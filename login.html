@@ -207,17 +207,7 @@
         // =========================================
 
         window.addEventListener('load', () => {
-            // Cinematic Login Card Entry
-            gsap.from('#login-card', {
-                scale: 0.8,
-                opacity: 0,
-                y: 60,
-                duration: 1.2,
-                ease: 'back.out(1.7)'
-            });
-
-            // Spawn floating particles
-            if (typeof spawnParticles === 'function') spawnParticles();
+            // Unified transitions via main.js
         });
 
         // B) Interactive Field Labels — Pop Up & Turn Orange on Focus

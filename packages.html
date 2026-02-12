@@ -250,13 +250,7 @@
                 `;
             });
 
-            gsap.from(".pkg-card", {
-                opacity: 0,
-                y: 50,
-                stagger: 0.15,
-                duration: 1.5,
-                ease: "expo.out"
-            });
+            // Unified transitions via main.js
 
             // Re-init magnetic buttons after injection
             if (typeof initMagneticButtons === 'function') initMagneticButtons();

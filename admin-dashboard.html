@@ -227,11 +227,7 @@
 
     <script>
         window.addEventListener('load', () => {
-            gsap.from("#sidebar", { x: -100, opacity: 0, duration: 1.5, ease: "expo.out" });
-            gsap.to(".reveal-up", { opacity: 1, y: 0, stagger: 0.15, duration: 1.5, ease: "expo.out", delay: 0.2 });
-
-            // Curtain Entry
-            gsap.to("#page-curtain", { left: "-100%", duration: 1.2, ease: "expo.inOut" });
+            // Unified transitions via main.js
         });
     </script>
 </body>

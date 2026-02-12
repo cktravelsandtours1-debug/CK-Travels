@@ -390,14 +390,6 @@
         // =========================================
 
         window.addEventListener('load', () => {
-            // A) Hero text split & stagger (Specific to Home)
-            const h1 = document.getElementById('hero-title');
-            if (h1) {
-                const text = h1.innerText;
-                h1.innerHTML = text.split('').map(c => `<span class="char inline-block">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
-                gsap.from("#hero-title .char", { duration: 1.2, opacity: 0, y: 50, stagger: 0.04, ease: "expo.out", delay: 0.3 });
-            }
-
             // B) Infinite Logo Marquee
             const marquee = document.getElementById('marquee-track');
             if (marquee) {

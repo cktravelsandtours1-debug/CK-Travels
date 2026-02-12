@@ -286,13 +286,11 @@
                 container.innerHTML += card;
             });
 
-            gsap.to(".booking-card", { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out", delay: 0.2 });
+            // Unified transitions via main.js
         }
 
         window.initAdminAnimations = function () {
-            gsap.from("#sidebar", { x: -50, opacity: 0, duration: 1, ease: "power4.out" });
-            gsap.from("header", { y: -20, opacity: 0, duration: 1, ease: "power4.out", delay: 0.2 });
-            gsap.to("#page-curtain", { left: "-100%", duration: 1.2, ease: "expo.inOut" });
+            // Unified transitions via main.js
         }
 
         window.updateStatus = async function (id, status) {

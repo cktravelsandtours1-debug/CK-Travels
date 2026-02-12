@@ -238,10 +238,7 @@
     <script src="js/main.js"></script>
     <script>
         window.addEventListener('load', () => {
-            // Dashboard specific entrance
-            gsap.from(".reveal-up", { y: 30, opacity: 0, duration: 1.2, ease: "power4.out" });
-            gsap.from(".reveal-left", { x: -30, opacity: 0, duration: 1.2, ease: "power4.out", delay: 0.2 });
-            gsap.from(".stat-card", { opacity: 0, scale: 0.9, stagger: 0.1, duration: 1, ease: "back.out(1.7)", delay: 0.5 });
+            // Unified transitions via main.js
         });
     </script>
 </body>

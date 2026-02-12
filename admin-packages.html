@@ -97,7 +97,10 @@
         <main class="admin-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
                 <h1 style="font-size: 2rem;">Manage Packages</h1>
-                <button class="btn btn-primary btn-sm" onclick="showPackageModal()">+ Create New Package</button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-secondary btn-sm" onclick="testConnection()">Test Connection</button>
+                    <button class="btn btn-primary btn-sm" onclick="showPackageModal()">+ Create New Package</button>
+                </div>
             </div>
 
             <div id="loading-indicator" style="text-align: center; padding: 20px; color: #666;">Loading packages...
@@ -159,9 +162,9 @@
         </div>
     </div>
 
-    <!-- Firebase Compat Libraries -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase SDK v8.10.0 (Robust) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <script>
         const firebaseConfig = {
@@ -175,13 +178,18 @@
         };
 
         // Initialize Firebase
-        try {
-            firebase.initializeApp(firebaseConfig);
-        } catch (e) {
-            console.error(e);
-            alert("Error initializing database. Please refresh.");
+        if (!firebase.apps.length) {
+            try {
+                firebase.initializeApp(firebaseConfig);
+            } catch (e) {
+                console.error(e);
+                alert("Error initializing database.");
+            }
         }
         const db = firebase.firestore();
+
+        // CRITICAL FIX: ENABLE LONG POLLING
+        db.settings({ experimentalForceLongPolling: true });
 
         let packages = [];
 
@@ -235,6 +243,8 @@
 
         // --- GLOBAL ACTIONS ---
         window.fetchPackages = function () {
+            console.log("Fetching packages...");
+
             db.collection("packages").get().then((querySnapshot) => {
                 packages = [];
                 querySnapshot.forEach((doc) => {
@@ -245,6 +255,13 @@
                 console.error(e);
                 document.getElementById('loading-indicator').textContent = "Error loading packages: " + e.message;
             });
+        }
+
+        window.testConnection = function () {
+            alert("Testing connection to Firebase...");
+            db.collection("packages").limit(1).get()
+                .then(() => alert("Connection Successful! You are connected to Firebase."))
+                .catch(e => alert("Connection Failed: " + e.message));
         }
 
         window.showPackageModal = function (isEdit = false) {
@@ -316,17 +333,24 @@
                 db.collection("packages").doc(editId).update(pkgData) :
                 db.collection("packages").add(pkgData);
 
-            action.then(() => {
-                fetchPackages();
-                hidePackageModal();
-                btn.textContent = originalText;
-                btn.disabled = false;
-            }).catch(e => {
-                console.error(e);
-                alert("Error saving: " + e.message);
-                btn.textContent = originalText;
-                btn.disabled = false;
-            });
+            // 20 Second Timeout
+            const timeout = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error("Request timed out. Firewall blocking connection.")), 20000)
+            );
+
+            Promise.race([action, timeout])
+                .then(() => {
+                    fetchPackages();
+                    hidePackageModal();
+                    alert("Success! Package Saved.");
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                }).catch(e => {
+                    console.error(e);
+                    alert("Error saving: " + e.message);
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                });
         });
 
         document.addEventListener('DOMContentLoaded', () => {

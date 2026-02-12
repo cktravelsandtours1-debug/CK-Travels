@@ -8,53 +8,79 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap"
-        rel="stylesheet">
+    <!-- GSAP for Micro-interactions -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    },
-                    colors: {
-                        primary: '#1e40af',  // Deep Blue
-                        secondary: '#3b82f6', // Bright Blue
-                        accent: '#f59e0b',    // Amber
-                        surface: '#f3f4f6',
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         .glass-header {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
 
-        .hero-gradient {
-            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+        .hero-video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -1;
         }
 
-        .search-shadow {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        .hero-video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.6) saturate(1.2);
         }
 
-        .hover-lift {
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        .glass-search-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.3),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
         }
 
-        .hover-lift:hover {
-            transform: translateY(-8px);
+        .ai-input-glow:focus-within {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.5);
         }
 
-        .text-balance {
-            text-wrap: balance;
+        .pulse-glow {
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                box-shadow: 0 0 0 0 rgba(30, 64, 175, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(30, 64, 175, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(30, 64, 175, 0);
+            }
+        }
+
+        .quick-chip {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .quick-chip:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        #ai-placeholder {
+            transition: opacity 0.5s ease;
         }
     </style>
 </head>
@@ -62,7 +88,7 @@
 <body class="bg-[#fafafa] font-sans text-gray-900 antialiased overflow-x-hidden">
 
     <!-- Navbar -->
-    <nav class="glass-header border-b border-gray-100 sticky top-0 z-50 h-20">
+    <nav class="glass-header border-b border-white/10 fixed top-0 w-full z-50 h-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
             <div class="flex justify-between items-center h-full">
                 <div class="flex items-center gap-12">
@@ -120,110 +146,87 @@
             <a href="packages.html" class="text-4xl font-bold hover:text-primary transition-colors">Packages</a>
             <a href="booking.html" class="text-4xl font-bold hover:text-primary transition-colors">My Trips</a>
         </div>
-        <div class="mt-auto pt-10 border-t border-gray-100 italic text-gray-400">
-            Premium luxury travel services since 2018.
-        </div>
     </div>
 
-    <!-- Hero Section -->
-    <section class="relative pt-16 pb-32 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col lg:flex-row items-center gap-16">
-                <!-- Text Content -->
-                <div class="w-full lg:w-1/2 z-10 text-center lg:text-left">
-                    <div
-                        class="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest mb-6">
-                        <span class="relative flex h-2 w-2">
-                            <span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
-                        </span>
-                        NOW BOOKING FOR 2026
-                    </div>
-                    <h1 class="text-5xl md:text-7xl font-serif font-bold text-gray-900 leading-[1.1] mb-8 text-balance">
-                        Your private gateway <span class="italic text-primary">to the world.</span>
-                    </h1>
-                    <p class="text-xl text-gray-500 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                        Precision, luxury, and speed. We redefine international air travel with bespoke private
-                        solutions and five-star curated destinations.
-                    </p>
+    <!-- Immersive Hero Section -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Full Screen Video BG -->
+        <div class="hero-video-container">
+            <video autoplay muted loop playsinline
+                poster="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=2069&auto=format&fit=crop">
+                <source src="https://cdn.pixabay.com/video/2023/11/04/187747-880922659_large.mp4" type="video/mp4">
+            </video>
+        </div>
 
-                    <!-- Main Search Widget -->
-                    <div class="bg-white p-2 rounded-[32px] search-shadow border border-gray-100 max-w-2xl">
-                        <form action="flights.html" class="flex flex-col sm:flex-row items-center gap-2">
-                            <div class="flex-1 w-full grid grid-cols-2 gap-2 px-4 py-2">
-                                <div class="text-left">
-                                    <label
-                                        class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">From</label>
-                                    <input type="text" placeholder="Origin" value="DXB"
-                                        class="w-full text-lg font-bold bg-transparent focus:outline-none placeholder-gray-300">
-                                </div>
-                                <div class="text-left border-l border-gray-100 pl-4">
-                                    <label
-                                        class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">To</label>
-                                    <input type="text" placeholder="Destination"
-                                        class="w-full text-lg font-bold bg-transparent focus:outline-none placeholder-gray-300 focus:placeholder-transparent">
-                                </div>
-                            </div>
-                            <button type="submit"
-                                class="w-full sm:w-auto bg-primary hover:bg-black text-white px-10 py-5 rounded-[24px] font-bold tracking-wider transition-all transform active:scale-95 flex items-center justify-center gap-2">
-                                SEARCH
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                </svg>
-                            </button>
-                        </form>
+        <div class="max-w-4xl w-full px-6 text-center z-10" id="hero-container">
+            <h1 class="text-5xl md:text-8xl font-serif font-bold text-white leading-tight mb-8 text-shadow-xl drop-shadow-2xl opacity-0 translate-y-10"
+                id="hero-title">
+                The World is Waiting. <span class="italic text-blue-300">Just Ask.</span>
+            </h1>
+
+            <!-- Agentic Search Container -->
+            <div class="glass-search-container p-6 md:p-10 rounded-[48px] opacity-0 translate-y-10" id="search-box">
+                <div
+                    class="relative ai-input-glow transition-all duration-500 bg-white/10 rounded-[32px] overflow-hidden border border-white/20 p-2 flex items-center">
+                    <!-- Sparkle Icon -->
+                    <div class="pl-6 pr-4 text-blue-300">
+                        <svg class="w-7 h-7 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
                     </div>
 
-                    <div class="mt-8 flex items-center justify-center lg:justify-start gap-4">
-                        <div class="flex -space-x-2">
-                            <img class="w-10 h-10 rounded-full border-2 border-white object-cover"
-                                src="https://i.pravatar.cc/100?u=1" alt="">
-                            <img class="w-10 h-10 rounded-full border-2 border-white object-cover"
-                                src="https://i.pravatar.cc/100?u=2" alt="">
-                            <img class="w-10 h-10 rounded-full border-2 border-white object-cover"
-                                src="https://i.pravatar.cc/100?u=3" alt="">
-                        </div>
-                        <p class="text-sm text-gray-500"><span class="font-bold text-gray-900">2,400+</span> luxury
-                            trips booked this month</p>
-                    </div>
+                    <input type="text" id="ai-command-bar"
+                        class="w-full bg-transparent text-white font-medium text-xl md:text-2xl placeholder-white/30 outline-none py-5"
+                        placeholder="Where do you want to go?">
+
+                    <button onclick="executeAISearch()"
+                        class="bg-primary hover:bg-blue-600 text-white px-10 py-5 rounded-[24px] font-bold tracking-wider transition-all pulse-glow flex items-center gap-2 mr-2">
+                        EXPLORE
+                    </button>
                 </div>
 
-                <!-- Visual Element -->
-                <div class="w-full lg:w-1/2 relative">
-                    <div
-                        class="relative rounded-[48px] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-700">
-                        <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=2069&auto=format&fit=crop"
-                            class="w-full h-[600px] object-cover" alt="Luxury Travel">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-12">
-                            <div class="text-white">
-                                <div
-                                    class="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold inline-block mb-4">
-                                    FEATURED PACKAGE</div>
-                                <h3 class="text-3xl font-bold mb-2">Amalfi Coast Escape</h3>
-                                <p class="text-white/80">Starting from $4,200 pp</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Decorative Floating Card -->
-                    <div class="absolute -bottom-10 -left-10 bg-white p-6 rounded-3xl shadow-2xl border border-gray-50 hidden md:block animate-bounce"
-                        style="animation-duration: 4s;">
-                        <div class="flex items-center gap-4">
-                            <div
-                                class="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-500">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="font-bold text-gray-900">4.9 / 5.0 Rating</div>
-                                <div class="text-xs text-gray-400">Verified by TrustPilot</div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Quick Prompt Chips -->
+                <div class="mt-8 flex flex-wrap justify-center gap-3">
+                    <button onclick="setPrompt('Cheap weekend getaways')"
+                        class="quick-chip px-5 py-2.5 rounded-full text-xs font-bold text-white/80 uppercase tracking-widest">Cheap
+                        weekend getaways</button>
+                    <button onclick="setPrompt('Direct flights to NYC')"
+                        class="quick-chip px-5 py-2.5 rounded-full text-xs font-bold text-white/80 uppercase tracking-widest">Direct
+                        flights to NYC</button>
+                    <button onclick="setPrompt('Find me a tropical villa')"
+                        class="quick-chip px-5 py-2.5 rounded-full text-xs font-bold text-white/80 uppercase tracking-widest">Summer
+                        in Europe</button>
                 </div>
+            </div>
+
+            <!-- Social Proof -->
+            <div class="mt-12 flex items-center justify-center gap-4 opacity-0" id="social-proof">
+                <div class="flex -space-x-2">
+                    <img class="w-10 h-10 rounded-full border-2 border-white/20 object-cover"
+                        src="https://i.pravatar.cc/100?u=1" alt="">
+                    <img class="w-10 h-10 rounded-full border-2 border-white/20 object-cover"
+                        src="https://i.pravatar.cc/100?u=2" alt="">
+                    <img class="w-10 h-10 rounded-full border-2 border-white/20 object-cover"
+                        src="https://i.pravatar.cc/100?u=3" alt="">
+                </div>
+                <p class="text-sm text-white/60 font-medium tracking-wide">Join <span class="text-white font-bold">12k+
+                        members</span> exploring the globe this month</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners / Trust -->
+    <section class="py-16 bg-white border-y border-gray-50">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-[10px] font-bold text-gray-300 uppercase tracking-[0.4em] mb-10">STRATEGIC ALLIANCES</p>
+            <div
+                class="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
+                <span class="text-2xl font-bold italic tracking-tighter">Emirates</span>
+                <span class="text-2xl font-bold tracking-tight">QATAR</span>
+                <span class="text-2xl font-black">ETIHAD</span>
+                <span class="text-2xl font-serif">Singpore Airlines</span>
+                <span class="text-2xl font-bold uppercase underline">Turkish</span>
             </div>
         </div>
     </section>
@@ -361,12 +364,81 @@
         </div>
     </footer>
 
-    <!-- Mobile Menu Toggle -->
+    <!-- AI Command Bar & Animations Logic -->
     <script>
+        // GSAP Entrance Animations
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            tl.to("#hero-title", { opacity: 1, y: 0, duration: 1.2, ease: "power4.out" })
+                .to("#search-box", { opacity: 1, y: 0, duration: 1, ease: "back.out(1.7)" }, "-=0.8")
+                .to("#social-proof", { opacity: 1, duration: 1 }, "-=0.5");
+        });
+
+        // Cycling Placeholders
+        const placeholders = [
+            "Where do you want to go?",
+            "Find me a beach trip under $500",
+            "Flight to Tokyo next month",
+            "Business class to London for two",
+            "Weekend getaway highlights"
+        ];
+        let pIndex = 0;
+        const input = document.getElementById('ai-command-bar');
+
+        function cyclePlaceholder() {
+            input.style.opacity = "0.5";
+            setTimeout(() => {
+                input.placeholder = placeholders[pIndex];
+                input.style.opacity = "1";
+                pIndex = (pIndex + 1) % placeholders.length;
+            }, 500);
+        }
+        setInterval(cyclePlaceholder, 4000);
+
+        // UI Helpers
+        function setPrompt(text) {
+            input.value = text;
+            input.focus();
+        }
+
+        // Agentic Parsing Logic (Simulator)
+        function executeAISearch() {
+            const query = input.value.toLowerCase();
+            if (!query) return;
+
+            // Simplified parsing
+            const params = new URLSearchParams();
+
+            // Destination Extraction
+            if (query.includes("tokyo") || query.includes("nyc") || query.includes("london")) {
+                const dest = query.includes("tokyo") ? "NRT" : query.includes("nyc") ? "JFK" : "LHR";
+                params.append('to', dest);
+            }
+
+            // Price Extraction
+            const priceMatch = query.match(/\$(\d+)/);
+            if (priceMatch) params.append('maxPrice', priceMatch[1]);
+
+            // Analytics / Mock Processing
+            const btn = document.querySelector('.pulse-glow');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+
+            setTimeout(() => {
+                window.location.href = `flights.html?${params.toString() || 'q=' + encodeURIComponent(query)}`;
+            }, 1500);
+        }
+
+        // Mobile Menu Toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('translate-x-full');
         }
+
+        // Enter Key Listener
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') executeAISearch();
+        });
     </script>
 </body>
 

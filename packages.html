@@ -76,27 +76,30 @@
     <!-- Page Transition Curtain -->
     <div id="page-curtain"></div>
 
-    <!-- Nav Dock -->
+    <!-- Navigation -->
     <nav id="main-nav"
-        class="fixed top-8 left-1/2 -translate-x-1/2 w-[90%] max-w-7xl z-50 px-10 py-5 rounded-[40px] transition-all duration-700 glass-2 hidden lg:flex items-center justify-between">
-        <a href="index.html" class="flex items-center gap-1 group">
-            <span class="text-3xl font-black tracking-tighter italic text-[#00143D]">CK<span
-                    class="text-[#FF6B00] not-italic">.</span></span>
-        </a>
+        class="fixed top-0 w-full z-50 px-6 py-4 flex items-center justify-between transition-all duration-700 opacity-0 -translate-y-[100px]">
+        <div id="nav-container"
+            class="max-w-7xl mx-auto w-full flex items-center justify-between px-10 py-5 rounded-[40px] transition-all duration-500">
+            <a href="index.html" class="flex items-center gap-1 group">
+                <span class="text-3xl font-black tracking-tighter italic text-[#00143D]">CK<span
+                        class="text-[#FF6B00] not-italic">.</span></span>
+            </a>
 
-        <div class="flex items-center gap-12 font-bold text-[11px] tracking-[0.3em] uppercase opacity-60">
-            <a href="index.html" class="hover:text-[#FF6B00] transition-colors">Home</a>
-            <a href="flights.html" class="hover:text-[#FF6B00] transition-colors">Flights</a>
-            <a href="packages.html" class="text-[#FF6B00]">Packages</a>
-            <a href="booking.html" class="hover:text-[#FF6B00] transition-colors">My Trips</a>
-        </div>
+            <div class="hidden lg:flex items-center gap-12 font-bold text-[11px] tracking-[0.3em] uppercase opacity-60">
+                <a href="index.html" class="hover:text-[#FF6B00] transition-colors">Home</a>
+                <a href="flights.html" class="hover:text-[#FF6B00] transition-colors">Flights</a>
+                <a href="packages.html" class="text-[#FF6B00]">Packages</a>
+                <a href="booking.html" class="hover:text-[#FF6B00] transition-colors">My Trips</a>
+            </div>
 
-        <div class="flex items-center gap-6">
-            <a href="login.html" class="text-[11px] font-black tracking-[0.3em] uppercase text-[#00143D]">Member
-                Link</a>
-            <a href="flights.html"
-                class="btn-orange px-8 py-4 rounded-full text-[11px] font-black tracking-[0.3em] uppercase transition-all shadow-xl">Book
-                Now</a>
+            <div class="flex items-center gap-6">
+                <a href="login.html" class="text-[11px] font-black tracking-[0.3em] uppercase text-[#00143D]">Member
+                    Link</a>
+                <a href="flights.html"
+                    class="btn-orange px-8 py-4 rounded-full text-[11px] font-black tracking-[0.3em] uppercase transition-all shadow-xl">Book
+                    Now</a>
+            </div>
         </div>
     </nav>
 
@@ -254,8 +257,45 @@
         window.addEventListener('load', () => {
             gsap.from(".reveal-up", { y: 40, opacity: 0, duration: 1.2, ease: "power4.out" });
 
+            // Navbar Entrance
+            gsap.to("#main-nav", {
+                y: 0,
+                opacity: 1,
+                duration: 1.2,
+                ease: "expo.out"
+            });
+
             // Curtain Entry
             gsap.to("#page-curtain", { left: "-100%", duration: 1.2, ease: "expo.inOut" });
+
+            // Navbar Scroll Transformation
+            ScrollTrigger.create({
+                start: "top -50",
+                onEnter: () => {
+                    gsap.to("#nav-container", {
+                        backgroundColor: "rgba(255, 255, 255, 0.1)",
+                        backdropFilter: "blur(25px)",
+                        border: "1px solid rgba(255, 255, 255, 0.1)",
+                        boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+                        padding: "16px 40px",
+                        marginTop: "16px",
+                        duration: 0.5,
+                        ease: "power2.out"
+                    });
+                },
+                onLeaveBack: () => {
+                    gsap.to("#nav-container", {
+                        backgroundColor: "transparent",
+                        backdropFilter: "blur(0px)",
+                        border: "1px solid transparent",
+                        boxShadow: "none",
+                        padding: "20px 0px",
+                        marginTop: "0px",
+                        duration: 0.5,
+                        ease: "power2.out"
+                    });
+                }
+            });
 
             // Exit back to Home
             document.querySelectorAll('a[href="index.html"]').forEach(link => {

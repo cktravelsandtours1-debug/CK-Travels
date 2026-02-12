@@ -4,149 +4,404 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Access | CK Travels Premium</title>
+    <title>Portal Access | CK Travels Nautical</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- GSAP for Micro-interactions -->
+    <!-- GSAP Master Stack -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="css/main.css">
 
     <style>
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 100px 150px -50px rgba(0, 0, 0, 0.2);
+        /* === Nautical Design Tokens === */
+        .bg-midnight {
+            background-color: #00143D;
         }
 
+        .text-midnight {
+            color: #00143D;
+        }
+
+        /* Glassmorphism 2.0 Login Card */
+        .login-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 80px 150px -30px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+        }
+
+        /* Interactive glassy inputs */
         .input-glass {
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: white;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .input-glass::placeholder {
+            color: rgba(255, 255, 255, 0.15);
         }
 
         .input-glass:focus {
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 20px 40px -10px rgba(30, 64, 175, 0.1);
+            background: rgba(255, 107, 0, 0.03);
+            border-color: #FF6B00;
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.15);
+            outline: none;
         }
 
-        /* Thematic Gradients */
-        .bg-matrix {
+        /* Floating label animation */
+        .float-label {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .float-label.active {
+            color: #FF6B00 !important;
+            transform: translateY(-4px);
+        }
+
+        .btn-orange {
+            background-color: #FF6B00;
+            color: white;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-orange:hover {
+            box-shadow: 0 0 40px rgba(255, 107, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .magnetic-wrap {
+            display: inline-block;
+        }
+
+        /* Nautical Background */
+        .bg-nautical {
+            background: radial-gradient(ellipse at 30% 20%, rgba(0, 40, 120, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(255, 107, 0, 0.05) 0%, transparent 40%),
+                #00143D;
+        }
+
+        /* Animated radar ring */
+        .radar-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 107, 0, 0.06);
+            animation: pulse-ring 4s ease-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        /* Particles */
+        .particle {
             position: fixed;
-            inset: 0;
-            z-index: -1;
-            background: radial-gradient(circle at 100% 0%, #eff6ff 0%, transparent 50%),
-                radial-gradient(circle at 0% 100%, #fff7ed 0%, transparent 50%),
-                #fafafa;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 107, 0, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Page Transition Curtain */
+        #page-curtain {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background-color: #FF6B00;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #00143D;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #FF6B00;
+            border-radius: 10px;
         }
     </style>
 </head>
 
 <body
-    class="bg-surface font-sans text-gray-900 antialiased h-screen flex items-center justify-center p-6 relative overflow-hidden">
+    class="bg-nautical h-screen w-full flex items-center justify-center overflow-hidden font-body antialiased text-white relative">
 
-    <div class="bg-matrix"></div>
+    <!-- Page Transition Curtain -->
+    <div id="page-curtain"></div>
 
-    <!-- Login Card -->
-    <div class="w-full max-w-[500px] glass-panel rounded-[64px] relative z-10 p-12 md:p-16" id="login-card">
+    <!-- Background Animated Rings -->
+    <div class="radar-ring"
+        style="width:300px; height:300px; top:50%; left:50%; margin-left:-150px; margin-top:-150px;"></div>
+    <div class="radar-ring"
+        style="width:300px; height:300px; top:50%; left:50%; margin-left:-150px; margin-top:-150px; animation-delay: 1.3s;">
+    </div>
+    <div class="radar-ring"
+        style="width:300px; height:300px; top:50%; left:50%; margin-left:-150px; margin-top:-150px; animation-delay: 2.6s;">
+    </div>
 
-        <div class="text-center mb-16">
-            <a href="index.html" class="inline-flex items-center gap-1 mb-10 group">
-                <span
-                    class="text-4xl font-extrabold tracking-tighter text-gray-900 group-hover:text-primary transition-colors">CK<span
-                        class="text-primary group-hover:text-amber-500 transition-colors">.</span></span>
-            </a>
-            <h1 class="text-5xl font-serif font-bold text-gray-900 mb-6 italic tracking-tight">Portal <span
-                    class="not-italic">Access.</span></h1>
-            <p class="text-gray-500 font-medium tracking-wide">Secure your credentials to synchronize logistics.</p>
-        </div>
+    <!-- Floating Particles (spawned via JS) -->
+    <div id="particles"></div>
 
-        <form id="loginForm" class="space-y-10">
-            <div class="space-y-3">
-                <label class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] ml-6">Digital
-                    Identifier</label>
-                <input type="email" required placeholder="name@domain.com"
-                    class="w-full input-glass rounded-[32px] px-10 py-6 focus:border-primary outline-none font-bold placeholder-gray-300">
+    <!-- ============================================ -->
+    <!--           LOGIN CARD — GLASSMORPHISM 2.0      -->
+    <!-- ============================================ -->
+    <div class="relative z-10 w-full max-w-[520px] px-6">
+        <div class="login-card rounded-[48px] p-12 md:p-16 space-y-12" id="login-card">
+
+            <!-- Logo & Header -->
+            <div class="text-center space-y-6">
+                <a href="index.html" class="inline-flex items-center gap-1 group page-link">
+                    <span
+                        class="text-4xl font-black tracking-tighter italic text-white group-hover:text-[#FF6B00] transition-colors duration-500">CK<span
+                            class="text-[#FF6B00] not-italic">.</span></span>
+                </a>
+                <h1 class="text-5xl font-heading font-black italic tracking-tight">Portal <span
+                        class="not-italic text-white/20">Access.</span></h1>
+                <p class="text-white/30 font-medium text-sm tracking-wide">Secure your credentials to synchronize
+                    logistics.</p>
             </div>
 
-            <div class="space-y-3">
-                <div class="flex justify-between items-center px-6">
-                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em]">Security Key</label>
-                    <a href="#"
-                        class="text-[9px] font-bold text-primary hover:text-black transition-colors underline tracking-widest uppercase">Lost
-                        Key?</a>
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-8">
+                <div class="space-y-3 field-group">
+                    <label
+                        class="float-label text-[9px] font-black text-white/20 uppercase tracking-[0.4em] ml-4">Digital
+                        Identifier</label>
+                    <input type="email" required placeholder="name@domain.luxury"
+                        class="w-full input-glass rounded-2xl px-8 py-5 font-bold text-lg login-input">
                 </div>
-                <input type="password" required placeholder="••••••••"
-                    class="w-full input-glass rounded-[32px] px-10 py-6 focus:border-primary outline-none font-bold placeholder-gray-300">
-            </div>
 
-            <button type="submit" id="auth-btn"
-                class="w-full bg-primary hover:bg-black text-white font-bold py-7 rounded-[32px] shadow-2xl shadow-primary/30 transition-all transform active:scale-[0.98] tracking-[0.2em] text-xs uppercase">
-                AUTHENTICATE
-            </button>
-        </form>
+                <div class="space-y-3 field-group">
+                    <div class="flex justify-between items-center px-4">
+                        <label
+                            class="float-label text-[9px] font-black text-white/20 uppercase tracking-[0.4em]">Security
+                            Key</label>
+                        <a href="#"
+                            class="text-[8px] font-black text-[#FF6B00]/60 hover:text-[#FF6B00] transition-colors tracking-widest uppercase">Lost
+                            Key?</a>
+                    </div>
+                    <input type="password" required placeholder="••••••••"
+                        class="w-full input-glass rounded-2xl px-8 py-5 font-bold text-lg login-input">
+                </div>
 
-        <div class="mt-12 mb-10">
+                <div class="pt-2 magnetic-wrap w-full">
+                    <button type="submit" id="auth-btn"
+                        class="magnetic-btn w-full btn-orange py-6 rounded-2xl font-black tracking-[0.4em] text-[10px] uppercase shadow-2xl shadow-[#FF6B00]/20">
+                        Initiate Handshake
+                    </button>
+                </div>
+            </form>
+
+            <!-- Cloud Divider -->
             <div class="relative">
                 <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-white/40"></div>
+                    <div class="w-full border-t border-white/5"></div>
                 </div>
-                <div class="relative flex justify-center text-[9px]">
+                <div class="relative flex justify-center">
                     <span
-                        class="px-5 glass-panel py-1 rounded-full text-gray-400 font-bold uppercase tracking-[0.25em]">Cloud
+                        class="px-6 bg-transparent text-[8px] font-black text-white/10 uppercase tracking-[0.4em]">Cloud
                         Integration</span>
                 </div>
             </div>
-        </div>
 
-        <button onclick="handleGoogleLogin()"
-            class="w-full bg-white/50 border border-white/20 py-6 rounded-[32px] font-bold text-[10px] text-gray-700 hover:bg-white transition-all flex items-center justify-center gap-5 tracking-[0.2em] shadow-sm uppercase">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5" alt="Google">
-            SIGN IN WITH GOOGLE
-        </button>
+            <!-- Google Login -->
+            <button onclick="handleGoogleLogin()"
+                class="w-full bg-white/[0.03] border border-white/5 py-5 rounded-2xl font-bold text-[10px] text-white/40 hover:bg-white/5 hover:text-white transition-all flex items-center justify-center gap-4 tracking-[0.2em] uppercase">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5 opacity-60"
+                    alt="Google">
+                Sign In With Google
+            </button>
 
-        <div class="mt-16 text-center">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                New Partner? <a href="#" class="text-primary hover:text-black transition-colors">Request Access</a>
-            </p>
+            <!-- Footer -->
+            <div class="text-center">
+                <p class="text-[9px] font-bold text-white/15 uppercase tracking-widest">
+                    New Partner? <a href="#" class="text-[#FF6B00]/60 hover:text-[#FF6B00] transition-colors">Request
+                        Access</a>
+                </p>
+            </div>
         </div>
     </div>
 
-    <!-- Background Elements -->
-    <div class="fixed top-20 right-20 w-32 h-32 border-2 border-gray-100 rounded-full opacity-20 animate-pulse"></div>
-    <div class="fixed bottom-20 left-20 w-48 h-48 border-2 border-gray-100 rounded-full opacity-20"></div>
-
     <script>
-        // GSAP Entrance
+        // =========================================
+        //  CK TRAVELS — LOGIN MOTION SYSTEM v10
+        // =========================================
+
+        // A) Cinematic Login Card Entry (back.out bounce)
         window.addEventListener('load', () => {
-            gsap.from("#login-card", {
+            gsap.from('#login-card', {
+                scale: 0.8,
                 opacity: 0,
-                scale: 0.9,
-                y: 50,
-                duration: 1.5,
-                ease: "power4.out"
+                y: 60,
+                duration: 1.2,
+                ease: 'back.out(1.7)'
+            });
+
+            // Stagger inner elements
+            gsap.from('#login-card > *', {
+                opacity: 0,
+                y: 20,
+                stagger: 0.1,
+                duration: 0.8,
+                ease: 'power3.out',
+                delay: 0.4
+            });
+
+            // Spawn floating particles
+            spawnParticles();
+
+            // Init magnetic buttons
+            initMagneticButtons();
+
+            // Init page transitions
+            initPageTransitions();
+        });
+
+        // B) Interactive Field Labels — Pop Up & Turn Orange on Focus
+        document.querySelectorAll('.login-input').forEach(input => {
+            input.addEventListener('focus', function () {
+                const group = this.closest('.field-group');
+                if (!group) return;
+                const label = group.querySelector('.float-label');
+                if (label) {
+                    gsap.to(label, {
+                        color: '#FF6B00',
+                        y: -4,
+                        scale: 1.05,
+                        duration: 0.3,
+                        ease: 'power2.out'
+                    });
+                }
+                gsap.to(this, {
+                    boxShadow: '0 0 40px rgba(255, 107, 0, 0.15)',
+                    duration: 0.4
+                });
+            });
+
+            input.addEventListener('blur', function () {
+                const group = this.closest('.field-group');
+                if (!group) return;
+                const label = group.querySelector('.float-label');
+                if (label) {
+                    gsap.to(label, {
+                        color: 'rgba(255,255,255,0.2)',
+                        y: 0,
+                        scale: 1,
+                        duration: 0.3
+                    });
+                }
+                gsap.to(this, { boxShadow: 'none', duration: 0.3 });
             });
         });
 
+        // C) Form Submission — Animate & Redirect
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const btn = document.getElementById('auth-btn');
+
+            // Button compress animation
+            gsap.to(btn, { scale: 0.95, duration: 0.15, ease: "power2.in" });
+
             btn.innerHTML = `<span class="flex items-center justify-center gap-3">
                 <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                 VERIFYING...
             </span>`;
             btn.disabled = true;
 
-            gsap.to(btn, { scale: 0.95, duration: 0.1 });
-
+            // Card shrink & fade
             setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1500);
+                gsap.to('#login-card', {
+                    scale: 0.9, opacity: 0, y: -30, duration: 0.8, ease: "power2.in",
+                    onComplete: () => { navigateWithCurtain('index.html'); }
+                });
+            }, 1200);
         });
 
         function handleGoogleLogin() {
-            window.location.href = 'index.html';
+            gsap.to('#login-card', {
+                scale: 0.9, opacity: 0, duration: 0.6, ease: "power2.in",
+                onComplete: () => { navigateWithCurtain('index.html'); }
+            });
+        }
+
+        // D) Floating Particles
+        function spawnParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.top = Math.random() * 100 + '%';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.opacity = Math.random() * 0.5;
+                container.appendChild(p);
+
+                gsap.to(p, {
+                    y: -(100 + Math.random() * 300),
+                    x: (Math.random() - 0.5) * 100,
+                    opacity: 0,
+                    duration: 5 + Math.random() * 10,
+                    repeat: -1,
+                    delay: Math.random() * 5,
+                    ease: "none"
+                });
+            }
+        }
+
+        // === REUSABLE FUNCTIONS (Consistent with all pages) ===
+        function navigateWithCurtain(href) {
+            gsap.to("#page-curtain", {
+                left: 0, duration: 0.8, ease: "expo.inOut",
+                onComplete: () => { window.location.href = href; }
+            });
+        }
+
+        function initPageTransitions() {
+            document.querySelectorAll('a.page-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const href = link.getAttribute('href');
+                    if (!href || href === '#' || href.startsWith('javascript')) return;
+                    e.preventDefault();
+                    navigateWithCurtain(href);
+                });
+            });
+        }
+
+        function initMagneticButtons() {
+            document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
+                const btn = wrap.querySelector('.magnetic-btn');
+                if (!btn) return;
+                wrap.addEventListener('mousemove', (e) => {
+                    const rect = wrap.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    gsap.to(btn, { x: x * 0.4, y: y * 0.4, duration: 0.4, ease: "power2.out" });
+                });
+                wrap.addEventListener('mouseleave', () => {
+                    gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
+                });
+            });
         }
     </script>
 </body>

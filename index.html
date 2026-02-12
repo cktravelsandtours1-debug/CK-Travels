@@ -11,38 +11,39 @@
     <!-- GSAP Master Stack -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
 
     <!-- Design System -->
     <link rel="stylesheet" href="css/main.css">
 
     <style>
-        /* Modern Nautical Utilities */
+        /* === Nautical Design Tokens === */
         .bg-midnight {
-            background-color: var(--color-bg);
+            background-color: #00143D;
         }
 
         .text-midnight {
-            color: var(--color-bg);
+            color: #00143D;
         }
 
         .btn-orange {
-            background-color: var(--color-primary);
+            background-color: #FF6B00;
             color: white;
-            transition: all 0.4s var(--ease-expo);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .btn-orange:hover {
-            box-shadow: var(--accent-glow);
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.4);
             transform: translateY(-2px);
         }
 
         .glass-2 {
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--glass-blur));
-            -webkit-backdrop-filter: blur(var(--glass-blur));
-            border: var(--glass-border);
-            box-shadow: var(--glass-shadow);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.4);
         }
 
         .glass-2:hover {
@@ -77,12 +78,12 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background-color: var(--color-primary);
+            background-color: #FF6B00;
             z-index: 9999;
             pointer-events: none;
         }
 
-        /* Split Text Animation */
+        /* Char Split Animation */
         .char {
             display: inline-block;
         }
@@ -93,59 +94,121 @@
             width: fit-content;
         }
 
-        /* Interactive Elements */
+        /* Magnetic Interaction */
         .magnetic-wrap {
             display: inline-block;
         }
 
-        /* Custom Scrollbar */
+        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--color-bg);
+            background: #00143D;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--color-primary);
+            background: #FF6B00;
             border-radius: 10px;
+        }
+
+        /* Mobile Nav */
+        .mobile-tab-bar {
+            background: rgba(0, 20, 61, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 1024px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+
+            .bento-item-large,
+            .bento-item-tall,
+            .bento-item-wide {
+                grid-column: span 1;
+                grid-row: span 1;
+                min-height: 300px;
+            }
         }
     </style>
 </head>
 
-<body class="bg-white font-body text-midnight antialiased overflow-x-hidden">
+<body class="bg-white font-body text-[#00143D] antialiased overflow-x-hidden">
 
     <!-- Page Transition Curtain -->
     <div id="page-curtain"></div>
 
-    <!-- Navigation -->
-    <nav id="main-nav"
-        class="fixed top-0 w-full z-50 px-10 py-6 transition-all duration-700 flex items-center justify-between">
-        <a href="index.html" class="flex items-center gap-1 group">
-            <span
-                class="text-3xl font-black tracking-tighter italic text-midnight group-hover:text-orange-600 transition-colors">CK<span
-                    class="text-orange-600 not-italic">.</span></span>
-        </a>
+    <!-- ============================================ -->
+    <!--           GLOBAL NAVIGATION (PC & Mobile)     -->
+    <!-- ============================================ -->
+    <nav id="main-nav" class="fixed top-0 w-full z-50 transition-all duration-700"
+        style="opacity:0; transform: translateY(-100px);">
+        <div id="nav-container"
+            class="max-w-7xl mx-auto w-full flex items-center justify-between px-10 py-5 rounded-[40px] transition-all duration-500">
+            <a href="index.html" class="flex items-center gap-1 group page-link">
+                <span id="logo-span"
+                    class="text-3xl font-black tracking-tighter italic text-white group-hover:text-[#FF6B00] transition-colors">CK<span
+                        class="text-[#FF6B00] not-italic">.</span></span>
+            </a>
 
-        <div class="hidden lg:flex items-center gap-12 font-bold text-[11px] tracking-[0.3em] uppercase">
-            <a href="index.html" class="text-orange-600">Home</a>
-            <a href="flights.html" class="hover:text-orange-600 transition-colors">Flights</a>
-            <a href="packages.html" class="hover:text-orange-600 transition-colors">Packages</a>
-            <a href="booking.html" class="hover:text-orange-600 transition-colors">My Trips</a>
-        </div>
+            <div class="hidden lg:flex items-center gap-12 font-bold text-[11px] tracking-[0.3em] uppercase">
+                <a href="index.html" class="nav-link-text text-[#FF6B00] page-link">Home</a>
+                <a href="flights.html"
+                    class="nav-link-text text-white hover:text-[#FF6B00] transition-colors page-link">Flights</a>
+                <a href="packages.html"
+                    class="nav-link-text text-white hover:text-[#FF6B00] transition-colors page-link">Packages</a>
+                <a href="booking.html"
+                    class="nav-link-text text-white hover:text-[#FF6B00] transition-colors page-link">My Trips</a>
+            </div>
 
-        <div class="flex items-center gap-6">
-            <div class="magnetic-wrap">
-                <a href="login.html"
-                    class="magnetic-btn bg-midnight text-white px-10 py-4 rounded-full text-[11px] font-black tracking-[0.3em] transition-all hover:scale-105 active:scale-95 shadow-xl uppercase">Login</a>
+            <div class="flex items-center gap-6">
+                <div class="magnetic-wrap">
+                    <a href="login.html"
+                        class="magnetic-btn btn-orange px-10 py-4 rounded-full text-[11px] font-black tracking-[0.3em] uppercase shadow-xl page-link">Login</a>
+                </div>
             </div>
         </div>
     </nav>
 
+    <!-- Mobile Tab Bar -->
+    <div class="lg:hidden fixed bottom-0 w-full z-50 px-6 pb-8 pt-4 mobile-tab-bar text-white">
+        <div class="flex justify-around items-center">
+            <a href="index.html" class="flex flex-col items-center gap-1 text-[#FF6B00] page-link">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                </svg>
+                <span class="text-[8px] font-black uppercase tracking-widest">Home</span>
+            </a>
+            <a href="flights.html" class="flex flex-col items-center gap-1 opacity-40 page-link">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+                </svg>
+                <span class="text-[8px] font-black uppercase tracking-widest">Flights</span>
+            </a>
+            <a href="packages.html" class="flex flex-col items-center gap-1 opacity-40 page-link">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span class="text-[8px] font-black uppercase tracking-widest">Packages</span>
+            </a>
+            <a href="booking.html" class="flex flex-col items-center gap-1 opacity-40 page-link">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M19 3h-1V1h-2v2H8V1H6v3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" />
+                </svg>
+                <span class="text-[8px] font-black uppercase tracking-widest">Trips</span>
+            </a>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <section class="relative h-screen flex items-center justify-center overflow-hidden bg-midnight">
-        <!-- Deep Blue to Transparent Gradient Overlay -->
         <div class="absolute inset-0 z-10 bg-gradient-to-b from-[#00143D] via-transparent to-[#00143D] opacity-60">
         </div>
         <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover brightness-[0.5]">
@@ -158,19 +221,19 @@
                 The World is <br> <span class="not-italic text-white">Waiting.</span>
             </h1>
 
-            <!-- Magnetic Search Container -->
+            <!-- Search Container -->
             <div class="max-w-4xl mx-auto glass-2 p-10 rounded-[48px] reveal-up">
                 <div
-                    class="flex flex-col md:flex-row items-center bg-white rounded-[32px] p-2 shadow-2xl focus-within:ring-4 ring-orange-500/20 transition-all group">
+                    class="flex flex-col md:flex-row items-center bg-white rounded-[32px] p-2 shadow-2xl focus-within:ring-4 ring-orange-500/20 transition-all">
                     <div class="flex-1 flex items-center px-6 gap-4">
-                        <div class="text-orange-600">
+                        <div class="text-[#FF6B00]">
                             <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                             </svg>
                         </div>
                         <input type="text" id="ai-search"
-                            class="w-full bg-transparent text-midnight font-bold text-xl md:text-2xl py-6 outline-none placeholder-slate-300"
+                            class="w-full bg-transparent text-[#00143D] font-bold text-xl md:text-2xl py-6 outline-none placeholder-slate-300"
                             placeholder="Discover your next nautical escape...">
                     </div>
                     <div class="magnetic-wrap w-full md:w-auto">
@@ -180,25 +243,23 @@
                     </div>
                 </div>
 
-                <!-- Live Indicators -->
                 <div class="mt-10 flex items-center justify-center gap-8 reveal-up">
                     <div class="flex items-center gap-3">
-                        <div class="w-2.5 h-2.5 bg-orange-600 rounded-full animate-ping"></div>
+                        <div class="w-2.5 h-2.5 bg-[#FF6B00] rounded-full animate-ping"></div>
                         <span class="text-[10px] font-black tracking-[0.2em] text-white/60">LIVE RADAR ACTIVE</span>
                     </div>
                     <div class="w-px h-6 bg-white/20"></div>
                     <div class="flex items-center gap-3">
                         <p class="text-[10px] font-black tracking-[0.2em] text-white/80"><span
-                                class="text-orange-500">2,401</span> NODES CONNECTED</p>
+                                class="text-[#FF6B00]">2,401</span> NODES CONNECTED</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Scroll Anchor -->
         <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-40">
             <span class="text-[9px] font-black tracking-[0.5em] text-white uppercase">Dive In</span>
-            <div class="w-[1px] h-16 bg-gradient-to-b from-orange-500 to-transparent"></div>
+            <div class="w-[1px] h-16 bg-gradient-to-b from-[#FF6B00] to-transparent"></div>
         </div>
     </section>
 
@@ -207,35 +268,35 @@
         <div class="marquee-container relative flex items-center">
             <div id="marquee-track" class="marquee-track flex items-center gap-32 px-16">
                 <span
-                    class="text-4xl font-heading font-black italic text-midnight opacity-20 hover:opacity-100 hover:text-orange-600 transition-all cursor-default">Emirates</span>
+                    class="text-4xl font-heading font-black italic text-[#00143D] opacity-20 hover:opacity-100 hover:text-[#FF6B00] transition-all cursor-default">Emirates</span>
                 <span
-                    class="text-4xl font-black tracking-tighter uppercase text-midnight opacity-20 hover:opacity-100 hover:text-orange-600 transition-all cursor-default">Qatar
+                    class="text-4xl font-black tracking-tighter uppercase text-[#00143D] opacity-20 hover:opacity-100 hover:text-[#FF6B00] transition-all cursor-default">Qatar
                     Airways</span>
                 <span
-                    class="text-4xl font-bold tracking-widest text-midnight opacity-20 hover:opacity-100 hover:text-orange-600 transition-all cursor-default">ETIHAD</span>
+                    class="text-4xl font-bold tracking-widest text-[#00143D] opacity-20 hover:opacity-100 hover:text-[#FF6B00] transition-all cursor-default">ETIHAD</span>
                 <span
-                    class="text-4xl font-heading underline text-midnight opacity-20 hover:opacity-100 hover:text-orange-600 transition-all cursor-default">Singapore
+                    class="text-4xl font-heading underline text-[#00143D] opacity-20 hover:opacity-100 hover:text-[#FF6B00] transition-all cursor-default">Singapore
                     Airlines</span>
                 <span
-                    class="text-4xl font-black italic text-midnight opacity-20 hover:opacity-100 hover:text-orange-600 transition-all cursor-default">Lufthansa</span>
+                    class="text-4xl font-black italic text-[#00143D] opacity-20 hover:opacity-100 hover:text-[#FF6B00] transition-all cursor-default">Lufthansa</span>
                 <span
-                    class="text-4xl font-black uppercase text-midnight opacity-20 hover:opacity-100 hover:text-orange-600 transition-all cursor-default">Turkish
+                    class="text-4xl font-black uppercase text-[#00143D] opacity-20 hover:opacity-100 hover:text-[#FF6B00] transition-all cursor-default">Turkish
                     Airlines</span>
-                <!-- Duplicate -->
+                <!-- Duplicate for seamless loop -->
                 <span
-                    class="text-4xl font-heading font-black italic text-midnight opacity-20 hover:opacity-100 hover:text-orange-600 transition-all cursor-default">Emirates</span>
+                    class="text-4xl font-heading font-black italic text-[#00143D] opacity-20 hover:opacity-100 hover:text-[#FF6B00] transition-all cursor-default">Emirates</span>
                 <span
-                    class="text-4xl font-black tracking-tighter uppercase text-midnight opacity-20 hover:opacity-100 hover:text-orange-600 transition-all cursor-default">Qatar
+                    class="text-4xl font-black tracking-tighter uppercase text-[#00143D] opacity-20 hover:opacity-100 hover:text-[#FF6B00] transition-all cursor-default">Qatar
                     Airways</span>
                 <span
-                    class="text-4xl font-bold tracking-widest text-midnight opacity-20 hover:opacity-100 hover:text-orange-600 transition-all cursor-default">ETIHAD</span>
+                    class="text-4xl font-bold tracking-widest text-[#00143D] opacity-20 hover:opacity-100 hover:text-[#FF6B00] transition-all cursor-default">ETIHAD</span>
                 <span
-                    class="text-4xl font-heading underline text-midnight opacity-20 hover:opacity-100 hover:text-orange-600 transition-all cursor-default">Singapore
+                    class="text-4xl font-heading underline text-[#00143D] opacity-20 hover:opacity-100 hover:text-[#FF6B00] transition-all cursor-default">Singapore
                     Airlines</span>
                 <span
-                    class="text-4xl font-black italic text-midnight opacity-20 hover:opacity-100 hover:text-orange-600 transition-all cursor-default">Lufthansa</span>
+                    class="text-4xl font-black italic text-[#00143D] opacity-20 hover:opacity-100 hover:text-[#FF6B00] transition-all cursor-default">Lufthansa</span>
                 <span
-                    class="text-4xl font-black uppercase text-midnight opacity-20 hover:opacity-100 hover:text-orange-600 transition-all cursor-default">Turkish
+                    class="text-4xl font-black uppercase text-[#00143D] opacity-20 hover:opacity-100 hover:text-[#FF6B00] transition-all cursor-default">Turkish
                     Airlines</span>
             </div>
         </div>
@@ -246,50 +307,44 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex justify-between items-end mb-24 reveal-up">
                 <div class="space-y-4">
-                    <p class="text-[11px] font-black tracking-[0.5em] text-orange-600 uppercase">Premium Inventory</p>
-                    <h2 class="text-7xl font-heading font-black italic text-midnight">Bento <span
-                            class="not-italic text-midnight/20">Selected.</span></h2>
+                    <p class="text-[11px] font-black tracking-[0.5em] text-[#FF6B00] uppercase">Premium Inventory</p>
+                    <h2 class="text-7xl font-heading font-black italic text-[#00143D]">Bento <span
+                            class="not-italic text-[#00143D]/20">Selected.</span></h2>
                 </div>
                 <div class="magnetic-wrap">
                     <a href="packages.html"
-                        class="magnetic-btn btn-orange px-10 py-5 rounded-full text-[10px] font-black tracking-[0.3em] uppercase shadow-lg">View
+                        class="magnetic-btn btn-orange px-10 py-5 rounded-full text-[10px] font-black tracking-[0.3em] uppercase shadow-lg page-link">View
                         Collective</a>
                 </div>
             </div>
 
             <div class="bento-grid" id="packages-bento">
-                <!-- Large Item -->
-                <div
-                    class="bento-item-large bg-white rounded-[48px] overflow-hidden group relative reveal-up card-perspective">
-                    <div class="absolute inset-0 bg-gradient-to-t from-midnight/80 to-transparent z-10"></div>
+                <div class="bento-item-large bg-white rounded-[48px] overflow-hidden group relative reveal-up">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#00143D]/80 to-transparent z-10"></div>
                     <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=2069&auto=format&fit=crop"
                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]"
-                        alt="">
+                        alt="Dubai Package">
                     <div class="absolute bottom-12 left-12 z-20 space-y-4">
                         <span
-                            class="bg-orange-600 text-white px-5 py-2 rounded-full text-[10px] font-black tracking-widest uppercase">Featured
+                            class="bg-[#FF6B00] text-white px-5 py-2 rounded-full text-[10px] font-black tracking-widest uppercase">Featured
                             Deployment</span>
                         <h3 class="text-5xl font-heading font-black italic text-white">The Dubai <br> Nautical Elite.
                         </h3>
                     </div>
                 </div>
-                <!-- Tall Item -->
-                <div
-                    class="bento-item-tall bg-white rounded-[48px] overflow-hidden group relative reveal-up card-perspective">
-                    <div class="absolute inset-0 bg-gradient-to-t from-midnight/80 to-transparent z-10"></div>
+                <div class="bento-item-tall bg-white rounded-[48px] overflow-hidden group relative reveal-up">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#00143D]/80 to-transparent z-10"></div>
                     <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?q=80&w=1965&auto=format&fit=crop"
                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]"
-                        alt="">
+                        alt="Maldives Package">
                     <div class="absolute bottom-10 left-10 z-20">
                         <h3 class="text-3xl font-heading font-black italic text-white">Maldives <br> Overwater
                             Interface.</h3>
                     </div>
                 </div>
-                <!-- Wide Item -->
-                <div class="bento-item-wide bg-midnight rounded-[48px] p-12 reveal-up relative overflow-hidden group">
+                <div class="bento-item-wide bg-[#00143D] rounded-[48px] p-12 reveal-up relative overflow-hidden group">
                     <div class="relative z-10 flex flex-col justify-between h-full">
-                        <div class="text-[10px] font-black tracking-[0.4em] text-orange-500 uppercase">Live Metrics
-                        </div>
+                        <div class="text-[10px] font-black tracking-[0.4em] text-[#FF6B00] uppercase">Live Metrics</div>
                         <div class="text-4xl font-heading font-black italic text-white">"Luxury isn't a place, <br> it's
                             a synchronized path."</div>
                         <div class="flex items-center gap-4">
@@ -298,16 +353,14 @@
                                 Center</span>
                         </div>
                     </div>
-                    <!-- Abstract Decoration -->
                     <div
-                        class="absolute -right-20 -bottom-20 w-80 h-80 bg-orange-600/10 rounded-full blur-[80px] group-hover:bg-orange-600/20 transition-all duration-1000">
+                        class="absolute -right-20 -bottom-20 w-80 h-80 bg-[#FF6B00]/10 rounded-full blur-[80px] group-hover:bg-[#FF6B00]/20 transition-all duration-1000">
                     </div>
                 </div>
-                <!-- Standard Item -->
-                <div class="bg-white rounded-[48px] overflow-hidden group relative reveal-up card-perspective">
-                    <div class="absolute inset-0 bg-gradient-to-t from-midnight/80 to-transparent z-10"></div>
+                <div class="bg-white rounded-[48px] overflow-hidden group relative reveal-up">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#00143D]/80 to-transparent z-10"></div>
                     <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2070&auto=format&fit=crop"
-                        class="w-full h-full object-cover" alt="">
+                        class="w-full h-full object-cover" alt="Santorini Package">
                     <div class="absolute bottom-6 left-6 z-20">
                         <h3 class="text-xl font-heading font-black italic text-white uppercase">Santorini Node.</h3>
                     </div>
@@ -317,36 +370,37 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-midnight pt-40 pb-20 mt-40">
+    <footer class="bg-[#00143D] pt-40 pb-20 mt-40">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-start gap-20 mb-32">
                 <div class="max-w-md">
                     <span class="text-5xl font-black tracking-tighter italic text-white mb-10 inline-block">CK<span
-                            class="text-orange-600 not-italic">.</span></span>
+                            class="text-[#FF6B00] not-italic">.</span></span>
                     <p class="text-slate-500 text-lg leading-relaxed font-medium">Revisiting the golden age of travel
                         with modern nautical precision. Secure your passage into the new world.</p>
                 </div>
                 <div class="grid grid-cols-2 lg:grid-cols-3 gap-24">
                     <div class="space-y-8">
-                        <h4 class="text-[10px] font-black tracking-[0.5em] uppercase text-orange-600">The Map</h4>
+                        <h4 class="text-[10px] font-black tracking-[0.5em] uppercase text-[#FF6B00]">The Map</h4>
                         <div class="flex flex-col gap-5 text-sm font-bold text-slate-400">
-                            <a href="flights.html" class="hover:text-white transition-colors">Flights</a>
-                            <a href="packages.html" class="hover:text-white transition-colors">Packages</a>
-                            <a href="booking.html" class="hover:text-white transition-colors">My Trips</a>
+                            <a href="flights.html" class="hover:text-white transition-colors page-link">Flights</a>
+                            <a href="packages.html" class="hover:text-white transition-colors page-link">Packages</a>
+                            <a href="booking.html" class="hover:text-white transition-colors page-link">My Trips</a>
                         </div>
                     </div>
                     <div class="space-y-8">
-                        <h4 class="text-[10px] font-black tracking-[0.5em] uppercase text-orange-600">The Bridge</h4>
+                        <h4 class="text-[10px] font-black tracking-[0.5em] uppercase text-[#FF6B00]">The Bridge</h4>
                         <div class="flex flex-col gap-5 text-sm font-bold text-slate-400">
-                            <a href="admin-login.html" class="hover:text-white transition-colors">Officer Login</a>
-                            <a href="login.html" class="hover:text-white transition-colors">Member Link</a>
+                            <a href="admin-login.html" class="hover:text-white transition-colors page-link">Officer
+                                Login</a>
+                            <a href="login.html" class="hover:text-white transition-colors page-link">Member Link</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div
                 class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[9px] font-black tracking-[0.3em] text-slate-700 uppercase gap-8">
-                <div>© 2026 CK TRAVELS // STN_NAUTICAL_SYNC</div>
+                <div>&copy; 2026 CK TRAVELS // STN_NAUTICAL_SYNC</div>
                 <div class="flex gap-12">
                     <a href="#" class="hover:text-white transition-colors">Security Protocol</a>
                     <a href="#" class="hover:text-white transition-colors">Maritime Terms</a>
@@ -356,56 +410,128 @@
     </footer>
 
     <!-- Scripts -->
-    <script type="module" src="js/main.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
     <script>
-        // Smooth Scrolling
+        // =========================================
+        //  CK TRAVELS — UNIFIED MOTION SYSTEM v10
+        // =========================================
+
+        // 1. Smooth Scrolling
         const lenis = new Lenis();
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // Splitting Logic for Hero
-        const h1 = document.getElementById('hero-title');
-        const text = h1.innerText;
-        h1.innerHTML = text.split('').map(char => `<span class="char">${char === ' ' ? '&nbsp;' : char}</span>`).join('');
+        // 2. Register GSAP Plugins
+        gsap.registerPlugin(ScrollTrigger);
 
-        // Master Class Animations
+        // 3. Window Load — Master Timeline
         window.addEventListener('load', () => {
             const tl = gsap.timeline();
 
-            // Split Text Entrance
-            tl.from("#hero-title .char", {
+            // A) NAVBAR — Slide from top immediately
+            gsap.from("#main-nav", {
+                y: -100,
+                opacity: 0,
                 duration: 1.2,
-                opacity: 0,
-                y: 50,
-                stagger: 0.05,
                 ease: "expo.out",
-                delay: 0.5
+                onStart: () => {
+                    document.getElementById('main-nav').style.opacity = '1';
+                    document.getElementById('main-nav').style.transform = 'translateY(0)';
+                }
             });
 
-            // Cascade Entry for UI
-            tl.from(".reveal-up", {
-                opacity: 0,
-                y: 30,
-                stagger: 0.15,
-                duration: 1.5,
-                ease: "expo.out"
-            }, "-=1");
+            // B) Hero text split & stagger
+            const h1 = document.getElementById('hero-title');
+            if (h1) {
+                const text = h1.innerText;
+                h1.innerHTML = text.split('').map(c => `<span class="char">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+                tl.from("#hero-title .char", { duration: 1.2, opacity: 0, y: 50, stagger: 0.04, ease: "expo.out", delay: 0.3 });
+            }
 
-            // Infinite Logo Marquee
+            // C) Cascade reveal
+            tl.from(".reveal-up", { opacity: 0, y: 30, stagger: 0.15, duration: 1.5, ease: "expo.out" }, "-=1");
+
+            // D) Infinite Logo Marquee
             const marquee = document.getElementById('marquee-track');
-            const loop = gsap.to(marquee, {
-                xPercent: -50,
-                repeat: -1,
-                duration: 40,
-                ease: "none"
-            });
-            marquee.addEventListener('mouseenter', () => gsap.to(loop, { timeScale: 0.2, duration: 1 }));
-            marquee.addEventListener('mouseleave', () => gsap.to(loop, { timeScale: 1, duration: 1 }));
+            if (marquee) {
+                const loop = gsap.to(marquee, { xPercent: -50, repeat: -1, duration: 40, ease: "none" });
+                marquee.addEventListener('mouseenter', () => gsap.to(loop, { timeScale: 0.2, duration: 1 }));
+                marquee.addEventListener('mouseleave', () => gsap.to(loop, { timeScale: 1, duration: 1 }));
+            }
 
-            // Magnetic Mouse Effect
-            const magneticElements = document.querySelectorAll('.magnetic-wrap');
-            magneticElements.forEach(wrap => {
+            // E) Magnetic Mouse Effect (Global)
+            initMagneticButtons();
+
+            // F) Page Transition Curtain — ALL internal links
+            initPageTransitions();
+
+            // G) Navbar Scroll Transformation (transparent → glassmorphic dock)
+            ScrollTrigger.create({
+                start: "top -50",
+                onEnter: () => {
+                    gsap.to("#nav-container", {
+                        backgroundColor: "rgba(0, 20, 61, 0.85)",
+                        backdropFilter: "blur(25px)",
+                        borderBottom: "2px solid #FF6B00",
+                        boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+                        padding: "12px 40px",
+                        marginTop: "12px",
+                        duration: 0.5,
+                        ease: "power2.out"
+                    });
+                },
+                onLeaveBack: () => {
+                    gsap.to("#nav-container", {
+                        backgroundColor: "transparent",
+                        backdropFilter: "blur(0px)",
+                        borderBottom: "2px solid transparent",
+                        boxShadow: "none",
+                        padding: "20px 40px",
+                        marginTop: "0px",
+                        duration: 0.5,
+                        ease: "power2.out"
+                    });
+                }
+            });
+        });
+
+        // === REUSABLE FUNCTIONS ===
+
+        function executeAISearch() {
+            const input = document.getElementById('ai-search');
+            if (!input) return;
+            const query = input.value.trim();
+            if (query) {
+                navigateWithCurtain(`flights.html?query=${encodeURIComponent(query)}`);
+            }
+        }
+
+        function navigateWithCurtain(href) {
+            gsap.to("#page-curtain", {
+                left: 0,
+                duration: 0.8,
+                ease: "expo.inOut",
+                onComplete: () => { window.location.href = href; }
+            });
+        }
+
+        function initPageTransitions() {
+            document.querySelectorAll('a.page-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const href = link.getAttribute('href');
+                    if (!href || href === '#' || href.startsWith('javascript')) return;
+                    e.preventDefault();
+                    navigateWithCurtain(href);
+                });
+            });
+        }
+
+        function initMagneticButtons() {
+            document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
                 const btn = wrap.querySelector('.magnetic-btn');
+                if (!btn) return;
                 wrap.addEventListener('mousemove', (e) => {
                     const rect = wrap.getBoundingClientRect();
                     const x = e.clientX - rect.left - rect.width / 2;
@@ -416,33 +542,7 @@
                     gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
                 });
             });
-
-            // Page Transition Hijack (For Curtain Effect)
-            document.querySelectorAll('a[href^="flights.html"]').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const href = link.getAttribute('href');
-                    gsap.to("#page-curtain", {
-                        left: 0,
-                        duration: 1,
-                        ease: "expo.inOut",
-                        onComplete: () => window.location.href = href
-                    });
-                });
-            });
-        });
-
-        // Navigation Ghosting
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('main-nav');
-            if (window.scrollY > 80) {
-                nav.classList.add('glass-2', 'py-4');
-                nav.classList.remove('py-6');
-            } else {
-                nav.classList.remove('glass-2', 'py-4');
-                nav.classList.add('py-6');
-            }
-        });
+        }
     </script>
 </body>
 

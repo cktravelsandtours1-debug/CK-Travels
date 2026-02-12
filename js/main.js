@@ -1,17 +1,22 @@
-import { flights, packages } from './data.js';
-import { updateNavigation } from './auth.js';
+// CK Travels Main Logic
+// Uses global data from window.ckTravelsData
 
 document.addEventListener('DOMContentLoaded', () => {
+    const data = window.ckTravelsData || { flights: [], packages: [] };
+    const auth = window.ckTravelsAuth;
+    const flights = data.flights;
+    const packages = data.packages;
+
     console.log('CK Travels Premium OS loaded.');
 
-    // Update navigation based on auth state
-    if (typeof updateNavigation === 'function') updateNavigation();
+    if (auth && typeof auth.updateNavigation === 'function') {
+        auth.updateNavigation();
+    }
 
-    // Render Home Page Content
-    renderHomeExperiences();
+    renderHomeExperiences(flights, packages);
 });
 
-function renderHomeExperiences() {
+function renderHomeExperiences(flights, packages) {
     const container = document.getElementById('home-experiences-grid');
     if (!container) return;
 

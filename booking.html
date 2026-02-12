@@ -4,273 +4,552 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Booking | CK Travels Premium Logistics</title>
+    <title>Secure Passage | CK Travels Nautical</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- GSAP for Micro-interactions -->
+    <!-- GSAP Master Stack -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="css/main.css">
 
     <style>
-        .glass-header {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+        /* === Nautical Design Tokens === */
+        .bg-midnight {
+            background-color: #00143D;
         }
 
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.1);
+        .text-midnight {
+            color: #00143D;
         }
 
-        .step-transition {
-            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        .btn-orange {
+            background-color: #FF6B00;
+            color: white;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Thematic Gradients */
-        .bg-matrix {
+        .btn-orange:hover {
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .magnetic-wrap {
+            display: inline-block;
+        }
+
+        /* === DIGITAL BOARDING PASS FORM === */
+        .boarding-container {
+            background: linear-gradient(135deg, #00143D 0%, #001e5c 50%, #00143D 100%);
+            border-radius: 48px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 60px 120px -30px rgba(0, 20, 61, 0.6);
+        }
+
+        .boarding-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 107, 0, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* Dashed perforated line */
+        .perf-line {
+            border-right: 3px dashed rgba(255, 255, 255, 0.08);
+        }
+
+        /* Input Glow */
+        .input-boarding {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: white;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .input-boarding::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .input-boarding:focus {
+            outline: none;
+            border-color: #FF6B00;
+            background: rgba(255, 107, 0, 0.05);
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.15), inset 0 0 20px rgba(255, 107, 0, 0.03);
+        }
+
+        /* Active field glow transition for GSAP */
+        .field-glow {
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.2), 0 0 60px rgba(255, 107, 0, 0.1);
+            border-color: #FF6B00 !important;
+        }
+
+        .label-active {
+            color: #FF6B00 !important;
+        }
+
+        /* Step toggle */
+        .step-inactive {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        /* Takeoff Overlay */
+        #takeoff-overlay {
             position: fixed;
             inset: 0;
-            z-index: -1;
-            background: radial-gradient(circle at 100% 0%, #eff6ff 0%, transparent 40%),
-                radial-gradient(circle at 0% 100%, #fff7ed 0%, transparent 40%),
-                #fafafa;
+            background: #00143D;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .airplane-loader {
+            width: 120px;
+            height: 120px;
+            fill: #FF6B00;
+        }
+
+        /* SVG Flight Path */
+        #flight-path-svg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1001;
+            pointer-events: none;
+            display: none;
+        }
+
+        /* Boarding Pass Reveal */
+        #boarding-pass {
+            position: fixed;
+            bottom: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            border-radius: 40px 40px 0 0;
+            z-index: 1002;
+            padding: 60px;
+            box-shadow: 0 -50px 100px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Page Transition Curtain */
+        #page-curtain {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background-color: #FF6B00;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        /* Progress Line */
+        .progress-line {
+            height: 2px;
+            background: linear-gradient(90deg, #FF6B00 var(--progress, 0%), rgba(255, 255, 255, 0.1) var(--progress, 0%));
+            transition: all 0.6s ease;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #00143D;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #FF6B00;
+            border-radius: 10px;
         }
     </style>
 </head>
 
-<body class="bg-surface font-sans text-gray-900 antialiased overflow-x-hidden">
+<body class="bg-[#00143D] font-body text-white antialiased">
 
-    <div class="bg-matrix"></div>
+    <!-- Page Transition Curtain -->
+    <div id="page-curtain"></div>
 
-    <!-- Simple Secure Header -->
-    <nav class="glass-header border-b border-white/20 fixed top-0 w-full z-50 h-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-            <div class="flex justify-between items-center h-full">
-                <a href="index.html" class="flex-shrink-0 flex items-center gap-1">
-                    <span class="text-3xl font-extrabold tracking-tighter text-gray-900">CK<span
-                            class="text-primary">.</span></span>
-                </a>
+    <!-- Takeoff Animation Overlay -->
+    <div id="takeoff-overlay">
+        <div class="airplane-container">
+            <svg class="airplane-loader animate-bounce" viewBox="0 0 24 24">
+                <path
+                    d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+            </svg>
+        </div>
+        <div class="text-white text-xs font-black tracking-[0.6em] uppercase animate-pulse">Synchronizing Passage...
+        </div>
+    </div>
 
-                <div class="flex items-center gap-4 text-gray-400 font-bold text-[10px] tracking-[0.3em] uppercase">
-                    <div
-                        class="flex items-center gap-2 bg-green-50 text-green-600 px-4 py-2 rounded-full border border-green-100">
-                        <svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        SECURE SYNC
-                    </div>
+    <!-- SVG Flight Path for Airplane Animation -->
+    <svg id="flight-path-svg" viewBox="0 0 1000 600">
+        <path id="flight-route" d="M -50 500 Q 200 100, 500 300 T 1050 -50" fill="none" stroke="none" />
+        <g id="animated-plane">
+            <path
+                d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"
+                fill="#FF6B00" transform="scale(3)" />
+        </g>
+    </svg>
+
+    <!-- Digital Boarding Pass (Post-Submission) -->
+    <div id="boarding-pass">
+        <div class="flex justify-between items-start mb-16">
+            <div>
+                <span class="text-[10px] font-black text-[#FF6B00] tracking-[0.4em] uppercase mb-4 block">Boarding Pass
+                    Generated</span>
+                <h2 class="text-5xl font-heading font-black italic text-[#00143D]">Bon Voyage.</h2>
+            </div>
+            <div class="text-right">
+                <div class="text-4xl font-black italic text-[#00143D]">CK<span class="text-[#FF6B00]">.</span>007</div>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-12 border-t border-slate-100 pt-12 mb-16">
+            <div class="space-y-2">
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Passenger</p>
+                <p id="pass-name" class="font-black italic text-xl text-[#00143D]">---</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Status</p>
+                <p class="font-black italic text-xl text-green-500">VERIFIED</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Seat Node</p>
+                <p class="font-black italic text-xl text-[#00143D]">1A</p>
+            </div>
+            <div class="space-y-2 text-right">
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Valuation</p>
+                <p id="pass-price" class="font-black italic text-xl text-[#00143D]">$0</p>
+            </div>
+        </div>
+        <button onclick="navigateWithCurtain('dashboard.html')"
+            class="w-full btn-orange py-6 rounded-2xl font-black tracking-[0.4em] text-[10px] uppercase shadow-2xl">Enter
+            Member Portal</button>
+    </div>
+
+    <!-- ============================================ -->
+    <!--           GLOBAL NAVIGATION                  -->
+    <!-- ============================================ -->
+    <nav id="main-nav" class="fixed top-0 w-full z-50 transition-all duration-700"
+        style="opacity:0; transform: translateY(-100px);">
+        <div id="nav-container"
+            class="max-w-7xl mx-auto w-full flex items-center justify-between px-10 py-5 rounded-[40px] transition-all duration-500">
+            <a href="index.html" class="flex items-center gap-1 group page-link">
+                <span id="logo-span"
+                    class="text-3xl font-black tracking-tighter italic text-white group-hover:text-[#FF6B00] transition-colors">CK<span
+                        class="text-[#FF6B00] not-italic">.</span></span>
+            </a>
+
+            <div class="hidden lg:flex items-center gap-12 font-bold text-[11px] tracking-[0.3em] uppercase">
+                <a href="index.html"
+                    class="nav-link-text text-white/60 hover:text-[#FF6B00] transition-colors page-link">Home</a>
+                <a href="flights.html"
+                    class="nav-link-text text-white/60 hover:text-[#FF6B00] transition-colors page-link">Flights</a>
+                <a href="packages.html"
+                    class="nav-link-text text-white/60 hover:text-[#FF6B00] transition-colors page-link">Packages</a>
+                <a href="booking.html" class="nav-link-text text-[#FF6B00]">My Trips</a>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div class="magnetic-wrap">
+                    <a href="login.html"
+                        class="magnetic-btn btn-orange px-10 py-4 rounded-full text-[11px] font-black tracking-[0.3em] uppercase shadow-xl page-link">Login</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Checkout Layout -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
-        <div class="flex flex-col lg:flex-row gap-16 items-start">
+    <!-- ============================================ -->
+    <!--        BOOKING FORM — BOARDING PASS STYLE     -->
+    <!-- ============================================ -->
+    <main class="max-w-7xl mx-auto px-6 pt-40 pb-32">
+        <div class="flex flex-col lg:flex-row gap-12">
 
-            <!-- Left: Form Steps -->
-            <div class="flex-1 w-full" id="booking-flow">
+            <!-- LEFT: Form (Boarding Pass Aesthetic) -->
+            <div class="flex-1 space-y-8 reveal-up">
 
-                <!-- New Progress UI -->
-                <div class="flex justify-between mb-24 px-4 relative max-w-xl mx-auto">
-                    <!-- Progress Line Backdrop -->
-                    <div class="absolute h-[2px] bg-gray-100 top-6 left-12 right-12 z-0"></div>
-
-                    <div class="flex flex-col items-center gap-4 relative z-10">
-                        <div id="step-node-1"
-                            class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-2xl shadow-primary/30 transition-all duration-500 border-4 border-white">
-                            1</div>
-                        <span class="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-900">IDENTITY</span>
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-[10px] font-black text-[#FF6B00] tracking-[0.5em] uppercase mb-2">Secure Passage
+                            Protocol</p>
+                        <h1 class="text-5xl md:text-6xl font-heading font-black italic">Book <span
+                                class="not-italic text-white/20">Your Seat.</span></h1>
                     </div>
-
-                    <div class="flex flex-col items-center gap-4 relative z-10">
-                        <div id="step-node-2"
-                            class="w-12 h-12 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center font-bold transition-all duration-500 border-4 border-white">
-                            2</div>
-                        <span class="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-400">SECURITY</span>
-                    </div>
-
-                    <div class="flex flex-col items-center gap-4 relative z-10">
-                        <div id="step-node-3"
-                            class="w-12 h-12 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center font-bold transition-all duration-500 border-4 border-white">
-                            3</div>
-                        <span class="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-400">LOGISTICS</span>
+                    <div class="hidden md:block text-right">
+                        <div class="text-6xl font-black italic text-white/5">CK.</div>
                     </div>
                 </div>
 
-                <form id="booking-form" class="glass-panel p-10 md:p-16 rounded-[48px]">
+                <!-- Progress Bar -->
+                <div class="flex items-center gap-4 mb-8">
+                    <div id="step-node-1"
+                        class="w-12 h-12 rounded-full bg-[#FF6B00] text-white flex items-center justify-center font-black italic text-sm shadow-lg shadow-[#FF6B00]/30 transition-all duration-500">
+                        01</div>
+                    <div class="flex-1 progress-line" id="progress-1" style="--progress: 0%"></div>
+                    <div id="step-node-2"
+                        class="w-12 h-12 rounded-full bg-white/5 text-white/20 border border-white/10 flex items-center justify-center font-black italic text-sm transition-all duration-500">
+                        02</div>
+                    <div class="flex-1 progress-line" id="progress-2" style="--progress: 0%"></div>
+                    <div id="step-node-3"
+                        class="w-12 h-12 rounded-full bg-white/5 text-white/20 border border-white/10 flex items-center justify-center font-black italic text-sm transition-all duration-500">
+                        03</div>
+                </div>
 
-                    <!-- STEP 1: TRAVELER -->
-                    <div id="step-1" class="step-transition">
-                        <h2 class="text-4xl font-serif font-bold mb-10">Traveler <span
-                                class="italic text-primary">Information.</span></h2>
+                <!-- Boarding Container -->
+                <div class="boarding-container p-10 md:p-16">
+                    <form id="booking-form" onsubmit="return false;">
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] ml-2">First
-                                    Name</label>
-                                <input type="text" id="fname" required
-                                    class="w-full bg-white border border-gray-100 rounded-3xl px-8 py-5 focus:border-primary focus:shadow-xl focus:shadow-primary/5 outline-none transition-all font-bold">
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] ml-2">Last
-                                    Name</label>
-                                <input type="text" id="lname" required
-                                    class="w-full bg-white border border-gray-100 rounded-3xl px-8 py-5 focus:border-primary focus:shadow-xl focus:shadow-primary/5 outline-none transition-all font-bold">
-                            </div>
-                            <div class="space-y-2 md:col-span-2">
-                                <label class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] ml-2">Email
-                                    Address</label>
-                                <input type="email" id="email" required
-                                    class="w-full bg-white border border-gray-100 rounded-3xl px-8 py-5 focus:border-primary focus:shadow-xl focus:shadow-primary/5 outline-none transition-all font-bold">
-                            </div>
-                        </div>
-
-                        <button type="button" onclick="goToStep(2)"
-                            class="w-full bg-primary hover:bg-black text-white py-6 rounded-3xl font-bold tracking-widest shadow-2xl shadow-primary/20 transition-all hover:-translate-y-1">
-                            PROCEED TO SECURE PAYMENT
-                        </button>
-                    </div>
-
-                    <!-- STEP 2: PAYMENT -->
-                    <div id="step-2" class="hidden step-transition opacity-0 translate-y-10">
-                        <h2 class="text-4xl font-serif font-bold mb-10 italic">Secure <span
-                                class="text-primary not-italic font-bold">Payment.</span></h2>
-
-                        <div class="bg-gray-900 rounded-[40px] p-8 md:p-12 text-white mb-10 shadow-2xl">
-                            <div class="flex justify-between items-start mb-16">
-                                <div class="w-16 h-10 bg-white/20 rounded-lg"></div>
-                                <svg class="w-10 h-10 text-white/40" fill="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        d="M12 0L14.59 4.59L20 5.41L16 9L17.18 14.59L12 12L6.82 14.59L8 9L4 5.41L9.41 4.59L12 0Z" />
-                                </svg>
+                        <!-- ========= STEP 1: Passenger Identity ========= -->
+                        <div id="step-1" class="space-y-10">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-16 h-1 bg-[#FF6B00] rounded-full"></div>
+                                <h2 class="text-3xl md:text-4xl font-heading font-black italic">Passenger <span
+                                        class="not-italic text-white/20">Identity.</span></h2>
                             </div>
 
-                            <div class="space-y-8">
-                                <div class="space-y-2">
-                                    <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Digital
-                                        Card Entry</label>
-                                    <input type="text" id="card" placeholder="0000 0000 0000 0000"
-                                        class="w-full bg-transparent border-b border-white/20 pb-4 text-2xl font-mono tracking-widest focus:outline-none focus:border-white transition-colors">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="space-y-3 field-group">
+                                    <label
+                                        class="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] ml-2 field-label transition-colors duration-300">Legal
+                                        First Name</label>
+                                    <input type="text" id="fname" required
+                                        class="w-full px-8 py-5 rounded-2xl input-boarding font-bold text-lg"
+                                        placeholder="Enter given name">
                                 </div>
-                                <div class="grid grid-cols-2 gap-12">
-                                    <div class="space-y-2">
-                                        <label
-                                            class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Expiry</label>
-                                        <input type="text" placeholder="MM/YY"
-                                            class="w-full bg-transparent border-b border-white/20 pb-4 text-xl font-bold focus:outline-none focus:border-white">
-                                    </div>
-                                    <div class="space-y-2">
-                                        <label
-                                            class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Secret
-                                            CVV</label>
-                                        <input type="password" placeholder="***"
-                                            class="w-full bg-transparent border-b border-white/20 pb-4 text-xl font-bold focus:outline-none focus:border-white">
-                                    </div>
+                                <div class="space-y-3 field-group">
+                                    <label
+                                        class="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] ml-2 field-label transition-colors duration-300">Legal
+                                        Last Name</label>
+                                    <input type="text" id="lname" required
+                                        class="w-full px-8 py-5 rounded-2xl input-boarding font-bold text-lg"
+                                        placeholder="Enter family name">
+                                </div>
+                                <div class="md:col-span-2 space-y-3 field-group">
+                                    <label
+                                        class="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] ml-2 field-label transition-colors duration-300">Secure
+                                        Email Protocol</label>
+                                    <input type="email" id="email" required
+                                        class="w-full px-8 py-5 rounded-2xl input-boarding font-bold text-lg"
+                                        placeholder="name@domain.luxury">
+                                </div>
+                                <div class="md:col-span-2 space-y-3 field-group">
+                                    <label
+                                        class="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] ml-2 field-label transition-colors duration-300">Phone
+                                        Frequency</label>
+                                    <input type="tel" id="phone"
+                                        class="w-full px-8 py-5 rounded-2xl input-boarding font-bold text-lg"
+                                        placeholder="+91 000 000 0000">
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="flex gap-4">
-                            <button type="button" onclick="goToStep(1)"
-                                class="px-8 py-6 rounded-3xl font-bold text-gray-400 hover:text-black transition-colors uppercase tracking-widest text-xs">Back</button>
-                            <button type="button" onclick="finalizeBooking()"
-                                class="flex-1 bg-primary hover:bg-black text-white py-6 rounded-3xl font-bold tracking-widest shadow-2xl shadow-primary/20 transition-all hover:-translate-y-1">
-                                CONFIRM TOTAL $<span id="btn-total">0</span>
+                            <button type="button" onclick="nextStep(2)"
+                                class="w-full btn-orange py-6 rounded-2xl font-black tracking-[0.4em] text-[10px] uppercase shadow-2xl shadow-[#FF6B00]/20 transition-all active:scale-[0.98]">
+                                Proceed To Preferences →
                             </button>
                         </div>
-                    </div>
 
-                    <!-- STEP 3: SUCCESS -->
-                    <div id="step-3" class="hidden step-transition opacity-0 translate-y-10">
-                        <div class="bg-white rounded-[48px] p-12 md:p-20 text-center shadow-xl border border-gray-50">
-                            <div
-                                class="w-24 h-24 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-10 animate-pulse">
-                                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
+                        <!-- ========= STEP 2: Travel Preferences ========= -->
+                        <div id="step-2" class="step-inactive space-y-10">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-16 h-1 bg-[#FF6B00] rounded-full"></div>
+                                <h2 class="text-3xl md:text-4xl font-heading font-black italic">Travel <span
+                                        class="not-italic text-white/20">Preferences.</span></h2>
                             </div>
-                            <h2 class="text-5xl font-serif font-bold mb-6 italic">Bon Voyage.</h2>
-                            <p class="text-gray-500 text-xl leading-relaxed max-w-md mx-auto mb-12">
-                                Your itinerary is now verified. A concierge executive has been assigned to your booking.
-                            </p>
-                            <a href="index.html"
-                                class="inline-block bg-primary hover:bg-black text-white px-12 py-5 rounded-2xl font-bold shadow-xl shadow-primary/20 transition-all">RETURN
-                                TO DASHBOARD</a>
-                        </div>
-                    </div>
 
-                </form>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="space-y-3 field-group">
+                                    <label
+                                        class="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] ml-2 field-label transition-colors duration-300">Meal
+                                        Logic</label>
+                                    <select
+                                        class="w-full px-8 py-5 rounded-2xl input-boarding font-bold text-lg appearance-none cursor-pointer">
+                                        <option>Nautical Standard</option>
+                                        <option>Maritime Vegan</option>
+                                        <option>High-Altitude Keto</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-3 field-group">
+                                    <label
+                                        class="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] ml-2 field-label transition-colors duration-300">Seat
+                                        Orientation</label>
+                                    <select
+                                        class="w-full px-8 py-5 rounded-2xl input-boarding font-bold text-lg appearance-none cursor-pointer">
+                                        <option>Window Path</option>
+                                        <option>Aisle Access</option>
+                                        <option>Emergency Row</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2 space-y-3 field-group">
+                                    <label
+                                        class="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] ml-2 field-label transition-colors duration-300">Extra
+                                        Cargo (kg)</label>
+                                    <input type="number"
+                                        class="w-full px-8 py-5 rounded-2xl input-boarding font-bold text-lg"
+                                        placeholder="0">
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <button type="button" onclick="nextStep(1)"
+                                    class="px-10 py-6 rounded-2xl bg-white/5 text-white/40 font-black tracking-widest text-[9px] uppercase hover:bg-white/10 hover:text-white transition-all">←
+                                    Back</button>
+                                <button type="button" onclick="nextStep(3)"
+                                    class="flex-1 btn-orange py-6 rounded-2xl font-black tracking-[0.4em] text-[10px] uppercase shadow-2xl shadow-[#FF6B00]/20 transition-all active:scale-[0.98]">
+                                    Proceed To Payment →
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- ========= STEP 3: Secure Payment ========= -->
+                        <div id="step-3" class="step-inactive space-y-10">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-16 h-1 bg-[#FF6B00] rounded-full"></div>
+                                <h2 class="text-3xl md:text-4xl font-heading font-black italic">Secure <span
+                                        class="not-italic text-white/20">Settlement.</span></h2>
+                            </div>
+
+                            <!-- Card Visual -->
+                            <div
+                                class="bg-gradient-to-br from-white/5 to-white/[0.02] rounded-[32px] p-10 border border-white/5 space-y-10 relative overflow-hidden">
+                                <div class="flex justify-between items-start">
+                                    <div
+                                        class="w-14 h-10 bg-gradient-to-br from-[#FFD700] to-[#FF6B00] rounded-lg opacity-80">
+                                    </div>
+                                    <svg class="w-10 h-10 text-white/10" fill="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 0L14.59 4.59L20 5.41L16 9L17.18 14.59L12 12L6.82 14.59L8 9L4 5.41L9.41 4.59L12 0Z" />
+                                    </svg>
+                                </div>
+                                <div class="space-y-3 field-group">
+                                    <label
+                                        class="text-[9px] font-black text-white/20 uppercase tracking-[0.4em] field-label transition-colors duration-300">Card
+                                        Link Protocol</label>
+                                    <input type="text" placeholder="0000 0000 0000 0000"
+                                        class="w-full bg-transparent border-b border-white/10 py-4 text-2xl md:text-3xl font-mono tracking-widest outline-none focus:border-[#FF6B00] transition-colors text-white/80">
+                                </div>
+                                <div class="grid grid-cols-2 gap-8">
+                                    <div class="space-y-2 field-group">
+                                        <label
+                                            class="text-[9px] font-black text-white/20 uppercase tracking-widest field-label transition-colors duration-300">Expiry</label>
+                                        <input type="text" placeholder="MM/YY"
+                                            class="w-full bg-transparent border-b border-white/10 py-3 text-xl outline-none focus:border-[#FF6B00] transition-colors text-white/80">
+                                    </div>
+                                    <div class="space-y-2 field-group">
+                                        <label
+                                            class="text-[9px] font-black text-white/20 uppercase tracking-widest field-label transition-colors duration-300">Secret
+                                            CVV</label>
+                                        <input type="password" placeholder="•••"
+                                            class="w-full bg-transparent border-b border-white/10 py-3 text-xl outline-none focus:border-[#FF6B00] transition-colors text-white/80">
+                                    </div>
+                                </div>
+                                <div
+                                    class="absolute -right-16 -bottom-16 w-64 h-64 bg-[#FF6B00]/5 rounded-full blur-[80px]">
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <button type="button" onclick="nextStep(2)"
+                                    class="px-10 py-6 rounded-2xl bg-white/5 text-white/40 font-black tracking-widest text-[9px] uppercase hover:bg-white/10 hover:text-white transition-all">←
+                                    Back</button>
+                                <button type="button" onclick="executeTakeoff()" id="confirm-btn"
+                                    class="flex-1 btn-orange py-6 rounded-2xl font-black tracking-[0.4em] text-[10px] uppercase shadow-2xl shadow-[#FF6B00]/30 transition-all active:scale-[0.98]">
+                                    Confirm Passage — $<span id="btn-price">0</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
             </div>
 
-            <!-- Right: Dynamic Order Summary -->
-            <aside class="w-full lg:w-96">
-                <div
-                    class="bg-white rounded-[40px] p-10 shadow-2xl shadow-gray-200/50 border border-gray-50 sticky top-32">
-                    <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mb-10">Your Selection</h3>
-
-                    <div id="loading-summary" class="animate-pulse space-y-4">
-                        <div class="h-6 bg-gray-100 rounded w-3/4"></div>
-                        <div class="h-4 bg-gray-100 rounded w-1/2"></div>
+            <!-- RIGHT: Order Summary Sidebar -->
+            <aside class="w-full lg:w-96 space-y-8 reveal-up">
+                <div class="bg-white/[0.03] backdrop-blur-xl border border-white/5 p-10 rounded-[40px] sticky top-40">
+                    <h3 class="text-[11px] font-black tracking-[0.5em] text-[#FF6B00] uppercase mb-10">Target Selection
+                    </h3>
+                    <div id="selection-view" class="space-y-8">
+                        <div>
+                            <h2 id="summary-title"
+                                class="text-3xl font-heading font-black italic text-white leading-tight">
+                                Authenticating...</h2>
+                            <p id="summary-meta"
+                                class="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] mt-3">Syncing
+                                node details</p>
+                        </div>
+                        <div class="space-y-4 pt-8 border-t border-white/5">
+                            <div class="flex justify-between items-center text-xs font-bold text-white/30 uppercase">
+                                <span>Base Valuation</span>
+                                <span id="summary-price" class="text-white font-black">$0</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs font-bold text-white/30 uppercase">
+                                <span>Nautical Surcharge</span>
+                                <span class="text-green-400 font-black italic">INCLUDED</span>
+                            </div>
+                            <div class="pt-6 flex justify-between items-end border-t border-white/5">
+                                <div>
+                                    <p class="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">Grand
+                                        Total</p>
+                                    <p id="summary-total" class="text-4xl font-black italic text-[#FF6B00]">$0</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div id="selection-details" class="hidden space-y-8">
-                        <div>
-                            <h4 id="item-title" class="text-3xl font-serif font-bold text-gray-900 mb-2 leading-tight">
-                                ...</h4>
-                            <p id="item-meta" class="text-gray-400 font-bold text-xs uppercase tracking-widest"></p>
+                    <!-- Decorative Ticket Stub -->
+                    <div class="mt-10 pt-8 border-t border-dashed border-white/10 text-center">
+                        <div class="flex items-center justify-center gap-3 text-white/10">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+                            </svg>
                         </div>
-
-                        <div class="bg-surface p-6 rounded-3xl space-y-4">
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-400">Base Fare</span>
-                                <span id="base-price" class="font-bold">...</span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-400">Handling & Logistics</span>
-                                <span class="text-green-600 font-bold">INCLUDED</span>
-                            </div>
-                            <div class="pt-4 border-t border-gray-200 flex justify-between items-end">
-                                <span class="text-[10px] font-bold text-gray-900 uppercase tracking-widest">Grand
-                                    Total</span>
-                                <span id="grand-total" class="text-4xl font-black text-primary">$0</span>
-                            </div>
-                        </div>
-
-                        <div class="pt-6 border-t border-gray-100 italic text-center text-[10px] text-gray-300">
-                            Strict cancellation policies apply to premium routes.
-                        </div>
+                        <p class="text-[8px] font-black text-white/10 uppercase tracking-[0.5em] mt-3">CK Nautical //
+                            Secure Channel</p>
                     </div>
                 </div>
             </aside>
         </div>
     </main>
 
-    <!-- Footer mirroring index -->
-    <footer class="bg-white pt-24 pb-12 border-t border-gray-100 mt-20">
-        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-10">
-            <span class="text-2xl font-black tracking-tighter">CK<span class="text-primary">.</span></span>
-            <div class="flex gap-12 grayscale opacity-40">
-                <span class="font-bold italic">VISA Secure</span>
-                <span class="font-bold">Mastercard.</span>
-                <span class="font-black underline uppercase tracking-tighter">Norton</span>
-            </div>
-            <p class="text-[10px] text-gray-300 font-bold uppercase tracking-widest">© 2026 CK TRAVELS LOGISTICS</p>
-        </div>
-    </footer>
-
-    <!-- Firebase System -->
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <script>
+        // =========================================
+        //  CK TRAVELS — BOOKING MOTION SYSTEM v10
+        // =========================================
+
+        // 1. Smooth Scrolling
+        const lenis = new Lenis();
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        // 2. Register GSAP Plugins
+        gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+
+        // 3. Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyBsrtZh0PBOjNA8c8-9sifdtVqKMk7q-fs",
             authDomain: "ck-travels-8926e.firebaseapp.com",
@@ -284,85 +563,269 @@
         const db = firebase.firestore();
         db.settings({ experimentalForceLongPolling: true });
 
+        // 4. Load Booking Data
         const params = new URLSearchParams(window.location.search);
         const type = params.get('type') || 'flight';
         const id = params.get('id');
-
-        let flightOrPkg = null;
+        let activePrice = 0;
 
         if (id) {
             db.collection(type + 's').doc(id).get().then(doc => {
-                if (doc.exists) {
-                    flightOrPkg = doc.data();
-                    document.getElementById('loading-summary').classList.add('hidden');
-                    document.getElementById('selection-details').classList.remove('hidden');
-
-                    document.getElementById('item-title').textContent = type === 'flight' ? `${flightOrPkg.airline} Flight` : flightOrPkg.title;
-                    document.getElementById('item-meta').textContent = type === 'flight' ? `${flightOrPkg.from} → ${flightOrPkg.to}` : flightOrPkg.location;
-                    document.getElementById('base-price').textContent = `$${flightOrPkg.price}`;
-                    document.getElementById('grand-total').textContent = `$${flightOrPkg.price}`;
-                    document.getElementById('btn-total').textContent = flightOrPkg.price;
-                }
-            });
+                if (doc.exists) { renderBookingData(doc.data()); }
+                else { useFallback(); }
+            }).catch(() => { useFallback(); });
         }
 
-        function goToStep(step) {
-            // Hide all steps
-            for (let i = 1; i <= 3; i++) {
-                const el = document.getElementById(`step-${i}`);
-                if (i === step) {
-                    el.classList.remove('hidden');
-                    setTimeout(() => {
-                        el.classList.remove('opacity-0', 'translate-y-10');
-                    }, 50);
-                } else {
-                    el.classList.add('hidden', 'opacity-0', 'translate-y-10');
-                }
+        function useFallback() {
+            const localData = window.ckTravelsData?.[type === 'flight' ? 'flights' : 'packages'];
+            const item = localData?.find(i => i.id === id);
+            if (item) renderBookingData(item);
+        }
 
-                // Update Progress Nodes
-                const node = document.getElementById(`step-node-${i}`);
-                const line = document.getElementById(`step-line-${i}`);
+        function renderBookingData(data) {
+            activePrice = data.price;
+            document.getElementById('summary-title').textContent = type === 'flight' ? data.airline : data.title;
+            document.getElementById('summary-meta').textContent = type === 'flight' ? `${data.from} → ${data.to}` : data.location;
+            document.getElementById('summary-price').textContent = `$${data.price.toLocaleString()}`;
+            document.getElementById('summary-total').textContent = `$${data.price.toLocaleString()}`;
+            document.getElementById('btn-price').textContent = data.price.toLocaleString();
+            document.getElementById('pass-price').textContent = `$${data.price.toLocaleString()}`;
+        }
 
-                if (i < step) {
-                    node.classList.replace('bg-primary', 'bg-green-500');
-                    node.classList.replace('bg-gray-100', 'bg-green-500');
-                    node.classList.replace('text-gray-400', 'text-white');
-                    node.innerHTML = '✓';
-                    if (line) line.classList.replace('bg-gray-100', 'bg-green-500');
-                } else if (i === step) {
-                    node.classList.replace('bg-gray-100', 'bg-primary');
-                    node.classList.replace('text-gray-400', 'text-white');
-                    node.innerHTML = i;
-                }
+        // =========================================
+        //  STEP NAVIGATION WITH GSAP
+        // =========================================
+        function nextStep(step) {
+            const current = document.querySelector('#booking-form > div:not(.step-inactive)');
+            const target = document.getElementById(`step-${step}`);
+            if (!current || !target) return;
+
+            try {
+                gsap.to(current, {
+                    opacity: 0, y: -30, duration: 0.5, ease: "power2.in",
+                    onComplete: () => {
+                        current.classList.add('step-inactive');
+                        target.classList.remove('step-inactive');
+                        target.style.display = '';
+                        gsap.fromTo(target,
+                            { opacity: 0, y: 30 },
+                            { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }
+                        );
+                        updateProgressNodes(step);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                });
+            } catch (e) {
+                current.classList.add('step-inactive');
+                target.classList.remove('step-inactive');
+                target.style.display = '';
+                updateProgressNodes(step);
             }
         }
 
-        // GSAP Entrance
-        window.addEventListener('load', () => {
-            gsap.from("#booking-flow", { opacity: 0, x: -50, duration: 1.2, ease: "power4.out" });
-            gsap.from("aside", { opacity: 0, x: 50, duration: 1.2, ease: "power4.out", delay: 0.3 });
+        function updateProgressNodes(step) {
+            for (let i = 1; i <= 3; i++) {
+                const node = document.getElementById(`step-node-${i}`);
+                if (!node) continue;
+
+                if (i < step) {
+                    node.className = 'w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center font-black italic text-sm shadow-lg shadow-green-500/30 transition-all duration-500';
+                    node.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-width="3"/></svg>';
+                } else if (i === step) {
+                    node.className = 'w-12 h-12 rounded-full bg-[#FF6B00] text-white flex items-center justify-center font-black italic text-sm shadow-lg shadow-[#FF6B00]/30 transition-all duration-500';
+                    node.innerHTML = `0${i}`;
+                } else {
+                    node.className = 'w-12 h-12 rounded-full bg-white/5 text-white/20 border border-white/10 flex items-center justify-center font-black italic text-sm transition-all duration-500';
+                    node.innerHTML = `0${i}`;
+                }
+            }
+
+            // Animate progress lines
+            const p1 = document.getElementById('progress-1');
+            const p2 = document.getElementById('progress-2');
+            if (p1) p1.style.setProperty('--progress', step > 1 ? '100%' : '0%');
+            if (p2) p2.style.setProperty('--progress', step > 2 ? '100%' : '0%');
+        }
+
+        // =========================================
+        //  GSAP FIELD FOCUS GLOW
+        // =========================================
+        document.querySelectorAll('.input-boarding, .boarding-container input, .boarding-container select').forEach(input => {
+            input.addEventListener('focus', function () {
+                const group = this.closest('.field-group');
+                if (!group) return;
+                const label = group.querySelector('.field-label');
+                if (label) gsap.to(label, { color: '#FF6B00', y: -2, duration: 0.3, ease: "power2.out" });
+                gsap.to(this, { boxShadow: '0 0 30px rgba(255, 107, 0, 0.2)', duration: 0.4 });
+            });
+            input.addEventListener('blur', function () {
+                const group = this.closest('.field-group');
+                if (!group) return;
+                const label = group.querySelector('.field-label');
+                if (label) gsap.to(label, { color: 'rgba(255,255,255,0.3)', y: 0, duration: 0.3 });
+                gsap.to(this, { boxShadow: 'none', duration: 0.3 });
+            });
         });
 
-        function finalizeBooking() {
-            const bookingData = {
-                customer: document.getElementById('fname').value + ' ' + document.getElementById('lname').value,
-                email: document.getElementById('email').value,
-                bookingType: type,
-                itemName: type === 'flight' ? (flightOrPkg.airline + ' ' + flightOrPkg.from + '-' + flightOrPkg.to) : flightOrPkg.title,
-                price: flightOrPkg.price,
-                status: 'Payment Verified',
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
+        // =========================================
+        //  TAKEOFF SEQUENCE (Post-Submission)
+        // =========================================
+        function executeTakeoff() {
+            try {
+                const fname = document.getElementById('fname')?.value || 'PASSENGER';
+                const lname = document.getElementById('lname')?.value || 'ONE';
+                document.getElementById('pass-name').textContent = `${fname} ${lname}`.toUpperCase();
 
-            db.collection("bookings").add(bookingData).then(() => {
-                goToStep(3);
-                gsap.from("#step-3", { scale: 0.9, opacity: 0, duration: 1, ease: "back.out(1.7)" });
-            }).catch(err => {
-                alert("Payment gateway reached timeout. Please try again.");
+                // Phase 1: Fade out form
+                gsap.to('.boarding-container', {
+                    opacity: 0, scale: 0.95, duration: 0.6, ease: "power2.in",
+                    onComplete: () => {
+                        // Phase 2: Show takeoff overlay
+                        const overlay = document.getElementById('takeoff-overlay');
+                        overlay.style.display = 'flex';
+
+                        gsap.fromTo(overlay,
+                            { clipPath: "circle(0% at 50% 50%)" },
+                            { clipPath: "circle(150% at 50% 50%)", duration: 1.5, ease: "expo.inOut" }
+                        );
+
+                        // Phase 3: Animate SVG airplane across screen
+                        const svg = document.getElementById('flight-path-svg');
+                        svg.style.display = 'block';
+
+                        gsap.to("#animated-plane", {
+                            motionPath: {
+                                path: "#flight-route",
+                                align: "#flight-route",
+                                autoRotate: true,
+                                alignOrigin: [0.5, 0.5]
+                            },
+                            duration: 2.5,
+                            ease: "power2.inOut",
+                            onComplete: () => {
+                                svg.style.display = 'none';
+                            }
+                        });
+
+                        // Phase 4: Reveal boarding pass with 3D flip
+                        setTimeout(() => { revealBoardingPass(); }, 3000);
+                    }
+                });
+            } catch (e) {
+                revealBoardingPass();
+            }
+        }
+
+        function revealBoardingPass() {
+            const overlay = document.getElementById('takeoff-overlay');
+            gsap.to(overlay, { opacity: 0, duration: 0.5 });
+
+            gsap.fromTo("#boarding-pass",
+                { bottom: '-100%', rotationX: -90 },
+                {
+                    bottom: 0, rotationX: 0, duration: 1.5, ease: "expo.out",
+                    boxShadow: "0 -20px 100px rgba(0,0,0,0.8)"
+                }
+            );
+
+            // Cloud particles
+            for (let i = 0; i < 12; i++) createCloud();
+        }
+
+        function createCloud() {
+            const cloud = document.createElement('div');
+            cloud.className = 'fixed w-64 h-32 bg-white/5 blur-3xl pointer-events-none z-[1003]';
+            cloud.style.top = Math.random() * 100 + '%';
+            cloud.style.left = '-100px';
+            document.body.appendChild(cloud);
+            gsap.to(cloud, { x: window.innerWidth + 200, duration: 5 + Math.random() * 10, onComplete: () => cloud.remove() });
+        }
+
+        // =========================================
+        //  PAGE LOAD ANIMATIONS
+        // =========================================
+        window.addEventListener('load', () => {
+            // Navbar slide in
+            gsap.from("#main-nav", {
+                y: -100, opacity: 0, duration: 1.2, ease: "expo.out",
+                onStart: () => {
+                    document.getElementById('main-nav').style.opacity = '1';
+                    document.getElementById('main-nav').style.transform = 'translateY(0)';
+                }
+            });
+
+            // Content reveal
+            gsap.from(".reveal-up", { y: 40, opacity: 0, duration: 1.2, stagger: 0.2, ease: "power4.out", delay: 0.3 });
+
+            // Navbar Scroll Transformation
+            ScrollTrigger.create({
+                start: "top -50",
+                onEnter: () => {
+                    gsap.to("#nav-container", {
+                        backgroundColor: "rgba(0, 20, 61, 0.85)",
+                        backdropFilter: "blur(25px)",
+                        borderBottom: "2px solid #FF6B00",
+                        boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+                        padding: "12px 40px",
+                        marginTop: "12px",
+                        duration: 0.5, ease: "power2.out"
+                    });
+                },
+                onLeaveBack: () => {
+                    gsap.to("#nav-container", {
+                        backgroundColor: "transparent",
+                        backdropFilter: "blur(0px)",
+                        borderBottom: "2px solid transparent",
+                        boxShadow: "none",
+                        padding: "20px 40px",
+                        marginTop: "0px",
+                        duration: 0.5, ease: "power2.out"
+                    });
+                }
+            });
+
+            // Magnetic Buttons
+            initMagneticButtons();
+
+            // Page Transitions
+            initPageTransitions();
+        });
+
+        // === REUSABLE FUNCTIONS ===
+        function navigateWithCurtain(href) {
+            gsap.to("#page-curtain", {
+                left: 0, duration: 0.8, ease: "expo.inOut",
+                onComplete: () => { window.location.href = href; }
+            });
+        }
+
+        function initPageTransitions() {
+            document.querySelectorAll('a.page-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const href = link.getAttribute('href');
+                    if (!href || href === '#' || href.startsWith('javascript')) return;
+                    e.preventDefault();
+                    navigateWithCurtain(href);
+                });
+            });
+        }
+
+        function initMagneticButtons() {
+            document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
+                const btn = wrap.querySelector('.magnetic-btn');
+                if (!btn) return;
+                wrap.addEventListener('mousemove', (e) => {
+                    const rect = wrap.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    gsap.to(btn, { x: x * 0.4, y: y * 0.4, duration: 0.4, ease: "power2.out" });
+                });
+                wrap.addEventListener('mouseleave', () => {
+                    gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
+                });
             });
         }
     </script>
-
 </body>
 
 </html>

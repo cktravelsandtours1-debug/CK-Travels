@@ -8,72 +8,94 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
-        rel="stylesheet">
+    <!-- GSAP for Micro-interactions -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    colors: {
-                        brand: '#1e40af',
-                        dark: '#0f172a',
-                        panel: '#1e293b',
-                    }
-                }
-            }
-        }
-    </script>
     <style>
+        .glass-sidebar {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.2);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.4);
+        }
+
         .sidebar-item-active {
-            background: rgba(30, 64, 175, 0.1);
-            border-left: 4px solid #3b82f6;
+            background: rgba(30, 64, 175, 0.2);
+            border-right: 4px solid #3b82f6;
             color: #fff;
         }
 
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 10px;
+        .pkg-card {
+            background: rgba(30, 41, 59, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         .pkg-card:hover {
-            border-color: #3b82f6;
-            transform: translateY(-4px);
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(30, 41, 59, 0.5);
+            border-color: rgba(30, 64, 175, 0.3);
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Thematic Gradients */
+        .bg-matrix {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 100% 0%, #1e3a8a 0%, transparent 40%),
+                radial-gradient(circle at 0% 100%, #1e1b4b 0%, transparent 40%),
+                #020617;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
         }
     </style>
 </head>
 
-<body class="bg-dark font-sans text-slate-300 antialiased overflow-hidden flex h-screen">
+<body class="bg-dark font-sans text-slate-300 antialiased overflow-hidden flex h-screen relative">
+
+    <div class="bg-matrix"></div>
 
     <!-- Sidebar Navigation -->
-    <aside class="w-72 bg-slate-900 border-r border-slate-800 flex flex-col">
-        <div class="p-8 border-b border-slate-800">
-            <div class="flex items-center gap-3 mb-2">
+    <aside class="w-80 glass-sidebar flex flex-col z-20" id="sidebar">
+        <div class="p-10 mb-8">
+            <div class="flex items-center gap-4 mb-3">
                 <div
-                    class="w-8 h-8 bg-brand rounded-lg flex items-center justify-center font-black text-white text-xs tracking-tighter">
+                    class="w-10 h-10 bg-brand rounded-2xl flex items-center justify-center font-black text-white text-sm tracking-tighter shadow-2xl shadow-brand/20">
                     CK</div>
-                <span class="text-white font-bold tracking-tight">STATION CONTROL</span>
+                <span class="text-white font-extrabold tracking-tighter text-xl uppercase italic">Station <span
+                        class="not-italic text-brand text-xs">C.</span></span>
             </div>
-            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest pl-1">V2.4 ADMIN PANEL</p>
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-[0.3em]">SYSTEM CORE STABLE</p>
+            </div>
         </div>
 
-        <nav class="flex-1 py-8 px-4 space-y-1">
+        <nav class="flex-1 px-6 space-y-3">
             <a href="admin-dashboard.html"
-                class="flex items-center gap-4 px-6 py-4 rounded-xl text-slate-500 hover:bg-slate-800 hover:text-white font-bold text-sm transition-all group">
-                <svg class="w-5 h-5 opacity-40 group-hover:opacity-100" fill="none" stroke="currentColor"
+                class="flex items-center gap-5 px-8 py-5 rounded-[24px] text-slate-500 hover:bg-white/5 hover:text-white font-bold text-[10px] tracking-[0.2em] uppercase transition-all group">
+                <svg class="w-4 h-4 opacity-40 group-hover:opacity-100" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -81,56 +103,60 @@
                 Overview
             </a>
             <a href="admin-bookings.html"
-                class="flex items-center gap-4 px-6 py-4 rounded-xl text-slate-500 hover:bg-slate-800 hover:text-white font-bold text-sm transition-all group">
-                <svg class="w-5 h-5 opacity-40 group-hover:opacity-100" fill="none" stroke="currentColor"
+                class="flex items-center gap-5 px-8 py-5 rounded-[24px] text-slate-500 hover:bg-white/5 hover:text-white font-bold text-[10px] tracking-[0.2em] uppercase transition-all group">
+                <svg class="w-4 h-4 opacity-40 group-hover:opacity-100" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5z" />
                 </svg>
-                Global Bookings
+                Bookings
             </a>
             <a href="admin-flights.html"
-                class="flex items-center gap-4 px-6 py-4 rounded-xl text-slate-500 hover:bg-slate-800 hover:text-white font-bold text-sm transition-all group">
-                <svg class="w-5 h-5 opacity-40 group-hover:opacity-100" fill="none" stroke="currentColor"
+                class="flex items-center gap-5 px-8 py-5 rounded-[24px] text-slate-500 hover:bg-white/5 hover:text-white font-bold text-[10px] tracking-[0.2em] uppercase transition-all group">
+                <svg class="w-4 h-4 opacity-40 group-hover:opacity-100" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                 </svg>
-                Flight Asset Mgmt
+                Flights
             </a>
             <a href="admin-packages.html"
-                class="sidebar-item-active flex items-center gap-4 px-6 py-4 rounded-xl font-bold text-sm transition-all">
-                <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="sidebar-item-active flex items-center gap-5 px-8 py-5 rounded-[24px] font-bold text-[10px] tracking-[0.2em] uppercase transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                Experience Packages
+                Packages
             </a>
         </nav>
 
-        <div class="p-8 border-t border-slate-800">
+        <div class="p-10 border-t border-white/5">
             <button onclick="logout()"
-                class="flex items-center gap-3 text-red-500 font-bold text-[10px] tracking-widest uppercase hover:text-red-400">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="flex items-center gap-4 text-red-500 font-bold text-[9px] tracking-[0.3em] uppercase hover:text-red-400 group transition-colors">
+                <svg class="w-4 h-4 opacity-60 group-hover:opacity-100" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
-                De-authenticate
+                DE-AUTHENTICATE
             </button>
         </div>
     </aside>
 
     <!-- Main Content Area -->
-    <main class="flex-1 flex flex-col overflow-hidden">
+    <main class="flex-1 flex flex-col overflow-hidden relative z-10" id="main-content">
         <!-- Top Header -->
-        <header class="h-20 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-12 z-10">
+        <header
+            class="h-24 bg-slate-900/40 backdrop-blur-3xl border-b border-white/5 flex items-center justify-between px-16 sticky top-0 z-30">
             <div>
-                <h1 class="text-xl font-bold text-white tracking-tight uppercase">Package Inventory</h1>
+                <h1 class="text-2xl font-black text-white tracking-tighter uppercase italic">Experience <span
+                        class="not-italic text-brand text-xs">Inventory Nexus.</span></h1>
             </div>
-            <div class="flex items-center gap-4">
-                <button onclick="fetchPackages()" class="p-2 text-slate-500 hover:text-white transition-colors">
+            <div class="flex items-center gap-10">
+                <button onclick="fetchPackages()"
+                    class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/10 transition-all hover:rotate-180 duration-500">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path
                             d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
@@ -138,89 +164,98 @@
                     </svg>
                 </button>
                 <button onclick="showPackageModal()"
-                    class="bg-brand hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold tracking-widest uppercase transition-all shadow-xl shadow-brand/20">+
-                    Create Experience</button>
+                    class="bg-brand hover:bg-blue-600 text-white px-10 py-4 rounded-2xl text-[10px] font-black tracking-[0.3em] uppercase transition-all shadow-2xl shadow-brand/30 active:scale-95">
+                    CREATE EXPERIENCE
+                </button>
             </div>
         </header>
 
         <!-- Grid Content -->
-        <div class="flex-1 overflow-y-auto custom-scrollbar p-12">
-            <div id="package-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-16">
+            <div id="package-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12">
                 <!-- Content Injected via JS -->
                 <div
-                    class="col-span-full py-24 text-center animate-pulse text-slate-700 font-mono italic uppercase tracking-widest">
-                    Scanning Global Experience Arrays...</div>
+                    class="col-span-full py-32 text-center animate-pulse text-slate-700 font-mono italic uppercase tracking-[0.3em] opacity-40">
+                    SCANNING GLOBAL EXPERIENCE ARRAYS...</div>
             </div>
         </div>
     </main>
 
     <!-- Modal System -->
     <div id="package-modal"
-        class="fixed inset-0 bg-dark/90 backdrop-blur-sm z-50 hidden items-center justify-center p-6">
-        <div
-            class="bg-slate-900 w-[600px] rounded-[40px] border border-slate-800 shadow-2xl flex flex-col max-h-full overflow-hidden">
-            <div class="p-8 border-b border-slate-800 flex justify-between items-center bg-slate-950/30">
-                <div>
-                    <h2 id="modal-title" class="text-xl font-bold text-white uppercase tracking-tight">Construct New
-                        Experience</h2>
-                    <p class="text-xs text-slate-500 mt-1">Configure asset visual and logistics data</p>
-                </div>
-                <button onclick="hidePackageModal()" class="text-slate-500 hover:text-white text-2xl">&times;</button>
+        class="fixed inset-0 bg-dark/95 backdrop-blur-xl z-50 hidden items-center justify-center p-6">
+        <div class="glass-panel w-full max-w-[700px] rounded-[64px] border-white/10 flex flex-col max-h-[90vh] overflow-hidden relative shadow-2xl shadow-brand/10"
+            id="modal-container">
+            <div
+                class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-brand/50 to-transparent">
             </div>
 
-            <form id="package-form" class="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-8">
+            <div class="p-12 border-b border-white/5 flex justify-between items-center bg-white/2">
+                <div>
+                    <h2 id="modal-title" class="text-3xl font-black text-white uppercase tracking-tighter italic">Design
+                        <span class="not-italic text-brand text-xs">Experience Node.</span>
+                    </h2>
+                    <p class="text-[9px] text-slate-500 mt-2 font-bold uppercase tracking-[0.3em] opacity-60">Asset
+                        Visual and Logistics Core Configuration</p>
+                </div>
+                <button onclick="hidePackageModal()"
+                    class="w-12 h-12 rounded-full hover:bg-white/5 text-slate-500 hover:text-white transition-all text-3xl font-light">&times;</button>
+            </div>
+
+            <form id="package-form" class="flex-1 overflow-y-auto custom-scrollbar p-12 space-y-12 bg-white/2">
                 <input type="hidden" id="edit-id">
 
-                <div class="space-y-2">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Asset Title
-                        (Naming Convention)</label>
+                <div class="space-y-3">
+                    <label class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.3em] ml-6">Experience Title
+                        (Naming Matrix)</label>
                     <input type="text" id="pkg-title" required placeholder="Luxurious Escape to..."
-                        class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white font-bold outline-none transition-all placeholder-slate-700">
+                        class="w-full bg-slate-950/40 border border-white/5 rounded-[24px] px-8 py-5 text-white font-bold italic outline-none transition-all placeholder-slate-800 focus:bg-slate-950/60">
                 </div>
 
-                <div class="grid grid-cols-2 gap-8">
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Visual
-                            Identifier (Image URL)</label>
+                <div class="grid grid-cols-2 gap-10">
+                    <div class="space-y-3">
+                        <label class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.3em] ml-6">Visual
+                            Identifier (CDN Link)</label>
                         <input type="url" id="pkg-image" required placeholder="https://..."
-                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white text-xs outline-none transition-all placeholder-slate-700">
+                            class="w-full bg-slate-950/40 border border-white/5 rounded-[24px] px-8 py-5 text-brand text-[10px] font-bold outline-none transition-all placeholder-slate-800 focus:bg-slate-950/60">
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Regional
-                            Code</label>
+                    <div class="space-y-3">
+                        <label class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.3em] ml-6">Regional Node
+                            Matrix</label>
                         <input type="text" id="pkg-location" required placeholder="Dubai, UAE"
-                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white font-bold outline-none transition-all placeholder-slate-700">
+                            class="w-full bg-slate-950/40 border border-white/5 rounded-[24px] px-8 py-5 text-white font-black uppercase outline-none transition-all placeholder-slate-800 focus:bg-slate-950/60">
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-8">
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Time Bracket
-                            (Duration)</label>
+                <div class="grid grid-cols-2 gap-10">
+                    <div class="space-y-3">
+                        <label class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.3em] ml-6">Temporal
+                            Bracket (Stay)</label>
                         <input type="text" id="pkg-duration" required placeholder="7 Days / 6 Nights"
-                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white outline-none transition-all placeholder-slate-700">
+                            class="w-full bg-slate-950/40 border border-white/5 rounded-[24px] px-8 py-5 text-white font-bold outline-none transition-all placeholder-slate-800 focus:bg-slate-950/60">
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Retail
+                    <div class="space-y-3">
+                        <label class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.3em] ml-6">Retail
                             Valuation ($)</label>
                         <input type="number" id="pkg-price" required placeholder="1250"
-                            class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-white font-black text-xl outline-none transition-all placeholder-slate-700">
+                            class="w-full bg-slate-950/40 border border-white/5 rounded-[24px] px-8 py-5 text-brand font-black text-2xl outline-none transition-all placeholder-slate-800 focus:bg-slate-950/60">
                     </div>
                 </div>
 
-                <div class="space-y-2">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Inclusion Matrix
-                        (Comma Separated)</label>
+                <div class="space-y-3">
+                    <label class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.3em] ml-6">Inclusion Array
+                        (Sequential Logic)</label>
                     <textarea id="pkg-features" placeholder="Private Jet, Hotel, Gourmet Dining..."
-                        class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-slate-300 text-sm outline-none transition-all placeholder-slate-700 h-24"></textarea>
+                        class="w-full bg-slate-950/40 border border-white/5 rounded-[32px] px-8 py-6 text-slate-300 text-[11px] font-medium outline-none transition-all placeholder-slate-800 h-32 focus:bg-slate-950/60 custom-scrollbar"></textarea>
                 </div>
 
-                <div class="flex gap-4 pt-4 sticky bottom-0 bg-slate-900 pb-10">
+                <div class="flex gap-6 pt-6 sticky bottom-0 bg-slate-900/90 py-10">
                     <button type="button" onclick="hidePackageModal()"
-                        class="flex-1 py-5 border border-slate-800 rounded-2xl text-slate-500 font-bold hover:bg-slate-800 transition-all uppercase tracking-widest text-[10px]">Cancel</button>
+                        class="flex-1 py-6 border border-white/5 rounded-[24px] text-slate-500 font-bold hover:bg-white/5 transition-all uppercase tracking-[0.3em] text-[9px]">Terminate
+                        Operation</button>
                     <button type="submit" id="submit-btn"
-                        class="flex-1 py-5 bg-brand hover:bg-blue-600 text-white rounded-2xl font-bold transition-all shadow-2xl shadow-brand/20 uppercase tracking-widest text-[10px]">Deploy
-                        Experience</button>
+                        class="flex-1 py-6 bg-brand hover:bg-blue-600 text-white rounded-[24px] font-black transition-all shadow-2xl shadow-brand/30 uppercase tracking-[0.3em] text-[10px] active:scale-95">EXECUTE
+                        DEPLOYMENT</button>
                 </div>
             </form>
         </div>
@@ -250,7 +285,7 @@
 
         async function fetchPackages() {
             const list = document.getElementById('package-list');
-            list.innerHTML = '<div class="col-span-full py-24 text-center animate-pulse text-slate-700 font-mono italic uppercase tracking-widest">Querying Cloud Inventory...</div>';
+            list.innerHTML = '<div class="col-span-full py-32 text-center animate-pulse text-slate-700 font-mono italic uppercase tracking-[0.3em] opacity-40">QUERYING CLOUD INVENTORY...</div>';
 
             try {
                 const qs = await db.collection("packages").get();
@@ -258,7 +293,7 @@
                 list.innerHTML = '';
 
                 if (qs.empty) {
-                    list.innerHTML = '<div class="col-span-full py-24 text-center text-slate-600 uppercase font-bold tracking-widest">No Active Experiences Found</div>';
+                    list.innerHTML = '<div class="col-span-full py-24 text-center text-slate-700 font-black uppercase tracking-[0.3em] opacity-40">NO ACTIVE EXPERIENCES FOUND</div>';
                     return;
                 }
 
@@ -266,20 +301,24 @@
                     const p = doc.data();
                     packages.push({ id: doc.id, ...p });
                     const card = `
-                        <div class="bg-slate-900/50 rounded-[32px] border border-slate-800 overflow-hidden pkg-card transition-all duration-300 group">
-                            <div class="h-40 relative">
-                                <img src="${p.image}" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" alt="${p.title}">
-                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                                <div class="absolute top-4 left-4 px-3 py-1 bg-brand rounded-full text-[8px] font-bold text-white uppercase tracking-widest">${p.location}</div>
+                        <div class="pkg-card rounded-[48px] overflow-hidden opacity-0 transform scale-95">
+                            <div class="h-48 relative">
+                                <img src="${p.image}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-700 group-hover:scale-110" alt="${p.title}">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent"></div>
+                                <div class="absolute top-6 left-6 px-4 py-1.5 bg-brand/20 backdrop-blur-md border border-brand/30 rounded-full text-[8px] font-black text-white uppercase tracking-[0.2em] shadow-xl">${p.location}</div>
                             </div>
-                            <div class="p-6">
-                                <h3 class="text-white font-bold text-lg mb-1 leading-tight group-hover:text-blue-400 transition-colors">${p.title}</h3>
-                                <p class="text-slate-500 text-xs font-medium mb-6">${p.duration}</p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-brand font-black text-lg">$${p.price}</span>
-                                    <div class="space-x-1">
-                                        <button onclick="editPackage('${doc.id}')" class="p-2 text-slate-400 hover:text-white transition-colors">✏️</button>
-                                        <button onclick="deletePackage('${doc.id}')" class="p-2 text-slate-400 hover:text-red-500 transition-colors">🗑️</button>
+                            <div class="p-8">
+                                <h3 class="text-white font-black text-xl mb-2 leading-tight italic uppercase tracking-tighter group-hover:text-brand transition-colors">${p.title}</h3>
+                                <p class="text-slate-500 text-[10px] font-bold mb-8 uppercase tracking-[0.2em] opacity-60">${p.duration}</p>
+                                <div class="flex justify-between items-center pt-6 border-t border-white/5">
+                                    <span class="text-white font-black text-2xl italic">$${p.price.toLocaleString()}</span>
+                                    <div class="flex gap-2">
+                                        <button onclick="editPackage('${doc.id}')" class="p-3 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all rounded-2xl">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                        </button>
+                                        <button onclick="deletePackage('${doc.id}')" class="p-3 bg-red-500/5 hover:bg-red-500/20 text-red-500 transition-all rounded-2xl">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -287,25 +326,40 @@
                     `;
                     list.innerHTML += card;
                 });
+
+                // GSAP Entrance
+                gsap.from("#sidebar", { x: -50, opacity: 0, duration: 1, ease: "power4.out" });
+                gsap.from("header", { y: -20, opacity: 0, duration: 1, ease: "power4.out", delay: 0.2 });
+                gsap.to(".pkg-card", { opacity: 1, scale: 1, duration: 0.8, stagger: 0.1, ease: "back.out(1.7)", delay: 0.4 });
+
             } catch (err) { console.error(err); }
         }
 
         window.showPackageModal = function (isEdit = false) {
             const modal = document.getElementById('package-modal');
+            const container = document.getElementById('modal-container');
             const title = document.getElementById('modal-title');
             if (!isEdit) {
                 document.getElementById('package-form').reset();
                 document.getElementById('edit-id').value = '';
-                title.textContent = "Construct New Experience";
+                title.innerHTML = `Design <span class="not-italic text-brand text-xs">Experience Node.</span>`;
             } else {
-                title.textContent = "Reconfigure Experience";
+                title.innerHTML = `Reconfigure <span class="not-italic text-brand text-xs">Experience.</span>`;
             }
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+            gsap.fromTo(container, { scale: 0.9, opacity: 0, y: 40 }, { scale: 1, opacity: 1, y: 0, duration: 0.8, ease: "power4.out" });
         };
 
         window.hidePackageModal = function () {
-            document.getElementById('package-modal').classList.add('hidden');
+            const modal = document.getElementById('package-modal');
+            const container = document.getElementById('modal-container');
+            gsap.to(container, {
+                scale: 0.9, opacity: 0, y: 40, duration: 0.5, ease: "power4.in", onComplete: () => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            });
         };
 
         window.editPackage = function (id) {

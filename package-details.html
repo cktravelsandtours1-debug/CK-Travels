@@ -8,32 +8,22 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap"
-        rel="stylesheet">
+    <!-- GSAP for Micro-interactions -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    },
-                    colors: {
-                        primary: '#1e40af',  // Deep Blue
-                        secondary: '#3b82f6', // Bright Blue
-                        surface: '#fafafa',
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         .glass-header {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.1);
         }
 
         .hero-zoom:hover img {
@@ -43,13 +33,25 @@
         .sticky-sidebar {
             top: 120px;
         }
+
+        /* Thematic Gradients */
+        .bg-matrix {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 0%, #eff6ff 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, #fff7ed 0%, transparent 40%),
+                #fafafa;
+        }
     </style>
 </head>
 
 <body class="bg-surface font-sans text-gray-900 antialiased overflow-x-hidden">
 
+    <div class="bg-matrix"></div>
+
     <!-- Navbar -->
-    <nav class="glass-header border-b border-gray-100 sticky top-0 z-50 h-20">
+    <nav class="glass-header border-b border-white/20 fixed top-0 w-full z-50 h-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
             <div class="flex justify-between items-center h-full">
                 <a href="index.html" class="flex-shrink-0 flex items-center gap-1 group">
@@ -69,10 +71,14 @@
         </div>
     </nav>
 
-    <main id="package-content">
+    <main id="package-content" class="pt-20">
         <!-- Loading State -->
-        <div class="max-w-7xl mx-auto px-4 py-20 text-center">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+        <div class="max-w-7xl mx-auto px-4 py-40 text-center">
+            <div
+                class="inline-flex items-center gap-4 bg-white/50 backdrop-blur-xl px-8 py-4 rounded-full border border-white/20 shadow-xl">
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                <span class="text-xs font-bold tracking-widest text-primary uppercase">Syncing Experience Data...</span>
+            </div>
         </div>
     </main>
 
@@ -119,22 +125,22 @@
         function renderDetails(pkg, id) {
             document.getElementById('package-content').innerHTML = `
                 <!-- Hero Section -->
-                <div class="relative h-[70vh] min-h-[500px] overflow-hidden">
-                    <img src="${pkg.image}" class="w-full h-full object-cover" alt="${pkg.title}">
+                <div class="relative h-[70vh] min-h-[600px] overflow-hidden">
+                    <img src="${pkg.image}" class="w-full h-full object-cover" id="hero-img" alt="${pkg.title}">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
                     
                     <div class="absolute inset-0 flex items-end">
-                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 w-full">
-                            <div class="max-w-3xl">
-                                <div class="bg-amber-500 text-white px-4 py-1.5 rounded-full text-xs font-bold inline-block mb-6 tracking-widest uppercase">EXCLUSIVE PACKAGE</div>
-                                <h1 class="text-6xl md:text-8xl font-serif font-bold text-white mb-6 leading-none">${pkg.title}</h1>
-                                <div class="flex items-center gap-6 text-white/80 text-lg font-medium">
-                                    <span class="flex items-center gap-2">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 w-full">
+                            <div class="max-w-4xl" id="hero-text">
+                                <div class="bg-amber-500/20 backdrop-blur-md text-amber-500 border border-amber-500/30 px-5 py-2 rounded-full text-xs font-bold inline-block mb-10 tracking-[0.2em] uppercase">EXCLUSIVE LOGISTICS SYNCHRONIZED</div>
+                                <h1 class="text-6xl md:text-9xl font-serif font-bold text-white mb-8 leading-none tracking-tighter">${pkg.title}</h1>
+                                <div class="flex items-center gap-10 text-white/70 text-sm font-bold tracking-widest uppercase">
+                                    <span class="flex items-center gap-3">
                                         <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
                                         ${pkg.location}
                                     </span>
                                     <span>•</span>
-                                    <span>${pkg.duration}</span>
+                                    <span>${pkg.duration} ALL-INCLUSIVE</span>
                                 </div>
                             </div>
                         </div>
@@ -142,39 +148,39 @@
                 </div>
 
                 <!-- Content Grid -->
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-20">
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-20 pb-32">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
                         
                         <!-- Main Story -->
-                        <div class="lg:col-span-2 space-y-12">
-                            <div class="bg-white rounded-[48px] p-10 md:p-16 shadow-2xl shadow-gray-200/50 border border-gray-50">
-                                <h2 class="text-4xl font-serif font-bold mb-8">The <span class="italic text-primary">Journey.</span></h2>
-                                <p class="text-xl text-gray-500 leading-relaxed mb-10">
+                        <div class="lg:col-span-2 space-y-12" id="main-content">
+                            <div class="bg-white/70 backdrop-blur-2xl rounded-[64px] p-12 md:p-20 shadow-2xl border border-white/40">
+                                <h2 class="text-4xl md:text-5xl font-serif font-bold mb-10 text-gray-900 leading-tight">The <span class="italic text-primary">Private Itinerary.</span></h2>
+                                <p class="text-2xl text-gray-500 leading-relaxed mb-12 font-medium">
                                     Experience the absolute pinnacle of luxury travel. Our bespoke itinerary for ${pkg.title} is designed to provide seamless logistics and unparalleled comfort.
                                 </p>
                                 
-                                <div class="space-y-10">
-                                    <div class="flex gap-6 items-start">
-                                        <div class="w-12 h-12 bg-blue-50 text-primary rounded-full flex items-center justify-center font-bold flex-shrink-0">01</div>
+                                <div class="space-y-12">
+                                    <div class="flex gap-8 items-start group">
+                                        <div class="w-16 h-16 bg-blue-50 text-primary rounded-3xl flex items-center justify-center font-bold flex-shrink-0 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all text-xl">01</div>
                                         <div>
-                                            <h3 class="text-xl font-bold mb-2">Private Arrival</h3>
-                                            <p class="text-gray-500">Chauffeur-driven transfer in a premium luxury sedan directly from the tarmac to your five-star villa.</p>
+                                            <h3 class="text-2xl font-bold mb-3 text-gray-900">Private Arrival</h3>
+                                            <p class="text-gray-500 text-lg leading-relaxed">Chauffeur-driven transfer in a premium luxury sedan directly from the tarmac to your five-star villa.</p>
                                         </div>
                                     </div>
-                                    <div class="flex gap-6 items-start">
-                                        <div class="w-12 h-12 bg-blue-50 text-primary rounded-full flex items-center justify-center font-bold flex-shrink-0">02</div>
+                                    <div class="flex gap-8 items-start group">
+                                        <div class="w-16 h-16 bg-blue-50 text-primary rounded-3xl flex items-center justify-center font-bold flex-shrink-0 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all text-xl">02</div>
                                         <div>
-                                            <h3 class="text-xl font-bold mb-2">Curated Exploration</h3>
-                                            <p class="text-gray-500">Expert-led private tours exploring hidden locations that standard tourists never see.</p>
+                                            <h3 class="text-2xl font-bold mb-3 text-gray-900">Curated Exploration</h3>
+                                            <p class="text-gray-500 text-lg leading-relaxed">Expert-led private tours exploring hidden locations that standard tourists never see.</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="mt-16 grid grid-cols-2 gap-4">
-                                     <div class="h-64 rounded-3xl overflow-hidden shadow-lg border-4 border-white">
+                                <div class="mt-20 grid grid-cols-2 gap-8">
+                                     <div class="h-80 rounded-[40px] overflow-hidden shadow-2xl skew-y-1">
                                         <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Luxury Interior">
                                      </div>
-                                      <div class="h-64 rounded-3xl overflow-hidden shadow-lg border-4 border-white mt-8">
+                                      <div class="h-80 rounded-[40px] overflow-hidden shadow-2xl -skew-y-1 mt-12">
                                         <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Luxury Hotel">
                                      </div>
                                 </div>
@@ -182,35 +188,41 @@
                         </div>
 
                         <!-- Side Booking Card -->
-                        <div class="lg:col-span-1">
-                            <div class="bg-white rounded-[40px] p-10 shadow-2xl shadow-gray-100 border border-gray-50 sticky sticky-sidebar">
-                                <div class="mb-10">
-                                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">ALL-INCLUSIVE FROM</div>
-                                    <div class="text-5xl font-black text-gray-900">$${pkg.price}</div>
-                                    <div class="text-xs text-gray-400 mt-2 font-medium italic">Price per guest based on double occupancy.</div>
+                        <div class="lg:col-span-1" id="sidebar-content">
+                            <div class="bg-white/80 backdrop-blur-2xl rounded-[48px] p-12 shadow-2xl border border-white/50 sticky sticky-sidebar">
+                                <div class="mb-12">
+                                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">ALL-INCLUSIVE TOTAL</div>
+                                    <div class="text-6xl font-black text-primary tracking-tighter">$${pkg.price}</div>
+                                    <div class="text-xs text-gray-400 mt-4 font-bold italic uppercase tracking-widest">Experience Guaranteed</div>
                                 </div>
 
-                                <div class="space-y-4 mb-10">
-                                    <h4 class="text-xs font-bold text-gray-900 uppercase tracking-widest">Inclusions</h4>
-                                    <ul class="space-y-3">
-                                        ${pkg.features.map(f => `
-                                            <li class="flex items-center gap-3 text-sm text-gray-600">
-                                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                <div class="space-y-6 mb-12">
+                                    <h4 class="text-[10px] font-bold text-gray-900 uppercase tracking-[0.2em]">PLATINUM INCLUSIONS</h4>
+                                    <ul class="space-y-4">
+                                        ${(pkg.features || []).map(f => `
+                                            <li class="flex items-center gap-4 text-sm font-bold text-gray-600 uppercase tracking-wide">
+                                                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
                                                 ${f}
                                             </li>
                                         `).join('')}
                                     </ul>
                                 </div>
 
-                                <a href="booking.html?id=${id}&type=package" class="block w-full bg-primary hover:bg-black text-white text-center py-6 rounded-3xl font-bold tracking-widest shadow-2xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95">BOOK EXPERIENCE</a>
+                                <a href="booking.html?id=${id}&type=package" class="block w-full bg-primary hover:bg-black text-white text-center py-7 rounded-[32px] font-bold tracking-widest shadow-2xl shadow-primary/30 transition-all hover:scale-[1.05] active:scale-95 text-xs uppercase">RESERVE JOURNEY</a>
                                 
-                                <p class="mt-6 text-center text-[10px] text-gray-300 font-bold uppercase tracking-widest italic">Inventory Limited • 24/7 Concierge Included</p>
+                                <p class="mt-8 text-center text-[10px] text-gray-400 font-bold uppercase tracking-[0.3em] inline-block w-full">Inventory Critical</p>
                             </div>
                         </div>
 
                     </div>
                 </div>
             `;
+
+            // GSAP Entrance
+            gsap.from("#hero-img", { scale: 1.2, duration: 4, ease: "power2.out" });
+            gsap.from("#hero-text", { opacity: 0, y: 50, duration: 1.5, ease: "power4.out", delay: 0.5 });
+            gsap.from("#main-content", { opacity: 0, x: -50, duration: 1.2, ease: "power3.out", delay: 1 });
+            gsap.from("#sidebar-content", { opacity: 0, x: 50, duration: 1.2, ease: "power3.out", delay: 1.2 });
         }
     </script>
 </body>

@@ -8,43 +8,34 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap"
-        rel="stylesheet">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    },
-                    colors: {
-                        primary: '#1e40af',  // Deep Blue
-                        secondary: '#3b82f6', // Bright Blue
-                        accent: '#f59e0b',    // Amber
-                        surface: '#fafafa',
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- GSAP for Micro-interactions -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <style>
         .glass-header {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.1);
         }
 
         .flight-card {
             transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
         }
 
         .flight-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.1);
         }
 
         .accordion-content {
@@ -68,13 +59,25 @@
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
+
+        /* Thematic Gradients */
+        .bg-matrix {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 0% 0%, #eff6ff 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, #fff7ed 0%, transparent 40%),
+                #fafafa;
+        }
     </style>
 </head>
 
 <body class="bg-surface font-sans text-gray-900 antialiased overflow-x-hidden">
 
+    <div class="bg-matrix"></div>
+
     <!-- Navbar -->
-    <nav class="glass-header border-b border-gray-100 sticky top-0 z-50 h-20">
+    <nav class="glass-header border-b border-white/20 fixed top-0 w-full z-50 h-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
             <div class="flex justify-between items-center h-full">
                 <div class="flex items-center gap-12">
@@ -97,48 +100,44 @@
                 <div class="flex items-center gap-4">
                     <a href="login.html"
                         class="bg-primary hover:bg-black text-white px-8 py-3 rounded-full text-sm font-bold shadow-xl shadow-primary/20 transition-all hover:scale-105 active:scale-95">PORTAL</a>
-                    <button class="lg:hidden p-2 text-gray-900" onclick="toggleMobileMenu()">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Search Summary / Date Matrix (Smart Header) -->
-    <header class="bg-white border-b border-gray-100 py-8 lg:sticky lg:top-20 z-40 relative">
+    <header class="pt-32 pb-8 sticky top-0 z-40 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div class="glass-panel p-8 rounded-[48px] flex flex-col lg:flex-row items-center justify-between gap-8"
+                id="header-matrix">
                 <!-- Search Info -->
-                <div class="flex items-center gap-6">
+                <div class="flex items-center gap-12">
                     <div class="flex flex-col">
                         <span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-1">REGION</span>
-                        <div class="text-2xl font-black tracking-tighter flex items-center gap-3 italic">
-                            DXB <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="2" stroke-linecap="round"
+                        <div class="text-3xl font-black tracking-tighter flex items-center gap-4 italic text-gray-900">
+                            DXB <svg class="w-6 h-6 text-primary animate-pulse" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="3" stroke-linecap="round"
                                     stroke-linejoin="round" />
                             </svg> LHR
                         </div>
                     </div>
-                    <div class="w-px h-10 bg-gray-100 hidden sm:block"></div>
+                    <div class="w-px h-12 bg-gray-200/50 hidden sm:block"></div>
                     <div class="flex flex-col">
-                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-1">DATE</span>
-                        <div class="text-lg font-bold">24 OCT, 2026</div>
+                        <span
+                            class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-1">DEPARTURE</span>
+                        <div class="text-xl font-bold text-gray-900">24 OCT, 2026</div>
                     </div>
                 </div>
 
                 <!-- Sorting Tabs -->
-                <div class="bg-gray-50 p-1.5 rounded-2xl flex w-full lg:w-auto overflow-x-auto no-scrollbar">
+                <div class="bg-black/5 p-2 rounded-3xl flex w-full lg:w-auto overflow-x-auto no-scrollbar">
                     <button
-                        class="flex-1 lg:flex-none px-8 py-3 rounded-xl text-xs font-bold tracking-widest price-tab-active transition-all whitespace-nowrap">CHEAPEST</button>
+                        class="flex-1 lg:flex-none px-10 py-4 rounded-2xl text-[10px] font-bold tracking-widest price-tab-active transition-all whitespace-nowrap uppercase">CHEAPEST</button>
                     <button
-                        class="flex-1 lg:flex-none px-8 py-3 rounded-xl text-xs font-bold tracking-widest text-gray-400 hover:text-black transition-all whitespace-nowrap">FASTEST</button>
+                        class="flex-1 lg:flex-none px-10 py-4 rounded-2xl text-[10px] font-bold tracking-widest text-gray-400 hover:text-black transition-all whitespace-nowrap uppercase">FASTEST</button>
                     <button
-                        class="flex-1 lg:flex-none px-8 py-3 rounded-xl text-xs font-bold tracking-widest text-gray-400 hover:text-black transition-all whitespace-nowrap">BEST
-                        EXPERIENCE</button>
+                        class="flex-1 lg:flex-none px-10 py-4 rounded-2xl text-[10px] font-bold tracking-widest text-gray-400 hover:text-black transition-all whitespace-nowrap uppercase">EXPERIENCE</button>
                 </div>
             </div>
         </div>
@@ -344,13 +343,32 @@
                 `;
                 container.innerHTML += card;
             });
+            animateCards();
         });
 
+        // Detail Toggle
         function toggleDetails(id) {
             const el = document.getElementById('details-' + id);
             const icon = document.getElementById('chevron-' + id);
             el.classList.toggle('open');
             icon.classList.toggle('rotate-180');
+        }
+
+        // GSAP Animations
+        window.addEventListener('load', () => {
+            gsap.from("#header-matrix", { opacity: 0, y: -20, duration: 1, ease: "power4.out" });
+            gsap.from("aside", { opacity: 0, x: -50, duration: 1, delay: 0.3, ease: "power4.out" });
+        });
+
+        // Stagger cards on load
+        function animateCards() {
+            gsap.from(".flight-card", {
+                opacity: 0,
+                y: 30,
+                stagger: 0.1,
+                duration: 0.8,
+                ease: "power2.out"
+            });
         }
     </script>
 </body>

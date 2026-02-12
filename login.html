@@ -149,103 +149,57 @@
 </head>
 
 <body
-    class="bg-nautical h-screen w-full flex items-center justify-center overflow-hidden font-body antialiased text-white relative">
+    class="bg-[#FFFAF0] h-screen w-full flex items-center justify-center overflow-hidden font-body antialiased text-[#00143D] relative">
 
-    <!-- Page Transition Curtain -->
-    <div id="page-curtain"></div>
+    <!-- Three.js Canvas injected into this section -->
+    <section class="relative w-full h-full flex items-center justify-center">
+        <!-- Page Transition Curtain -->
+        <div id="page-curtain"></div>
 
-    <!-- Background Animated Rings -->
-    <div class="radar-ring"
-        style="width:300px; height:300px; top:50%; left:50%; margin-left:-150px; margin-top:-150px;"></div>
-    <div class="radar-ring"
-        style="width:300px; height:300px; top:50%; left:50%; margin-left:-150px; margin-top:-150px; animation-delay: 1.3s;">
-    </div>
-    <div class="radar-ring"
-        style="width:300px; height:300px; top:50%; left:50%; margin-left:-150px; margin-top:-150px; animation-delay: 2.6s;">
-    </div>
+        <div class="relative z-10 w-full max-w-[500px] px-8">
+            <div class="bg-white/60 backdrop-blur-3xl border border-[#00BFFF]/10 rounded-[48px] p-16 space-y-12 shadow-[0_40px_100px_-20px_rgba(0,191,255,0.15)]"
+                id="login-card">
 
-    <!-- Floating Particles (spawned via JS) -->
-    <div id="particles"></div>
-
-    <!-- ============================================ -->
-    <!--           LOGIN CARD — GLASSMORPHISM 2.0      -->
-    <!-- ============================================ -->
-    <div class="relative z-10 w-full max-w-[520px] px-6">
-        <div class="login-card rounded-[48px] p-12 md:p-16 space-y-12" id="login-card">
-
-            <!-- Logo & Header -->
-            <div class="text-center space-y-6">
-                <a href="index.html" class="inline-flex items-center gap-1 group page-link">
-                    <span
-                        class="text-4xl font-black tracking-tighter italic text-white group-hover:text-[#FF6B00] transition-colors duration-500">CK<span
-                            class="text-[#FF6B00] not-italic">.</span></span>
-                </a>
-                <h1 class="text-5xl font-heading font-black italic tracking-tight">Portal <span
-                        class="not-italic text-white/20">Access.</span></h1>
-                <p class="text-white/30 font-medium text-sm tracking-wide">Secure your credentials to synchronize
-                    logistics.</p>
-            </div>
-
-            <!-- Login Form -->
-            <form id="loginForm" class="space-y-8">
-                <div class="space-y-3 field-group">
-                    <label
-                        class="float-label text-[9px] font-black text-white/20 uppercase tracking-[0.4em] ml-4">Digital
-                        Identifier</label>
-                    <input type="email" required placeholder="name@domain.luxury"
-                        class="w-full input-glass rounded-2xl px-8 py-5 font-bold text-lg login-input">
+                <div class="text-center space-y-4">
+                    <span class="text-[10px] font-black tracking-[0.5em] text-[#00BFFF] uppercase">Security
+                        Protocol</span>
+                    <h1 class="text-4xl font-heading font-black italic">Passport <span
+                            class="not-italic text-[#FF8C00]">Control_</span></h1>
+                    <p class="text-[11px] font-bold text-[#00143D]/40 uppercase tracking-widest">Identify yourself for
+                        nautical synchronization</p>
                 </div>
 
-                <div class="space-y-3 field-group">
-                    <div class="flex justify-between items-center px-4">
-                        <label
-                            class="float-label text-[9px] font-black text-white/20 uppercase tracking-[0.4em]">Security
-                            Key</label>
-                        <a href="#"
-                            class="text-[8px] font-black text-[#FF6B00]/60 hover:text-[#FF6B00] transition-colors tracking-widest uppercase">Lost
-                            Key?</a>
+                <form id="loginForm" class="space-y-8">
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-[0.4em] ml-4 text-[#00143D]/20">Airborne
+                            ID</label>
+                        <input type="email" required placeholder="OFFICER@CK.TRAVELS"
+                            class="login-input w-full bg-slate-50 border border-[#00BFFF]/5 rounded-2xl px-8 py-5 font-bold text-sm tracking-widest uppercase focus:bg-white focus:border-[#FF8C00] transition-all outline-none">
                     </div>
-                    <input type="password" required placeholder="••••••••"
-                        class="w-full input-glass rounded-2xl px-8 py-5 font-bold text-lg login-input">
-                </div>
 
-                <div class="pt-2 magnetic-wrap w-full">
-                    <button type="submit" id="auth-btn"
-                        class="magnetic-btn w-full btn-orange py-6 rounded-2xl font-black tracking-[0.4em] text-[10px] uppercase shadow-2xl shadow-[#FF6B00]/20">
-                        Initiate Handshake
-                    </button>
-                </div>
-            </form>
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-[0.4em] ml-4 text-[#00143D]/20">Access
+                            Sequence</label>
+                        <input type="password" required placeholder="••••••••"
+                            class="login-input w-full bg-slate-50 border border-[#00BFFF]/5 rounded-2xl px-8 py-5 font-bold text-sm tracking-widest focus:bg-white focus:border-[#FF8C00] transition-all outline-none">
+                    </div>
 
-            <!-- Cloud Divider -->
-            <div class="relative">
-                <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-white/5"></div>
-                </div>
-                <div class="relative flex justify-center">
-                    <span
-                        class="px-6 bg-transparent text-[8px] font-black text-white/10 uppercase tracking-[0.4em]">Cloud
-                        Integration</span>
-                </div>
-            </div>
+                    <div class="magnetic-wrap w-full pt-4">
+                        <button type="submit" id="auth-btn"
+                            class="magnetic-btn w-full bg-[#FF8C00] text-white py-6 rounded-2xl font-black tracking-[0.5em] text-[10px] uppercase shadow-2xl shadow-[#FF8C00]/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                            Verify Identity
+                        </button>
+                    </div>
+                </form>
 
-            <!-- Google Login -->
-            <button onclick="handleGoogleLogin()"
-                class="w-full bg-white/[0.03] border border-white/5 py-5 rounded-2xl font-bold text-[10px] text-white/40 hover:bg-white/5 hover:text-white transition-all flex items-center justify-center gap-4 tracking-[0.2em] uppercase">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5 opacity-60"
-                    alt="Google">
-                Sign In With Google
-            </button>
-
-            <!-- Footer -->
-            <div class="text-center">
-                <p class="text-[9px] font-bold text-white/15 uppercase tracking-widest">
-                    New Partner? <a href="#" class="text-[#FF6B00]/60 hover:text-[#FF6B00] transition-colors">Request
-                        Access</a>
-                </p>
+                <div class="text-center">
+                    <a href="index.html"
+                        class="text-[9px] font-black text-[#00143D]/20 hover:text-[#00BFFF] transition-colors uppercase tracking-[0.4em]">Abort
+                        Entry</a>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <script>
         // =========================================

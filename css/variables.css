@@ -1,18 +1,18 @@
 :root {
     /* 🎨 Modern Nautical Palette */
-    --color-bg: #00143D; /* Deep Midnight Blue */
+    /* 🎨 Sky-Luxury Palette */
+    --color-bg: #FFFAF0; /* Floral White */
     --color-surface: #FFFFFF; /* Pure White */
-    --color-primary: #FF6B00; /* Sunset Orange */
+    --color-primary: #FF8C00; /* Dark Orange */
+    --color-secondary: #00BFFF; /* Sky Blue */
     --color-text: #00143D;
-    --color-text-on-dark: #FFFFFF;
-    --color-text-muted: #64748B;
     
-    /* Glassmorphism 2.0 */
-    --glass-bg: rgba(255, 255, 255, 0.1);
-    --glass-blur: 25px;
-    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.4);
-    --accent-glow: 0 0 20px rgba(255, 107, 0, 0.3);
+    /* Glassmorphism 3.0 Cloud */
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    --glass-blur: 40px;
+    --glass-border: 1px solid rgba(0, 191, 255, 0.1);
+    --glass-shadow: 0 20px 40px rgba(0, 191, 255, 0.1);
+    --accent-glow: 0 0 30px rgba(0, 191, 255, 0.2);
 
     /* Typography */
     --font-heading: 'Playfair Display', serif;

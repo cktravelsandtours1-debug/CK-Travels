@@ -184,20 +184,21 @@
     </style>
 </head>
 
-<body class="bg-[#00143D] font-body text-white antialiased">
+<body class="bg-[#FFFAF0] font-body text-[#00143D] antialiased">
 
     <!-- Page Transition Curtain -->
     <div id="page-curtain"></div>
 
     <!-- Takeoff Animation Overlay -->
-    <div id="takeoff-overlay">
+    <div id="takeoff-overlay" style="background: #FFFAF0;">
         <div class="airplane-container">
-            <svg class="airplane-loader animate-bounce" viewBox="0 0 24 24">
+            <svg class="airplane-loader animate-bounce" viewBox="0 0 24 24" style="fill: #FF8C00;">
                 <path
                     d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
             </svg>
         </div>
-        <div class="text-white text-xs font-black tracking-[0.6em] uppercase animate-pulse">Synchronizing Passage...
+        <div class="text-[#00143D]/40 text-xs font-black tracking-[0.6em] uppercase animate-pulse">Synchronizing
+            Passage...
         </div>
     </div>
 
@@ -254,18 +255,18 @@
             class="max-w-7xl mx-auto w-full flex items-center justify-between px-10 py-5 rounded-[40px]">
             <a href="index.html" class="flex items-center gap-1 group page-link">
                 <span id="logo-span"
-                    class="text-3xl font-black tracking-tighter italic text-white group-hover:text-[#FF6B00] transition-colors">CK<span
-                        class="text-[#FF6B00] not-italic">.</span></span>
+                    class="text-3xl font-black tracking-tighter italic text-[#00BFFF] group-hover:text-[#FF8C00] transition-colors">CK<span
+                        class="text-[#FF8C00] not-italic">.</span></span>
             </a>
 
             <div class="hidden lg:flex items-center gap-12 font-bold text-[11px] tracking-[0.3em] uppercase">
                 <a href="index.html"
-                    class="nav-link-text text-white/60 hover:text-[#FF6B00] transition-colors page-link">Home</a>
+                    class="nav-link-text text-[#00BFFF]/60 hover:text-[#FF8C00] transition-colors page-link">Home</a>
                 <a href="flights.html"
-                    class="nav-link-text text-white/60 hover:text-[#FF6B00] transition-colors page-link">Flights</a>
+                    class="nav-link-text text-[#00BFFF]/60 hover:text-[#FF8C00] transition-colors page-link">Flights</a>
                 <a href="packages.html"
-                    class="nav-link-text text-white/60 hover:text-[#FF6B00] transition-colors page-link">Packages</a>
-                <a href="booking.html" class="nav-link-text text-[#FF6B00]">My Trips</a>
+                    class="nav-link-text text-[#00BFFF]/60 hover:text-[#FF8C00] transition-colors page-link">Packages</a>
+                <a href="booking.html" class="nav-link-text text-[#FF8C00]">My Trips</a>
             </div>
 
             <div class="flex items-center gap-6">
@@ -289,10 +290,10 @@
                 <!-- Header -->
                 <div class="flex items-center justify-between mb-4">
                     <div>
-                        <p class="text-[10px] font-black text-[#FF6B00] tracking-[0.5em] uppercase mb-2">Secure Passage
+                        <p class="text-[10px] font-black text-[#FF8C00] tracking-[0.5em] uppercase mb-2">Secure Passage
                             Protocol</p>
-                        <h1 class="text-5xl md:text-6xl font-heading font-black italic">Book <span
-                                class="not-italic text-white/20">Your Seat.</span></h1>
+                        <h1 class="text-5xl md:text-6xl font-heading font-black italic text-[#00143D]">Book <span
+                                class="not-italic text-[#00BFFF]">Your Seat.</span></h1>
                     </div>
                     <div class="hidden md:block text-right">
                         <div class="text-6xl font-black italic text-white/5">CK.</div>
@@ -315,7 +316,8 @@
                 </div>
 
                 <!-- Boarding Container -->
-                <div class="boarding-container p-10 md:p-16">
+                <div
+                    class="bg-white/40 backdrop-blur-3xl border border-[#00BFFF]/10 rounded-[48px] p-10 md:p-16 shadow-[0_40px_100px_-20px_rgba(0,191,255,0.1)]">
                     <form id="booking-form" onsubmit="return false;">
 
                         <!-- ========= STEP 1: Passenger Identity ========= -->

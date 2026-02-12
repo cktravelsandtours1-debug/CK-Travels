@@ -13,9 +13,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Initialize Global Animations
     // We wait for window load to ensure all assets/layout are stable for GSAP
     window.addEventListener('load', () => {
+        initLenis();
         initGlobalAnimations();
     });
 });
+
+function initLenis() {
+    if (typeof Lenis !== 'undefined') {
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true
+        });
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+        window.lenis = lenis;
+    }
+}
 
 function initGlobalAnimations() {
     console.log("Initializing CK Travels Motion System...");
@@ -38,11 +55,11 @@ function initGlobalAnimations() {
                 start: "top -50",
                 onEnter: () => {
                     gsap.to(navContainer, {
-                        backgroundColor: "rgba(0, 20, 61, 0.85)",
+                        backgroundColor: "rgba(255, 250, 240, 0.85)", // Floral White Glass
                         backdropFilter: "blur(25px)",
                         webkitBackdropFilter: "blur(25px)",
-                        borderBottom: "2px solid #FF6B00",
-                        boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+                        borderBottom: "2px solid #00BFFF", // Sky Blue
+                        boxShadow: "0 20px 60px rgba(0, 191, 255, 0.1)", // Cloud Shadow
                         padding: "12px 40px",
                         marginTop: "12px",
                         duration: 0.5,
@@ -90,6 +107,17 @@ function initGlobalAnimations() {
             }
         });
     }
+    // E) Hero 3D Scene
+    createHeroScene();
+
+    // F) AI-Glass Shimmer
+    initAIShimmer();
+
+    // G) Raindrop Headings
+    initRaindropText();
+
+    // H) Login Interactions
+    initLoginInteractions();
 }
 
 // === COMPONENT: Magnetic Buttons ===
@@ -111,13 +139,170 @@ function initMagneticButtons() {
     });
 }
 
+// === COMPONENT: Hero 3D Scene ===
+function createHeroScene() {
+    const heroSection = document.querySelector('section.relative');
+    if (!heroSection) return;
+
+    // Create Canvas
+    const canvas = document.createElement('canvas');
+    canvas.id = 'hero-canvas';
+    canvas.style.cssText = "position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;";
+    heroSection.appendChild(canvas);
+
+    // Three.js Import Check
+    if (typeof THREE === 'undefined') {
+        console.warn("Three.js not loaded");
+        return;
+    }
+
+    // Scene Setup
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0xFFFAF0, 10, 50);
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
+
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // Lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    scene.add(ambientLight);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+    dirLight.position.set(5, 10, 7);
+    scene.add(dirLight);
+
+    // Plane Geometry (Abstract Low Poly)
+    const geometry = new THREE.ConeGeometry(0.5, 2, 8);
+    const material = new THREE.MeshPhongMaterial({ color: 0xFF8C00, shininess: 100, flatShading: true });
+    const plane = new THREE.Mesh(geometry, material);
+    plane.rotation.x = Math.PI / 2;
+    plane.rotation.z = Math.PI;
+    scene.add(plane);
+
+    // Clouds (Procedural)
+    const cloudGeo = new THREE.DodecahedronGeometry(1, 0);
+    const cloudMat = new THREE.MeshPhongMaterial({ color: 0xffffff, transparent: true, opacity: 0.8, flatShading: true });
+    const clouds = [];
+
+    for (let i = 0; i < 20; i++) {
+        const cloud = new THREE.Mesh(cloudGeo, cloudMat);
+        cloud.position.set(
+            (Math.random() - 0.5) * 20,
+            (Math.random() - 0.5) * 10,
+            (Math.random() - 0.5) * 10 - 5
+        );
+        cloud.scale.setScalar(Math.random() * 0.5 + 0.5);
+        scene.add(cloud);
+        clouds.push({ mesh: cloud, speed: Math.random() * 0.02 + 0.01 });
+    }
+
+    // Interaction
+    let mouseX = 0;
+    let mouseY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+    });
+
+    // Animation Loop
+    function animate() {
+        requestAnimationFrame(animate);
+
+        // Plane Movement (Follow Mouse with Lag)
+        plane.rotation.z = -mouseX * 0.5 + Math.PI;
+        plane.rotation.x = mouseY * 0.5 + Math.PI / 2;
+        plane.position.x += (mouseX * 2 - plane.position.x) * 0.05;
+        plane.position.y += (mouseY * 1 - plane.position.y) * 0.05;
+
+        // Cloud Flow
+        clouds.forEach(c => {
+            c.mesh.position.z += c.speed;
+            if (c.mesh.position.z > 5) c.mesh.position.z = -15; // Reset position
+            c.mesh.rotation.x += 0.01;
+            c.mesh.rotation.y += 0.01;
+        });
+
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // Resize
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Handle Vibration for Login
+    window.planeRef = plane;
+}
+
+function initAIShimmer() {
+    const shimmer = document.getElementById('ai-shimmer');
+    if (shimmer) {
+        gsap.to(shimmer, {
+            left: '100%',
+            duration: 2.5,
+            repeat: -1,
+            ease: "none",
+            delay: 1
+        });
+    }
+}
+
+function initRaindropText() {
+    const headings = document.querySelectorAll('h1, h2');
+    headings.forEach(h => {
+        if (h.classList.contains('no-split')) return;
+        const text = h.innerText;
+        h.innerHTML = text.split('').map(char => `<span class="raindrop-char inline-block translate-y-[-50px] opacity-0">${char === ' ' ? '&nbsp;' : char}</span>`).join('');
+
+        ScrollTrigger.create({
+            trigger: h,
+            start: "top 90%",
+            onEnter: () => {
+                gsap.to(h.querySelectorAll('.raindrop-char'), {
+                    y: 0,
+                    opacity: 1,
+                    stagger: 0.05,
+                    duration: 1.2,
+                    ease: "elastic.out(1, 0.4)"
+                });
+            }
+        });
+    });
+}
+
+function initLoginInteractions() {
+    const loginInputs = document.querySelectorAll('.login-input');
+    loginInputs.forEach(input => {
+        input.addEventListener('input', () => {
+            if (window.planeRef) {
+                gsap.to(window.planeRef.position, {
+                    x: window.planeRef.position.x + (Math.random() - 0.5) * 0.1,
+                    y: window.planeRef.position.y + (Math.random() - 0.5) * 0.1,
+                    duration: 0.1,
+                    repeat: 5,
+                    yoyo: true,
+                    ease: "none"
+                });
+            }
+        });
+    });
+}
+
 // === COMPONENT: Page Transitions ===
 function initPageTransitions() {
     // Ensure curtain exists
     if (!document.getElementById('page-curtain')) {
         const curtain = document.createElement('div');
         curtain.id = 'page-curtain';
-        curtain.style.cssText = "position: fixed; top: 0; left: -100%; width: 100%; height: 100%; background-color: #FF6B00; z-index: 9999; pointer-events: none;";
+        curtain.style.cssText = `position: fixed; top: 0; left: -100%; width: 100%; height: 100%; background-color: #FF8C00; z-index: 9999; pointer-events: none;`;
         document.body.appendChild(curtain);
     }
 
